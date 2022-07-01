@@ -1,0 +1,123 @@
+package org.giste.profiles.data
+
+import android.database.sqlite.SQLiteConstraintException
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.runTest
+import org.giste.profiles.domain.Profile
+import org.giste.profiles.domain.ProfileRepository
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+
+@ExperimentalCoroutinesApi
+class ProfileRepositoryTests {
+    companion object {
+        private val PROFILE_1 = Profile(1, "Profile 1")
+        private val PROFILE_2 = Profile(2, "Profile 2")
+
+        private val PROFILE_DTO_1 = ProfileEntity(1, "Profile 1")
+        private val PROFILE_DTO_2 = ProfileEntity(2, "Profile 2")
+    }
+
+    @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @MockK
+    private lateinit var profileDao: ProfileDao
+
+    private val mapper = ProfileMapper()
+    private lateinit var repository: ProfileRepository
+
+    @Before
+    fun setUp() {
+        repository = ProfileRepositoryImpl(profileDao, mapper)
+    }
+
+    @Test
+    fun findAll_thereAreProfiles_returnsProfileList() = runTest {
+        every { profileDao.findAll() } returns flow { emit(listOf(PROFILE_DTO_1, PROFILE_DTO_2)) }
+
+        val readProfiles = repository.findAll().first()
+
+        assertThat(readProfiles, equalTo(listOf(PROFILE_1, PROFILE_2)))
+        verify(exactly = 1) { profileDao.findAll() }
+    }
+
+    @Test
+    fun findAll_thereIsNoProfile_returnsEmptyList() = runTest {
+        every { profileDao.findAll() } returns flow { emit(listOf()) }
+
+        val readProfiles = repository.findAll().first()
+
+        assertThat(readProfiles, equalTo(listOf()))
+        verify(exactly = 1) { profileDao.findAll() }
+    }
+
+    @Test
+    fun findById_profileExist_returnsProfile() = runTest {
+        every { profileDao.findById(1) } returns flow { emit(PROFILE_DTO_1) }
+
+        val readProfile = repository.findById(1).first()
+
+        assertThat(readProfile, equalTo(PROFILE_1))
+        verify(exactly = 1) { profileDao.findById(1) }
+    }
+
+    @Test
+    fun findById_profileDoesNotExist_returnsNull() = runTest {
+        every { profileDao.findById(1) } returns flow { emit(null) }
+
+        val readProfile = repository.findById(1).first()
+
+        assertThat(readProfile, equalTo(null))
+        verify(exactly = 1) { profileDao.findById(1) }
+    }
+
+    @Test
+    fun add_profileIdDoesNotExist_returnsId() = runTest {
+        val newProfile = Profile(name = "New profile")
+        val newProfileEntity = ProfileEntity(name = "New profile")
+        coEvery { profileDao.add(newProfileEntity) } returns 1
+
+        val id = repository.add(newProfile)
+
+        assertThat(id, equalTo(1))
+        coVerify(exactly = 1) { profileDao.add(newProfileEntity) }
+    }
+
+    @Test(expected = SQLiteConstraintException::class)
+    fun add_profileIdExists_throwsException() = runTest {
+        coEvery { profileDao.add(PROFILE_DTO_1) } throws SQLiteConstraintException()
+
+        repository.add(PROFILE_1)
+    }
+
+    @Test
+    fun update_profileExists_updatesProfile() = runTest {
+        coEvery { profileDao.update(PROFILE_DTO_1) } returns 1
+
+        val updated = repository.update(PROFILE_1)
+
+        assertThat(updated, equalTo(1))
+        coVerify(exactly = 1) { profileDao.update(PROFILE_DTO_1) }
+    }
+
+    @Test
+    fun delete_profileExists_deletesProfile() = runTest {
+        coEvery { profileDao.delete(PROFILE_DTO_1) } returns Unit
+
+        repository.delete(PROFILE_1)
+
+        coVerify(exactly = 1) { profileDao.delete(PROFILE_DTO_1) }
+    }
+}
