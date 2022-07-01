@@ -1,8 +1,9 @@
 package org.giste.profiles.data
 
 import org.giste.profiles.domain.Profile
+import javax.inject.Inject
 
-class ProfileMapper constructor() {
+class ProfileMapper @Inject constructor() {
     fun toEntity(profile: Profile): ProfileEntity {
         with(profile) {
             return ProfileEntity(id, name)

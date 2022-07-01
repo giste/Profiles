@@ -3,41 +3,133 @@ package org.giste.profiles
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import dagger.hilt.android.AndroidEntryPoint
+import org.giste.profiles.ui.ManagerFloatingButton
+import org.giste.profiles.ui.ManagerToolBar
+import org.giste.profiles.ui.ManagerViewModel
+import org.giste.profiles.ui.ProfileManagerBody
+//import org.giste.profiles.ui.ProfileBody
+//import org.giste.profiles.ui.ProfileToolBar
 import org.giste.profiles.ui.theme.ProfilesTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ProfilesTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+            ProfileApp()
         }
     }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
+    ProfileApp()
+}
+
+@Composable
+fun ProfileApp() {
     ProfilesTheme {
-        Greeting("Android")
+        val navController = rememberNavController()
+        val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+        val managerViewModel = hiltViewModel<ManagerViewModel>()
+
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+
+        Scaffold(
+            topBar = { TopBar(destination = currentDestination) },
+            floatingActionButtonPosition = FabPosition.End,
+            floatingActionButton = {
+                FloatingButton(
+                    destination = currentDestination,
+                    navController = navController
+                )
+            }
+        ) { innerPadding ->
+            ProfilesNavHost(
+                navController = navController,
+                modifier = Modifier.padding(innerPadding),
+                managerViewModel
+            )
+        }
     }
 }
+
+@Composable
+fun ProfilesNavHost(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    managerViewModel: ManagerViewModel
+) {
+    NavHost(
+        navController = navController,
+        startDestination = ProfileScreens.Manager.name,
+        modifier = modifier
+    ) {
+        composable(ProfileScreens.Manager.name) {
+            ProfileManagerBody(
+                managerViewModel = managerViewModel,
+                onProfileClick = { profile ->
+                    navController.navigate("${ProfileScreens.Profile}/${profile.id}")
+                }
+            )
+        }
+        composable(
+            route = "${ProfileScreens.Profile.name}/{id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.LongType
+                }
+            )
+        ) {
+//            ProfileBody(
+//                profileViewModel = hiltViewModel(),
+//                navigate = {
+//                    navController.navigate("${ProfileScreens.Manager}") {
+//                        popUpTo("${ProfileScreens.Manager}") { inclusive = true }
+//                    }
+//                }
+//            )
+        }
+    }
+}
+
+@Composable
+fun TopBar(destination: NavDestination?) {
+    if (destination?.route == ProfileScreens.Manager.name) {
+        ManagerToolBar()
+    } else {
+//        ProfileToolBar()
+    }
+}
+
+@Composable
+fun FloatingButton(destination: NavDestination?, navController: NavHostController) {
+    if (destination?.route == ProfileScreens.Manager.name) {
+        ManagerFloatingButton(
+            onClick = {
+                navController.navigate("${ProfileScreens.Profile.name}/0")
+            }
+        )
+    }
+}
+
+enum class ProfileScreens { Manager, Profile }

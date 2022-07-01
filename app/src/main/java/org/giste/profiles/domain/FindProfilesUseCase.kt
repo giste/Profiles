@@ -1,5 +1,7 @@
 package org.giste.profiles.domain
 
-class FindProfilesUseCase(private val profileRepository: ProfileRepository) {
+import javax.inject.Inject
+
+class FindProfilesUseCase @Inject constructor(private val profileRepository: ProfileRepository) {
     operator fun invoke() = profileRepository.findAll()
 }

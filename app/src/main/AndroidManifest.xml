@@ -4,6 +4,7 @@
     package="org.giste.profiles">
 
     <application
+        android:name=".ProfilesApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
