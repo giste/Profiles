@@ -20,12 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
-import org.giste.profiles.ui.ManagerFloatingButton
-import org.giste.profiles.ui.ManagerToolBar
-import org.giste.profiles.ui.ManagerViewModel
-import org.giste.profiles.ui.ProfileManagerBody
-//import org.giste.profiles.ui.ProfileBody
-//import org.giste.profiles.ui.ProfileToolBar
+import org.giste.profiles.ui.*
 import org.giste.profiles.ui.theme.ProfilesTheme
 
 @AndroidEntryPoint
@@ -100,14 +95,14 @@ fun ProfilesNavHost(
                 }
             )
         ) {
-//            ProfileBody(
-//                profileViewModel = hiltViewModel(),
-//                navigate = {
-//                    navController.navigate("${ProfileScreens.Manager}") {
-//                        popUpTo("${ProfileScreens.Manager}") { inclusive = true }
-//                    }
-//                }
-//            )
+            ProfileBody(
+                profileViewModel = hiltViewModel(),
+                navigate = {
+                    navController.navigate("${ProfileScreens.Manager}") {
+                        popUpTo("${ProfileScreens.Manager}") { inclusive = true }
+                    }
+                }
+            )
         }
     }
 }
@@ -117,7 +112,7 @@ fun TopBar(destination: NavDestination?) {
     if (destination?.route == ProfileScreens.Manager.name) {
         ManagerToolBar()
     } else {
-//        ProfileToolBar()
+        ProfileToolBar()
     }
 }
 
