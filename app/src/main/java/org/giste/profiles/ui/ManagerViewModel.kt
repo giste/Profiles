@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import org.giste.profiles.domain.DeleteProfileUseCase
 //import kotlinx.coroutines.launch
 import org.giste.profiles.domain.FindProfilesUseCase
 //import org.giste.profiles.domain.FindSelectedProfileUseCase
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ManagerViewModel @Inject constructor(
     findProfilesUseCase: FindProfilesUseCase,
+    private val deleteProfileUseCase: DeleteProfileUseCase
 //    private val selectProfileUseCase: SelectProfileUseCase,
 //    findSelectedProfileUseCase: FindSelectedProfileUseCase
 ) : ViewModel() {
@@ -36,6 +39,12 @@ class ManagerViewModel @Inject constructor(
 //            Log.d("ManagerViewModel", "findSelectedProfileUseCase: $it")
 //            selectedProfileId = it
 //        }.launchIn(viewModelScope)
+    }
+
+    fun deleteProfile(profile: Profile) {
+        viewModelScope.launch {
+            deleteProfileUseCase.invoke(profile)
+        }
     }
 
 //    fun onProfileSelected(profile: Profile) {

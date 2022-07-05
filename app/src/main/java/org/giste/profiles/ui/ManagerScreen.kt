@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,14 +21,15 @@ import org.giste.profiles.domain.Profile
 @Composable
 fun ManagerPreview() {
     ProfileManagerScreen(
-        listOf(
+        profileList = listOf(
             Profile(id = 1L, name = "Profile 1"),
             Profile(id = 2L, name = "Profile 2"),
             Profile(id = 3L, name = "Profile 3")
         ),
-        0L,
-        {},
-        {}
+        selectedId = 0L,
+        onProfileSelect = {},
+        onProfileClick = {},
+        onProfileDelete = {}
     )
 }
 
@@ -40,7 +42,8 @@ fun ProfileManagerBody(
         profileList = managerViewModel.profileList,
         selectedId = managerViewModel.selectedProfileId,
         onProfileSelect = {}, // managerViewModel::onProfileSelected,
-        onProfileClick = onProfileClick
+        onProfileClick = onProfileClick,
+        onProfileDelete = managerViewModel::deleteProfile
     )
 }
 
@@ -49,7 +52,8 @@ fun ProfileManagerScreen(
     profileList: List<Profile>,
     selectedId: Long,
     onProfileSelect: (Profile) -> Unit,
-    onProfileClick: (Profile) -> Unit
+    onProfileClick: (Profile) -> Unit,
+    onProfileDelete: (Profile) -> Unit
 ) {
     LazyColumn(
         contentPadding = PaddingValues(all = 8.dp),
@@ -63,7 +67,8 @@ fun ProfileManagerScreen(
                 isSelected = profile.id == selectedId,
                 name = profile.name,
                 onRadioSelect = { onProfileSelect(profile) },
-                onTextClick = { onProfileClick(profile) }
+                onTextClick = { onProfileClick(profile) },
+                onDelete = {onProfileDelete(profile)}
             )
         }
     }
@@ -74,7 +79,8 @@ fun ProfileRow(
     isSelected: Boolean,
     name: String,
     onRadioSelect: () -> Unit,
-    onTextClick: () -> Unit
+    onTextClick: () -> Unit,
+    onDelete: () -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         RadioButton(selected = isSelected, onClick = { onRadioSelect() })
@@ -84,6 +90,12 @@ fun ProfileRow(
             .clickable { onTextClick() }
             .padding(vertical = 8.dp)
         )
+        IconButton(onClick = { onDelete() }) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = stringResource(id = R.string.profile_screen_delete_profile_content_description)
+            )
+        }
     }
 }
 
