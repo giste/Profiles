@@ -14,7 +14,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class AddProfileByIdUseCaseTests {
+class AddProfileUseCaseTests {
     companion object {
         private val PROFILE_1 = Profile(name = "Profile 1")
     }
