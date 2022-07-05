@@ -16,7 +16,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class UpdateProfileUseCaseTests {
     companion object {
-        private val PROFILE_1 = Profile(name = "Profile 1")
+        private val PROFILE_1 = Profile(1, "Profile 1")
     }
 
     @get:Rule
@@ -25,27 +25,21 @@ class UpdateProfileUseCaseTests {
     @MockK
     private lateinit var profileRepository: ProfileRepository
 
-    private lateinit var useCase: AddProfileUseCase
+    private lateinit var useCase: UpdateProfileUseCase
 
     @Before
     fun setUp() {
-        useCase = AddProfileUseCase(profileRepository)
+        useCase = UpdateProfileUseCase(profileRepository)
     }
 
     @Test
-    fun addProfile_noExceptionIsThrown_returnsNewId() = runTest {
-        coEvery { profileRepository.add(PROFILE_1) } returns 1
+    fun updateProfile_profileExists_updateProfile() = runTest {
+        coEvery { profileRepository.update(PROFILE_1) } returns 1
 
-        val newId = useCase.invoke(PROFILE_1)
+        val updated = useCase.invoke(PROFILE_1)
 
-        assertThat(newId, equalTo(1))
-        coVerify(exactly = 1) { profileRepository.add(PROFILE_1) }
+        assertThat(updated, equalTo(1))
+        coVerify(exactly = 1) { profileRepository.update(PROFILE_1) }
     }
 
-    @Test(expected = SQLiteConstraintException::class)
-    fun addProfile_exceptionIsThrown_throwsException() = runTest {
-        coEvery { profileRepository.add(PROFILE_1) } throws SQLiteConstraintException()
-
-        useCase.invoke(PROFILE_1)
-    }
 }

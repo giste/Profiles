@@ -73,14 +73,11 @@ class ProfileRepositoryTests {
         verify(exactly = 1) { profileDao.findById(1) }
     }
 
-    @Test
-    fun findById_profileDoesNotExist_returnsNull() = runTest {
+    @Test(expected = IllegalArgumentException::class)
+    fun findById_profileDoesNotExist_throwsException() = runTest {
         every { profileDao.findById(1) } returns flow { emit(null) }
 
-        val readProfile = repository.findById(1).first()
-
-        assertThat(readProfile, equalTo(null))
-        verify(exactly = 1) { profileDao.findById(1) }
+        repository.findById(1).first()
     }
 
     @Test
