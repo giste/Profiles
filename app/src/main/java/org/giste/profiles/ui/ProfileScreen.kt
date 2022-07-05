@@ -1,9 +1,11 @@
 package org.giste.profiles.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,8 +19,7 @@ import org.giste.profiles.R
 fun ProfilePreview() {
     ProfileScreen(
         name = "Profile 1",
-        onNameChange = {},
-        onDelete = {}
+        onNameChange = {}
     )
 }
 
@@ -29,25 +30,19 @@ fun ProfileBody(
 ) {
     ProfileScreen(
         name = profileViewModel.profile.name,
-        onNameChange = profileViewModel::onNameChange,
-        onDelete = {
-            //profileViewModel.deleteProfile()
-            navigate()
-        }
+        onNameChange = profileViewModel::onNameChange
     )
 }
 
 @Composable
 fun ProfileScreen(
     name: String,
-    onNameChange: (String) -> Unit,
-    onDelete: () -> Unit
+    onNameChange: (String) -> Unit
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
         ProfileName(
             name = name,
-            onChange = onNameChange,
-            onDelete = onDelete
+            onChange = onNameChange
         )
     }
 }
@@ -55,8 +50,7 @@ fun ProfileScreen(
 @Composable
 fun ProfileName(
     name: String,
-    onChange: (String) -> Unit,
-    onDelete: () -> Unit
+    onChange: (String) -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         TextField(
@@ -66,13 +60,6 @@ fun ProfileName(
             placeholder = { Text(stringResource(id = R.string.profile_screen_name_label)) },
             modifier = Modifier.weight(1F)
         )
-        Spacer(modifier = Modifier.width(16.dp))
-        IconButton(onClick = { onDelete() }) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = stringResource(id = R.string.profile_screen_delete_profile_content_description)
-            )
-        }
     }
 }
 
