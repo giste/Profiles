@@ -1,6 +1,7 @@
 package org.giste.profiles.data
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.ProfileRepository
@@ -13,8 +14,11 @@ class ProfileRepositoryImpl(
         return profileDao.findAll().map { list -> list.map { profileMapper.toModel(it) } }
     }
 
-    override fun findById(id: Long): Flow<Profile?> {
-        return profileDao.findById(id).map { it?.let { profileMapper.toModel(it) } }
+    override fun findById(id: Long): Flow<Profile> {
+        return profileDao.findById(id).map {
+            it?.let { profileMapper.toModel(it) }
+                ?: throw IllegalArgumentException("No profile for id = $id")
+        }
     }
 
     override suspend fun add(profile: Profile): Long {
@@ -28,4 +32,5 @@ class ProfileRepositoryImpl(
     override suspend fun delete(profile: Profile) {
         return profileDao.delete(profileMapper.toEntity(profile))
     }
+
 }

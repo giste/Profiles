@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 interface ProfileRepository {
     fun findAll(): Flow<List<Profile>>
 
-    fun findById(id: Long): Flow<Profile?>
+    fun findById(id: Long): Flow<Profile>
 
     suspend fun add(profile: Profile): Long
 
