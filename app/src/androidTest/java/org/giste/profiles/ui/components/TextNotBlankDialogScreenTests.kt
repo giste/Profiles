@@ -22,7 +22,7 @@ class TextNotBlankDialogScreenTests {
             }
         }
 
-        composeTestRule.onNodeWithContentDescription("Input Label").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("TextField").assertIsDisplayed()
     }
 
     @Test
@@ -39,7 +39,7 @@ class TextNotBlankDialogScreenTests {
         }
 
         composeTestRule.onNodeWithTag("AcceptButton").assertIsEnabled()
-        composeTestRule.onNodeWithContentDescription("Input Label").performTextReplacement("")
+        composeTestRule.onNodeWithTag("TextField").performTextReplacement("")
         composeTestRule.onNodeWithTag("AcceptButton").assertIsNotEnabled()
     }
 
@@ -56,7 +56,7 @@ class TextNotBlankDialogScreenTests {
         }
 
         composeTestRule.onNodeWithTag("AcceptButton").assertIsNotEnabled()
-        composeTestRule.onNodeWithContentDescription("Input Label").performTextReplacement("Text")
+        composeTestRule.onNodeWithTag("TextField").performTextReplacement("Text")
         composeTestRule.onNodeWithTag("AcceptButton").assertIsEnabled()
     }
 }
