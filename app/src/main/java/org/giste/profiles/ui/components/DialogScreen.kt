@@ -99,7 +99,7 @@ private fun DialogScreen(
 
 @Composable
 private fun DialogTitle(title: String) {
-    val titleContentDescription = stringResource(id = R.string.dialog_title_content_description)
+    val titleContentDescription = stringResource(R.string.dialog_title_content_description)
 
     Row {
         Text(
