@@ -8,4 +8,8 @@
     <string name="profile_screen_name_label">Profile name</string>
     <string name="profile_screen_delete_profile_content_description">Delete profile</string>
     <string name="profile_screen_add_profile_content_description">Add profile</string>
+
+    <string name="dialog_title_content_description">Title</string>
+    <string name="dialog_cancel_button_content_description">Cancel button</string>
+    <string name="dialog_accept_button_content_description">Accept button</string>
 </resources>
