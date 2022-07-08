@@ -6,6 +6,7 @@ import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
+import org.giste.profiles.domain.DeleteProfileUseCase
 import org.giste.profiles.domain.FindProfilesUseCase
 import org.giste.profiles.domain.Profile
 import org.hamcrest.CoreMatchers.equalTo
@@ -30,13 +31,16 @@ class ManagerViewModelTests {
     @MockK
     private lateinit var findProfilesUseCase: FindProfilesUseCase
 
+    @MockK
+    private lateinit var deleteProfileUseCase: DeleteProfileUseCase
+
     private lateinit var viewModel: ManagerViewModel
 
     @Test
     fun init_profilesExists_profilesAreLoaded() = runTest {
         coEvery { findProfilesUseCase.invoke() } returns flow { emit(listOf(PROFILE_1, PROFILE_2)) }
 
-        viewModel = ManagerViewModel(findProfilesUseCase)
+        viewModel = ManagerViewModel(findProfilesUseCase, deleteProfileUseCase)
 
         assertThat(viewModel.profileList.size, equalTo(2))
     }
