@@ -21,7 +21,9 @@ fun DialogPreview() {
         title = "Title",
         cancelLabel = "Cancel",
         acceptLabel = "Accept",
-        onAccept = {}
+        onDismiss = {},
+        onAccept = {},
+        acceptEnabled = true
     ) {
         Text(text = "Content")
     }
@@ -34,6 +36,7 @@ fun DialogBody(
     acceptLabel: String,
     onDismiss: () -> Unit = {},
     onAccept: () -> Unit,
+    acceptEnabled: () -> Boolean = { true },
     content: @Composable () -> Unit
 ) {
     var show by remember { mutableStateOf(true) }
@@ -50,7 +53,9 @@ fun DialogBody(
         onAccept = {
             onAccept()
             show = false
-        }) {
+        },
+        acceptEnabled = acceptEnabled()
+    ) {
         content()
     }
 }
@@ -61,8 +66,9 @@ private fun DialogScreen(
     title: String,
     cancelLabel: String,
     acceptLabel: String,
-    onDismiss: () -> Unit = {},
+    onDismiss: () -> Unit,
     onAccept: () -> Unit,
+    acceptEnabled: Boolean,
     content: @Composable () -> Unit
 ) {
     if (show) {
@@ -82,7 +88,8 @@ private fun DialogScreen(
                         cancelLabel = cancelLabel,
                         acceptLabel = acceptLabel,
                         onDismiss = onDismiss,
-                        onAccept = onAccept
+                        onAccept = onAccept,
+                        acceptEnabled = acceptEnabled
                     )
                 }
             }
@@ -118,7 +125,8 @@ private fun DialogButtons(
     cancelLabel: String,
     acceptLabel: String,
     onDismiss: () -> Unit,
-    onAccept: () -> Unit
+    onAccept: () -> Unit,
+    acceptEnabled: Boolean
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(1f),
@@ -146,7 +154,8 @@ private fun DialogButtons(
             modifier = Modifier.semantics {
                 contentDescription = acceptContentDescription
                 testTag = "AcceptButton"
-            }
+            },
+            enabled = acceptEnabled
         ) {
             Text(text = acceptLabel)
         }
