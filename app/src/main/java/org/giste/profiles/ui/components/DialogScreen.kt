@@ -32,8 +32,8 @@ fun DialogPreview() {
 @Composable
 fun DialogBody(
     title: String,
-    cancelLabel: String,
-    acceptLabel: String,
+    cancelLabel: String = stringResource(R.string.dialog_cancel_label),
+    acceptLabel: String= stringResource(R.string.dialog_accept_label),
     onDismiss: () -> Unit = {},
     onAccept: () -> Unit,
     acceptEnabled: () -> Boolean = { true },
