@@ -16,4 +16,5 @@
     <string name="dialog_accept_button_content_description">Accept button</string>
 
     <string name="dialog_text_not_blank_text_field_content_description">Input %1$s</string>
+    <string name="dialog_text_not_blank_error">Can not be blank</string>
 </resources>

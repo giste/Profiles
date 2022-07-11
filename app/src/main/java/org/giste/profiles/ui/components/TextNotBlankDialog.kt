@@ -1,5 +1,8 @@
 package org.giste.profiles.ui.components
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
@@ -9,6 +12,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import org.giste.profiles.R
 
 @Preview
@@ -78,14 +82,26 @@ private fun Content(
 ) {
     val textFieldContentDescription =
         stringResource(R.string.dialog_text_not_blank_text_field_content_description, label)
+    val isError = text.isBlank()
 
-    TextField(
-        value = text,
-        onValueChange = onTextChange,
-        label = { Text(label) },
-        modifier = Modifier.semantics {
-            contentDescription = textFieldContentDescription
-            testTag = "TextField"
+    Column {
+        TextField(
+            value = text,
+            onValueChange = onTextChange,
+            label = { Text(label) },
+            modifier = Modifier.semantics {
+                contentDescription = textFieldContentDescription
+                testTag = "TextField"
+            },
+            isError = isError
+        )
+        if(isError) {
+            Text(
+                text = stringResource(R.string.dialog_text_not_blank_error),
+                modifier = Modifier.padding(start = 16.dp).semantics { testTag = "ErrorText" },
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption
+            )
         }
-    )
+    }
 }

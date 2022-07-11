@@ -26,7 +26,7 @@ class TextNotBlankDialogScreenTests {
     }
 
     @Test
-    fun changeText_textIsBlank_acceptIsNotEnabled() {
+    fun changeText_textIsBlank_acceptIsNotEnabledAndErrorIsShown() {
         composeTestRule.setContent {
             ProfilesTheme {
                 TextNotBlankDialogBody(
@@ -41,10 +41,11 @@ class TextNotBlankDialogScreenTests {
         composeTestRule.onNodeWithTag("AcceptButton").assertIsEnabled()
         composeTestRule.onNodeWithTag("TextField").performTextReplacement("")
         composeTestRule.onNodeWithTag("AcceptButton").assertIsNotEnabled()
+        composeTestRule.onNodeWithTag("ErrorText").assertIsDisplayed()
     }
 
     @Test
-    fun changeText_textIsNotBlank_acceptIsEnabled() {
+    fun changeText_textIsNotBlank_acceptIsEnabledAndErrorIsNotShown() {
         composeTestRule.setContent {
             ProfilesTheme {
                 TextNotBlankDialogBody(
@@ -58,5 +59,6 @@ class TextNotBlankDialogScreenTests {
         composeTestRule.onNodeWithTag("AcceptButton").assertIsNotEnabled()
         composeTestRule.onNodeWithTag("TextField").performTextReplacement("Text")
         composeTestRule.onNodeWithTag("AcceptButton").assertIsEnabled()
+        composeTestRule.onNodeWithTag("ErrorText").assertDoesNotExist()
     }
 }
