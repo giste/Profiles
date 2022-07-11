@@ -35,7 +35,7 @@ fun TextNotBlankDialogBody(
     cancelLabel: String = stringResource(R.string.dialog_cancel_label),
     acceptLabel: String = stringResource(R.string.dialog_accept_label),
     onDismiss: () -> Unit = {},
-    onAccept: () -> Unit,
+    onAccept: (String) -> Unit,
     label: String,
     text: String = ""
 ) {
@@ -56,7 +56,7 @@ private fun TextNotBlankDialogScreen(
     cancelLabel: String,
     acceptLabel: String,
     onDismiss: () -> Unit,
-    onAccept: () -> Unit,
+    onAccept: (String) -> Unit,
     label: String,
     initialText: String
 ) {
@@ -67,7 +67,7 @@ private fun TextNotBlankDialogScreen(
         cancelLabel = cancelLabel,
         acceptLabel = acceptLabel,
         onDismiss = onDismiss,
-        onAccept = onAccept,
+        onAccept = { onAccept(text) },
         acceptEnabled = { text != "" }
     ) {
         Content(label = label, text = text, onTextChange = { text = it })
