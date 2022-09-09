@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.giste.profiles.domain.AddProfileUseCase
 import org.giste.profiles.domain.DeleteProfileUseCase
 //import kotlinx.coroutines.launch
 import org.giste.profiles.domain.FindProfilesUseCase
@@ -21,13 +22,15 @@ import javax.inject.Inject
 @HiltViewModel
 class ManagerViewModel @Inject constructor(
     findProfilesUseCase: FindProfilesUseCase,
-    private val deleteProfileUseCase: DeleteProfileUseCase
+    private val deleteProfileUseCase: DeleteProfileUseCase,
+    private val addProfileUseCase: AddProfileUseCase
 //    private val selectProfileUseCase: SelectProfileUseCase,
 //    findSelectedProfileUseCase: FindSelectedProfileUseCase
 ) : ViewModel() {
     var profileList by mutableStateOf<List<Profile>>(listOf())
         private set
     var selectedProfileId by mutableStateOf(0L)
+    var newProfileId by mutableStateOf(0L)
 
     init {
         findProfilesUseCase.invoke().onEach {
@@ -56,4 +59,12 @@ class ManagerViewModel @Inject constructor(
 //            selectProfileUseCase.invoke(profile)
 //        }
 //    }
+
+    fun addProfile(name: String) {
+        newProfileId = 0
+
+        viewModelScope.launch {
+            newProfileId = addProfileUseCase.invoke(Profile(name = name))
+        }
+    }
 }

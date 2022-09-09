@@ -6,8 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,7 +54,8 @@ fun ProfileApp() {
             floatingActionButton = {
                 FloatingButton(
                     destination = currentDestination,
-                    navController = navController
+                    navController = navController,
+                    managerViewModel = managerViewModel
                 )
             }
         ) { innerPadding ->
@@ -117,13 +117,22 @@ fun TopBar(destination: NavDestination?) {
 }
 
 @Composable
-fun FloatingButton(destination: NavDestination?, navController: NavHostController) {
+fun FloatingButton(
+    destination: NavDestination?,
+    navController: NavHostController,
+    managerViewModel: ManagerViewModel
+) {
     if (destination?.route == ProfileScreens.Manager.name) {
         ManagerFloatingButton(
             onClick = {
-                navController.navigate("${ProfileScreens.Profile.name}/0")
+                managerViewModel.addProfile(it)
             }
         )
+        if (managerViewModel.newProfileId > 0) {
+            val newId = managerViewModel.newProfileId
+            managerViewModel.newProfileId = 0L
+            navController.navigate("${ProfileScreens.Profile.name}/${newId}")
+        }
     }
 }
 

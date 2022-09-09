@@ -8,7 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.giste.profiles.R
 import org.giste.profiles.domain.Profile
+import org.giste.profiles.ui.components.TextDialog
 
 @Preview(showBackground = true)
 @Composable
@@ -68,7 +69,7 @@ fun ProfileManagerScreen(
                 name = profile.name,
                 onRadioSelect = { onProfileSelect(profile) },
                 onTextClick = { onProfileClick(profile) },
-                onDelete = {onProfileDelete(profile)}
+                onDelete = { onProfileDelete(profile) }
             )
         }
     }
@@ -105,13 +106,37 @@ fun ManagerToolBar() {
 }
 
 @Composable
-fun ManagerFloatingButton(onClick: () -> Unit) {
+fun ManagerFloatingButton(onClick: (String) -> Unit) {
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+
     FloatingActionButton(
-        onClick = onClick
+        onClick = { showDialog = true }
     ) {
         Icon(
             imageVector = Icons.Default.Add,
             contentDescription = stringResource(id = R.string.manager_screen_add_profile_content_description)
+        )
+    }
+
+    if (showDialog) {
+        TextDialog(
+            title = "New Profile",
+            onDismiss = { showDialog = false },
+            onAccept = {
+                showDialog = false
+                onClick(it)
+            },
+            label = "Name",
+            getErrorForText = {
+                if (it.isBlank()) {
+                    "Can't be empty"
+                } else {
+                    ""
+                }
+            },
+            maxLength = 20
         )
     }
 }
