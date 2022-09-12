@@ -80,11 +80,14 @@ fun ProfilesNavHost(
         modifier = modifier
     ) {
         composable(ProfileScreens.Manager.name) {
-            ProfileManagerBody(
-                managerViewModel = managerViewModel,
+            ProfileManagerScreen(
+                profileList = managerViewModel.profileList,
                 onProfileClick = { profile ->
                     navController.navigate("${ProfileScreens.Profile}/${profile.id}")
-                }
+                },
+                selectedId = managerViewModel.selectedProfileId,
+                onProfileSelect = {}, // managerViewModel::onProfileSelected,
+                onProfileDelete = managerViewModel::deleteProfile
             )
         }
         composable(
@@ -95,13 +98,10 @@ fun ProfilesNavHost(
                 }
             )
         ) {
-            ProfileBody(
-                profileViewModel = hiltViewModel(),
-                navigate = {
-                    navController.navigate("${ProfileScreens.Manager}") {
-                        popUpTo("${ProfileScreens.Manager}") { inclusive = true }
-                    }
-                }
+            val profileViewModel = hiltViewModel<ProfileViewModel>()
+            ProfileScreen(
+                name = profileViewModel.profile.name,
+                onNameChange = profileViewModel::onNameChange
             )
         }
     }
