@@ -139,4 +139,9 @@ class ProfileDaoTests {
         assertThat(profileList.size, equalTo(3))
     }
 
+    @Test(expected = SQLiteConstraintException::class)
+    fun add_profileNameExists_throwException(): Unit = runBlocking {
+        val newProfile = ProfileEntity(name = "profile 1")
+        profileDao.add(newProfile)
+    }
 }
