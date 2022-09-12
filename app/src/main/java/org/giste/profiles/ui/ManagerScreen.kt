@@ -35,6 +35,20 @@ fun ManagerPreview() {
 }
 
 @Composable
+fun ProfileManagerBody(
+    managerViewModel: ManagerViewModel,
+    onProfileClick: (Profile) -> Unit
+) {
+    ProfileManagerScreen(
+        profileList = managerViewModel.profileList,
+        selectedId = managerViewModel.selectedProfileId,
+        onProfileSelect = {}, // managerViewModel::onProfileSelected,
+        onProfileClick = onProfileClick,
+        onProfileDelete = managerViewModel::deleteProfile
+    )
+}
+
+@Composable
 fun ProfileManagerScreen(
     profileList: List<Profile>,
     selectedId: Long,

@@ -24,6 +24,17 @@ fun ProfilePreview() {
 }
 
 @Composable
+fun ProfileBody(
+    profileViewModel: ProfileViewModel,
+    navigate: () -> Unit
+) {
+    ProfileScreen(
+        name = profileViewModel.profile.name,
+        onNameChange = profileViewModel::onNameChange
+    )
+}
+
+@Composable
 fun ProfileScreen(
     name: String,
     onNameChange: (String) -> Unit
