@@ -84,7 +84,8 @@ fun ProfilesNavHost(
                 managerViewModel = managerViewModel,
                 onProfileClick = { profile ->
                     navController.navigate("${ProfileScreens.Profile}/${profile.id}")
-                }
+                },
+                navController
             )
         }
         composable(
@@ -128,11 +129,6 @@ fun FloatingButton(
                 managerViewModel.addProfile(it)
             }
         )
-        if (managerViewModel.newProfileId > 0) {
-            val newId = managerViewModel.newProfileId
-            managerViewModel.newProfileId = 0L
-            navController.navigate("${ProfileScreens.Profile.name}/${newId}")
-        }
     }
 }
 

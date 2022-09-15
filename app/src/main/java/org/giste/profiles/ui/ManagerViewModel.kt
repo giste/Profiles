@@ -7,8 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.giste.profiles.domain.AddProfileUseCase
 import org.giste.profiles.domain.DeleteProfileUseCase
@@ -30,7 +29,9 @@ class ManagerViewModel @Inject constructor(
     var profileList by mutableStateOf<List<Profile>>(listOf())
         private set
     var selectedProfileId by mutableStateOf(0L)
-    var newProfileId by mutableStateOf(0L)
+
+    private val _newProfileIdFlow: MutableSharedFlow<Long> = MutableSharedFlow(extraBufferCapacity = 1)
+    val newProfileIdFlow get() = _newProfileIdFlow.asSharedFlow()
 
     init {
         findProfilesUseCase.invoke().onEach {
@@ -61,10 +62,9 @@ class ManagerViewModel @Inject constructor(
 //    }
 
     fun addProfile(name: String) {
-        newProfileId = 0
-
         viewModelScope.launch {
-            newProfileId = addProfileUseCase.invoke(Profile(name = name))
+            val newProfileId = addProfileUseCase.invoke(Profile(name = name))
+            _newProfileIdFlow.tryEmit(newProfileId)
         }
     }
 }

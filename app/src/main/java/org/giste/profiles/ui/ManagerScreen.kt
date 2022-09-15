@@ -1,5 +1,6 @@
 package org.giste.profiles.ui
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.giste.profiles.ProfileScreens
 import org.giste.profiles.R
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.ui.components.TextDialog
@@ -37,8 +42,16 @@ fun ManagerPreview() {
 @Composable
 fun ProfileManagerBody(
     managerViewModel: ManagerViewModel,
-    onProfileClick: (Profile) -> Unit
+    onProfileClick: (Profile) -> Unit,
+    navController: NavController
 ) {
+    LaunchedEffect("newProfile") {
+        managerViewModel.newProfileIdFlow.onEach {
+            Log.d("ProfileManagerBody", "navigate(${ProfileScreens.Profile.name}/$it)")
+            navController.navigate("${ProfileScreens.Profile.name}/$it")
+        }.launchIn(this)
+    }
+
     ProfileManagerScreen(
         profileList = managerViewModel.profileList,
         selectedId = managerViewModel.selectedProfileId,
