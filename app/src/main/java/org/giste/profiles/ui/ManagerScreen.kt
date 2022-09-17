@@ -15,18 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.giste.profiles.ProfileScreens
 import org.giste.profiles.R
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.ui.components.TextDialog
+import org.giste.profiles.ui.destinations.ProfileBodyDestination
 
 @Preview(showBackground = true)
 @Composable
 fun ManagerPreview() {
-    ProfileManagerScreen(
+    ManagerScreen(
         profileList = listOf(
             Profile(id = 1L, name = "Profile 1"),
             Profile(id = 2L, name = "Profile 2"),
@@ -39,30 +42,33 @@ fun ManagerPreview() {
     )
 }
 
+@RootNavGraph(start = true)
+@Destination
 @Composable
-fun ProfileManagerBody(
-    managerViewModel: ManagerViewModel,
-    onProfileClick: (Profile) -> Unit,
-    navController: NavController
+fun ManagerBody(
+    navigator: DestinationsNavigator,
+    managerViewModel: ManagerViewModel
 ) {
+    Log.d("ManagerBody", "ManagerViewModel: $managerViewModel")
+
     LaunchedEffect("newProfile") {
-        managerViewModel.newProfileIdFlow.onEach {
-            Log.d("ProfileManagerBody", "navigate(${ProfileScreens.Profile.name}/$it)")
-            navController.navigate("${ProfileScreens.Profile.name}/$it")
+        managerViewModel.newProfileIdFlow.onEach { newProfileId ->
+            Log.d("ProfileManagerBody", "navigate(${ProfileBodyDestination.route}/$newProfileId)")
+            navigator.navigate(ProfileBodyDestination(newProfileId))
         }.launchIn(this)
     }
 
-    ProfileManagerScreen(
+    ManagerScreen(
         profileList = managerViewModel.profileList,
         selectedId = managerViewModel.selectedProfileId,
         onProfileSelect = {}, // managerViewModel::onProfileSelected,
-        onProfileClick = onProfileClick,
+        onProfileClick = { profile -> navigator.navigate(ProfileBodyDestination(profile.id)) },
         onProfileDelete = managerViewModel::deleteProfile
     )
 }
 
 @Composable
-fun ProfileManagerScreen(
+fun ManagerScreen(
     profileList: List<Profile>,
     selectedId: Long,
     onProfileSelect: (Profile) -> Unit,

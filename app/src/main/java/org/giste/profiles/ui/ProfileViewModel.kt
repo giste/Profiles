@@ -14,6 +14,7 @@ import org.giste.profiles.domain.AddProfileUseCase
 import org.giste.profiles.domain.FindProfileByIdUseCase
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.UpdateProfileUseCase
+import org.giste.profiles.ui.destinations.ProfileBodyDestination
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +27,7 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
     var profile by mutableStateOf(Profile())
         private set
-    private var id: Long = state["id"] ?: 0
+    private var id: Long = ProfileBodyDestination.argsFrom(state).id
 
     init {
         viewModelScope.launch {

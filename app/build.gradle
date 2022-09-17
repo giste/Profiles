@@ -3,15 +3,16 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
+    id 'com.google.devtools.ksp' version '1.7.10-1.0.6'
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "org.giste.profiles"
-        minSdk 32
-        targetSdk 32
+        minSdk 33
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -38,11 +39,20 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion compose_compiler_version
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    namespace 'org.giste.profiles'
+
+    applicationVariants.all { variant ->
+        kotlin.sourceSets {
+            getByName(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
         }
     }
 }
@@ -62,6 +72,9 @@ dependencies {
     implementation "androidx.room:room-common:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     implementation "com.google.dagger:hilt-android:$hilt_version"
+
+    implementation "io.github.raamcosta.compose-destinations:core:$compose_destinations_version"
+    ksp "io.github.raamcosta.compose-destinations:ksp:$compose_destinations_version"
 
     testImplementation "androidx.room:room-testing:$room_version"
     testImplementation "io.mockk:mockk:$mockk_version"

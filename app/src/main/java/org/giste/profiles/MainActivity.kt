@@ -6,20 +6,21 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint
 import org.giste.profiles.ui.*
+import org.giste.profiles.ui.destinations.ProfileBodyDestination
+import org.giste.profiles.ui.destinations.ManagerBodyDestination
 import org.giste.profiles.ui.theme.ProfilesTheme
 
 @AndroidEntryPoint
@@ -42,7 +43,6 @@ fun DefaultPreview() {
 fun ProfileApp() {
     ProfilesTheme {
         val navController = rememberNavController()
-        val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
         val managerViewModel = hiltViewModel<ManagerViewModel>()
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -54,15 +54,13 @@ fun ProfileApp() {
             floatingActionButton = {
                 FloatingButton(
                     destination = currentDestination,
-                    navController = navController,
                     managerViewModel = managerViewModel
                 )
             }
         ) { innerPadding ->
             ProfilesNavHost(
                 navController = navController,
-                modifier = Modifier.padding(innerPadding),
-                managerViewModel
+                modifier = Modifier.padding(innerPadding)
             )
         }
     }
@@ -71,59 +69,36 @@ fun ProfileApp() {
 @Composable
 fun ProfilesNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    managerViewModel: ManagerViewModel
+    modifier: Modifier = Modifier
 ) {
-    NavHost(
+    DestinationsNavHost(
+        navGraph = NavGraphs.root,
         navController = navController,
-        startDestination = ProfileScreens.Manager.name,
-        modifier = modifier
-    ) {
-        composable(ProfileScreens.Manager.name) {
-            ProfileManagerBody(
-                managerViewModel = managerViewModel,
-                onProfileClick = { profile ->
-                    navController.navigate("${ProfileScreens.Profile}/${profile.id}")
-                },
-                navController
-            )
+        modifier = modifier,
+        dependenciesContainerBuilder = {
+            dependency(ManagerBodyDestination) { hiltViewModel<ManagerViewModel>() }
         }
-        composable(
-            route = "${ProfileScreens.Profile.name}/{id}",
-            arguments = listOf(
-                navArgument("id") {
-                    type = NavType.LongType
-                }
-            )
-        ) {
-            ProfileBody(
-                profileViewModel = hiltViewModel(),
-                navigate = {
-                    navController.navigate("${ProfileScreens.Manager}") {
-                        popUpTo("${ProfileScreens.Manager}") { inclusive = true }
-                    }
-                }
-            )
-        }
-    }
+    )
 }
 
 @Composable
 fun TopBar(destination: NavDestination?) {
-    if (destination?.route == ProfileScreens.Manager.name) {
-        ManagerToolBar()
-    } else {
-        ProfileToolBar()
+    when(destination?.route) {
+        ManagerBodyDestination.route -> {
+            ManagerToolBar()
+        }
+        ProfileBodyDestination.route -> {
+            ProfileToolBar()
+        }
     }
 }
 
 @Composable
 fun FloatingButton(
     destination: NavDestination?,
-    navController: NavHostController,
     managerViewModel: ManagerViewModel
 ) {
-    if (destination?.route == ProfileScreens.Manager.name) {
+    if (destination?.route == ManagerBodyDestination.route) {
         ManagerFloatingButton(
             onClick = {
                 managerViewModel.addProfile(it)
@@ -131,5 +106,3 @@ fun FloatingButton(
         )
     }
 }
-
-enum class ProfileScreens { Manager, Profile }

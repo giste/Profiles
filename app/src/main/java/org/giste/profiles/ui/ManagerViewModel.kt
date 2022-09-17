@@ -30,8 +30,8 @@ class ManagerViewModel @Inject constructor(
         private set
     var selectedProfileId by mutableStateOf(0L)
 
-    private val _newProfileIdFlow: MutableSharedFlow<Long> = MutableSharedFlow(extraBufferCapacity = 1)
-    val newProfileIdFlow get() = _newProfileIdFlow.asSharedFlow()
+    private val _newProfileIdFlow = MutableSharedFlow<Long>(extraBufferCapacity = 1)
+    val newProfileIdFlow = _newProfileIdFlow.asSharedFlow()
 
     init {
         findProfilesUseCase.invoke().onEach {
@@ -62,6 +62,7 @@ class ManagerViewModel @Inject constructor(
 //    }
 
     fun addProfile(name: String) {
+        Log.d("ManagerViewModel", "Manager: $this")
         viewModelScope.launch {
             val newProfileId = addProfileUseCase.invoke(Profile(name = name))
             _newProfileIdFlow.tryEmit(newProfileId)
