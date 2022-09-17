@@ -81,10 +81,7 @@ fun ProfilesNavHost(
     DestinationsNavHost(
         navGraph = NavGraphs.root,
         navController = navController,
-        modifier = modifier,
-        dependenciesContainerBuilder = {
-            dependency(ManagerBodyDestination) { hiltViewModel<ManagerViewModel>() }
-        }
+        modifier = modifier
     )
 }
 
