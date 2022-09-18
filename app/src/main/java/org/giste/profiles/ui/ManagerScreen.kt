@@ -6,8 +6,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,7 +21,9 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.giste.profiles.R
 import org.giste.profiles.domain.Profile
+import org.giste.profiles.ui.components.FabSettings
 import org.giste.profiles.ui.destinations.ProfileBodyDestination
+import org.giste.profiles.ui.destinations.ProfileNameBodyDestination
 
 @Preview(showBackground = true)
 @Composable
@@ -41,9 +45,19 @@ fun ManagerPreview() {
 @Destination
 @Composable
 fun ManagerBody(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    fabSettings: FabSettings
 ) {
     val managerViewModel: ManagerViewModel = hiltViewModel()
+
+    LaunchedEffect("Manager") {
+        fabSettings.config(
+            visible = true,
+            icon = Icons.Default.Add,
+            onClick = { navigator.navigate(ProfileNameBodyDestination) }
+        )
+    }
+
     ManagerScreen(
         profileList = managerViewModel.profileList,
         selectedId = managerViewModel.selectedProfileId,

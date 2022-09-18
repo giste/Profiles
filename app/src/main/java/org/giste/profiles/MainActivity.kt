@@ -1,6 +1,7 @@
 package org.giste.profiles
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
@@ -12,24 +13,23 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.navigation.dependency
+import com.ramcosta.composedestinations.manualcomposablecalls.composable
 import dagger.hilt.android.AndroidEntryPoint
-import org.giste.profiles.ui.ManagerToolBar
-import org.giste.profiles.ui.ManagerViewModel
-import org.giste.profiles.ui.NavGraphs
-import org.giste.profiles.ui.ProfileToolBar
+import org.giste.profiles.ui.*
+import org.giste.profiles.ui.components.FabSettings
 import org.giste.profiles.ui.destinations.ManagerBodyDestination
 import org.giste.profiles.ui.destinations.ProfileBodyDestination
-import org.giste.profiles.ui.destinations.ProfileNameBodyDestination
 import org.giste.profiles.ui.theme.ProfilesTheme
 
 @AndroidEntryPoint
@@ -55,19 +55,33 @@ fun ProfileApp() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
+        val (fabVisible, setFabVisible) = remember { mutableStateOf(false) }
+        val (fabIcon, setFabIcon) = remember { mutableStateOf(Icons.Default.Add) }
+        val (fabOnClick, setFabOnClick) = remember { mutableStateOf({ }) }
+
+        val fabSettings = object: FabSettings {
+            override fun config(visible: Boolean, icon: ImageVector, onClick: () -> Unit) {
+                setFabVisible(visible)
+                setFabIcon(icon)
+                setFabOnClick(onClick)
+            }
+        }
+
         Scaffold(
             topBar = { TopBar(destination = currentDestination) },
             floatingActionButtonPosition = FabPosition.End,
             floatingActionButton = {
                 FloatingButton(
-                    destination = currentDestination,
-                    onClick = { navController.navigate(ProfileNameBodyDestination.route) }
+                    visible = fabVisible,
+                    icon = fabIcon,
+                    onClick = fabOnClick
                 )
             }
         ) { innerPadding ->
             ProfilesNavHost(
                 navController = navController,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+                fabSettings = fabSettings
             )
         }
     }
@@ -76,18 +90,28 @@ fun ProfileApp() {
 @Composable
 fun ProfilesNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fabSettings: FabSettings
 ) {
     DestinationsNavHost(
         navGraph = NavGraphs.root,
         navController = navController,
         modifier = modifier
-    )
+    ) {
+        composable(ManagerBodyDestination){
+            ManagerBody(navigator = destinationsNavigator, fabSettings = fabSettings)
+        }
+        composable(ProfileBodyDestination){
+            ProfileBody(fabSettings = fabSettings)
+        }
+    }
 }
 
 @Composable
 fun TopBar(destination: NavDestination?) {
-    when(destination?.route) {
+    Log.d("TopBar", "destination: $destination")
+
+    when (destination?.route) {
         ManagerBodyDestination.route -> {
             ManagerToolBar()
         }
@@ -99,15 +123,17 @@ fun TopBar(destination: NavDestination?) {
 
 @Composable
 fun FloatingButton(
-    destination: NavDestination?,
+    visible: Boolean,
+    icon: ImageVector,
     onClick: () -> Unit
 ) {
-    if (destination?.route == ManagerBodyDestination.route) {
+    if(visible) {
         FloatingActionButton(
             onClick = onClick
         ) {
             Icon(
-                imageVector = Icons.Default.Add,
+                //imageVector = Icons.Default.Add,
+                imageVector = icon,
                 contentDescription = stringResource(id = R.string.manager_screen_add_profile_content_description)
             )
         }
