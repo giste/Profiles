@@ -40,29 +40,6 @@ class ProfileViewModelTests {
     private lateinit var state: SavedStateHandle
 
     @Test
-    fun init_idIsZero_profileIsAdded() = runTest {
-        every { state.get<Long>("id") } returns 0
-        coEvery { addProfileUseCase.invoke(Profile(name = "<New Profile>")) } returns 1
-        coEvery { findProfileByIdUseCase.invoke(1) } returns flow {
-            emit(Profile(1,"<New Profile>"))
-        }
-
-        val profileViewModel = ProfileViewModel(
-            findProfileByIdUseCase,
-            addProfileUseCase,
-            updateProfileUseCase,
-            state
-        )
-
-        assertThat(profileViewModel.profile, equalTo(Profile(1,"<New Profile>")))
-        verify { state.get<Long>("id") }
-        coVerify(exactly = 1) {
-            addProfileUseCase.invoke(Profile(name = "<New Profile>"))
-            findProfileByIdUseCase.invoke(1)
-        }
-    }
-
-    @Test
     fun init_idIsNotZero_profileIsLoaded() = runTest {
         every { state.get<Long>("id") } returns 1
         coEvery { findProfileByIdUseCase.invoke(1) } returns flow {
@@ -71,7 +48,6 @@ class ProfileViewModelTests {
 
         val profileViewModel = ProfileViewModel(
             findProfileByIdUseCase,
-            addProfileUseCase,
             updateProfileUseCase,
             state
         )
@@ -94,7 +70,6 @@ class ProfileViewModelTests {
 
         val profileViewModel = ProfileViewModel(
             findProfileByIdUseCase,
-            addProfileUseCase,
             updateProfileUseCase,
             state
         )
