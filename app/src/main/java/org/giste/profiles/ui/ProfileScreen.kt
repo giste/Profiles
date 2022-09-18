@@ -34,15 +34,15 @@ fun ProfileBody(
     fabSettings: FabSettings
 ) {
     val profileViewModel: ProfileViewModel = hiltViewModel()
-    val title = stringResource(id = R.string.profile_screen_title)
+    val profileName = profileViewModel.profile.name
 
-    LaunchedEffect("Profile") {
-        topBarSettings.config(upVisible = true, title = title)
+    LaunchedEffect(profileName) {
+        topBarSettings.config(upVisible = true, title = profileName)
         fabSettings.config(visible = false)
     }
 
     ProfileScreen(
-        name = profileViewModel.profile.name,
+        name = profileName,
         onNameChange = profileViewModel::onNameChange
     )
 }

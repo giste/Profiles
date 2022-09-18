@@ -8,9 +8,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.giste.profiles.domain.AddProfileUseCase
 import org.giste.profiles.domain.FindProfileByIdUseCase
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.UpdateProfileUseCase
@@ -20,7 +20,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     findProfileByIdUseCase: FindProfileByIdUseCase,
-    private val addProfileUseCase: AddProfileUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase,
 //    private val deleteProfileUseCase: DeleteProfileUseCase,
     state: SavedStateHandle
@@ -31,10 +30,6 @@ class ProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            if (id == 0L) {
-                id = addProfileUseCase.invoke(Profile(name = "<New Profile>"))
-            }
-
             findProfileByIdUseCase.invoke(id).onEach { profile = it }.collect()
         }
     }

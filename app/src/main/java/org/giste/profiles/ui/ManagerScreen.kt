@@ -19,6 +19,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.NavResult
+import com.ramcosta.composedestinations.result.ResultRecipient
 import org.giste.profiles.R
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.ui.components.FabSettings
@@ -47,11 +49,21 @@ fun ManagerPreview() {
 @Composable
 fun ManagerBody(
     navigator: DestinationsNavigator,
+    resultRecipient: ResultRecipient<ProfileNameBodyDestination, Long>,
     topBarSettings: TopBarSettings,
     fabSettings: FabSettings
 ) {
     val managerViewModel: ManagerViewModel = hiltViewModel()
     val title = stringResource(id = R.string.manager_screen_title)
+    
+    resultRecipient.onNavResult { result ->
+        when(result) {
+            is NavResult.Canceled -> {}
+            is NavResult.Value -> {
+                navigator.navigate(ProfileBodyDestination(result.value))
+            }
+        }
+    }
 
     LaunchedEffect("Manager") {
         topBarSettings.config(

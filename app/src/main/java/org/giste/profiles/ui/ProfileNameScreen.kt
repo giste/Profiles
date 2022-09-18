@@ -8,11 +8,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultBackNavigator
+import com.ramcosta.composedestinations.spec.DestinationStyle
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.giste.profiles.R
 import org.giste.profiles.ui.components.TextDialog
-import org.giste.profiles.ui.destinations.ManagerBodyDestination
 import org.giste.profiles.ui.destinations.ProfileBodyDestination
 
 @Preview
@@ -27,18 +28,18 @@ fun ProfileNamePreview(){
     )
 }
 
-@Destination
+@Destination(style = DestinationStyle.Dialog::class)
 @Composable
 fun ProfileNameBody(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    resultNavigator: ResultBackNavigator<Long>
 ) {
     val profileNameViewModel: ProfileNameViewModel = hiltViewModel()
 
     LaunchedEffect("newProfile") {
         profileNameViewModel.newProfileIdFlow.onEach { newProfileId ->
             Log.d("ProfileManagerBody", "navigate(${ProfileBodyDestination.route}/$newProfileId)")
-            navigator.popBackStack(ManagerBodyDestination, false)
-            navigator.navigate(ProfileBodyDestination(newProfileId),true)
+            resultNavigator.navigateBack(newProfileId)
         }.launchIn(this)
     }
 

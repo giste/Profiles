@@ -18,15 +18,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.manualcomposablecalls.composable
+import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint
-import org.giste.profiles.ui.ManagerBody
 import org.giste.profiles.ui.NavGraphs
-import org.giste.profiles.ui.ProfileBody
 import org.giste.profiles.ui.components.FabSettings
 import org.giste.profiles.ui.components.TopBarSettings
-import org.giste.profiles.ui.destinations.ManagerBodyDestination
-import org.giste.profiles.ui.destinations.ProfileBodyDestination
 import org.giste.profiles.ui.theme.ProfilesTheme
 
 @AndroidEntryPoint
@@ -107,33 +103,25 @@ fun ProfilesNavHost(
     DestinationsNavHost(
         navGraph = NavGraphs.root,
         navController = navController,
-        modifier = modifier
-    ) {
-        composable(ManagerBodyDestination) {
-            ManagerBody(
-                navigator = destinationsNavigator,
-                topBarSettings = topBarSettings,
-                fabSettings = fabSettings
-            )
+        modifier = modifier,
+        dependenciesContainerBuilder = {
+            dependency(topBarSettings)
+            dependency(fabSettings)
         }
-        composable(ProfileBodyDestination) {
-            ProfileBody(
-                topBarSettings = topBarSettings,
-                fabSettings = fabSettings
-            )
-        }
-    }
+    )
 }
 
 @Composable
 fun TopBar(upVisible: Boolean, title: String, navController: NavHostController) {
+    val backContentDescription = stringResource(id = R.string.app_back_content_description)
+
     TopAppBar(
         navigationIcon = {
             if (upVisible) {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = ""
+                        contentDescription = backContentDescription
                     )
                 }
             }
