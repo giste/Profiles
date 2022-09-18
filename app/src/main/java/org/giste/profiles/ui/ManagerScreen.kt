@@ -22,6 +22,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.giste.profiles.R
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.ui.components.FabSettings
+import org.giste.profiles.ui.components.TopBarSettings
 import org.giste.profiles.ui.destinations.ProfileBodyDestination
 import org.giste.profiles.ui.destinations.ProfileNameBodyDestination
 
@@ -46,11 +47,17 @@ fun ManagerPreview() {
 @Composable
 fun ManagerBody(
     navigator: DestinationsNavigator,
+    topBarSettings: TopBarSettings,
     fabSettings: FabSettings
 ) {
     val managerViewModel: ManagerViewModel = hiltViewModel()
+    val title = stringResource(id = R.string.manager_screen_title)
 
     LaunchedEffect("Manager") {
+        topBarSettings.config(
+            upVisible = false,
+            title = title
+        )
         fabSettings.config(
             visible = true,
             icon = Icons.Default.Add,
@@ -117,9 +124,4 @@ fun ProfileRow(
             )
         }
     }
-}
-
-@Composable
-fun ManagerToolBar() {
-    TopAppBar { Text(stringResource(id = R.string.manager_screen_title)) }
 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -15,9 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.giste.profiles.R
 import org.giste.profiles.ui.components.FabSettings
+import org.giste.profiles.ui.components.TopBarSettings
 
 @Preview(showBackground = true)
 @Composable
@@ -30,10 +29,15 @@ fun ProfilePreview() {
 
 @Destination(navArgsDelegate = ProfileScreenNavArgs::class)
 @Composable
-fun ProfileBody(fabSettings: FabSettings) {
+fun ProfileBody(
+    topBarSettings: TopBarSettings,
+    fabSettings: FabSettings
+) {
     val profileViewModel: ProfileViewModel = hiltViewModel()
+    val title = stringResource(id = R.string.profile_screen_title)
 
     LaunchedEffect("Profile") {
+        topBarSettings.config(upVisible = true, title = title)
         fabSettings.config(visible = false)
     }
 
@@ -70,9 +74,4 @@ fun ProfileName(
             modifier = Modifier.weight(1F)
         )
     }
-}
-
-@Composable
-fun ProfileToolBar() {
-    TopAppBar { Text(stringResource(id = R.string.profile_screen_title)) }
 }
