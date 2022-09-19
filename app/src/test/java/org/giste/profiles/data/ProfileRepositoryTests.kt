@@ -149,4 +149,24 @@ class ProfileRepositoryTests {
 
         coVerify(exactly = 1) { selectedProfileDao.selectProfile(SelectedProfileEntity(1L)) }
     }
+
+    @Test
+    fun checkIfExists_profileDoesNotExist_returnFalse() = runTest {
+        coEvery { profileDao.findByName("profile 1") } returns null
+
+        val exists = repository.checkIfExists("profile 1")
+
+        assertThat(exists, equalTo(false))
+        coVerify { profileDao.findByName("profile 1") }
+    }
+
+    @Test
+    fun checkIfExists_profileExists_returnTrue() = runTest {
+        coEvery { profileDao.findByName("profile 1") } returns ProfileEntity(1L, "Profile 1")
+
+        val exists = repository.checkIfExists("profile 1")
+
+        assertThat(exists, equalTo(true))
+        coVerify { profileDao.findByName("profile 1") }
+    }
 }

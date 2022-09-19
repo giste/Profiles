@@ -42,4 +42,8 @@ class ProfileRepositoryImpl(
         selectedProfileDao.selectProfile(SelectedProfileEntity(profile.id))
     }
 
+    override suspend fun checkIfExists(name: String): Boolean {
+        return profileDao.findByName(name) != null
+    }
+
 }
