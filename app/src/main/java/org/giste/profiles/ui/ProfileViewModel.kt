@@ -21,7 +21,6 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     findProfileByIdUseCase: FindProfileByIdUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase,
-//    private val deleteProfileUseCase: DeleteProfileUseCase,
     state: SavedStateHandle
 ) : ViewModel() {
     var profile by mutableStateOf(Profile())
@@ -41,13 +40,4 @@ class ProfileViewModel @Inject constructor(
             Log.d("ProfileViewModel", "Updated profile: $updatedProfile")
         }
     }
-
-//    fun deleteProfile() {
-//        if (profile.id != 0L) {
-//            viewModelScope.launch {
-//                deleteProfileUseCase.invoke(profile)
-//            }
-//        }
-//    }
-
 }
