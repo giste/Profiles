@@ -33,9 +33,24 @@ class SelectedProfileDaoTests {
     }
 
     @Test
+    fun findSelected_noProfileSelected_returnsNull() = runBlocking {
+        val selectedProfileEntity = selectedProfileDao.findSelected().first()
+
+        assertThat(selectedProfileEntity, equalTo(null))
+    }
+
+    @Test
+    fun findSelected_thereIsSelectedProfile_returnsProfileId() = runBlocking {
+        selectedProfileDao.selectProfile(SelectedProfileEntity(1))
+        val selectedId = selectedProfileDao.findSelected().first()?.selectedId
+
+        assertThat(selectedId, equalTo(1))
+    }
+
+    @Test
     fun selectProfile_noSelectedProfile_selectsProfile() = runBlocking {
         selectedProfileDao.selectProfile(SelectedProfileEntity(1))
-        val selectedProfileId = selectedProfileDao.findSelected().first().selectedId
+        val selectedProfileId = selectedProfileDao.findSelected().first()?.selectedId
 
         assertThat(selectedProfileId, equalTo(1L))
     }
@@ -45,7 +60,7 @@ class SelectedProfileDaoTests {
         selectedProfileDao.insert(SelectedProfileEntity(2))
 
         selectedProfileDao.selectProfile(SelectedProfileEntity(1))
-        val selectedProfileId = selectedProfileDao.findSelected().first().selectedId
+        val selectedProfileId = selectedProfileDao.findSelected().first()?.selectedId
 
         assertThat(selectedProfileId, equalTo(1L))
     }

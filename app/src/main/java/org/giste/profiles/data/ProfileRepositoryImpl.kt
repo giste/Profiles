@@ -1,14 +1,14 @@
 package org.giste.profiles.data
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.ProfileRepository
 
 class ProfileRepositoryImpl(
     private val profileDao: ProfileDao,
-    private val profileMapper: ProfileMapper
+    private val profileMapper: ProfileMapper,
+    private val selectedProfileDao: SelectedProfileDao
 ) : ProfileRepository {
     override fun findAll(): Flow<List<Profile>> {
         return profileDao.findAll().map { list -> list.map { profileMapper.toModel(it) } }
@@ -31,6 +31,15 @@ class ProfileRepositoryImpl(
 
     override suspend fun delete(profile: Profile) {
         return profileDao.delete(profileMapper.toEntity(profile))
+    }
+
+    override fun findSelectedProfile(): Flow<Long> {
+        return selectedProfileDao.findSelected()
+            .map { it?.selectedId ?: 0L }
+    }
+
+    override suspend fun selectProfile(id: Long) {
+        selectedProfileDao.selectProfile(SelectedProfileEntity(id))
     }
 
 }

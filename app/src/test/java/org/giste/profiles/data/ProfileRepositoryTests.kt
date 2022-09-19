@@ -35,12 +35,15 @@ class ProfileRepositoryTests {
     @MockK
     private lateinit var profileDao: ProfileDao
 
+    @MockK
+    private lateinit var selectedProfileDao: SelectedProfileDao
+
     private val mapper = ProfileMapper()
     private lateinit var repository: ProfileRepository
 
     @Before
     fun setUp() {
-        repository = ProfileRepositoryImpl(profileDao, mapper)
+        repository = ProfileRepositoryImpl(profileDao, mapper, selectedProfileDao)
     }
 
     @Test
@@ -116,5 +119,34 @@ class ProfileRepositoryTests {
         repository.delete(PROFILE_1)
 
         coVerify(exactly = 1) { profileDao.delete(PROFILE_DTO_1) }
+    }
+
+    @Test
+    fun findSelected_noProfileSelected_returnsZero() = runTest {
+        coEvery { selectedProfileDao.findSelected() } returns flow { emit(null) }
+
+        val id = repository.findSelectedProfile().first()
+        assertThat(id, equalTo(0L))
+
+        coVerify(exactly = 1) { selectedProfileDao.findSelected() }
+    }
+
+    @Test
+    fun findSelected_thereIsSelectedProfile_returnsId() = runTest {
+        coEvery { selectedProfileDao.findSelected() } returns flow { emit(SelectedProfileEntity(1L)) }
+
+        val id = repository.findSelectedProfile().first()
+        assertThat(id, equalTo(1L))
+
+        coVerify(exactly = 1) { selectedProfileDao.findSelected() }
+    }
+
+    @Test
+    fun selectProfile_daoIsInvoked() = runTest {
+        coEvery { selectedProfileDao.selectProfile(SelectedProfileEntity(1L)) } returns Unit
+
+        repository.selectProfile(1L)
+
+        coVerify(exactly = 1) { selectedProfileDao.selectProfile(SelectedProfileEntity(1L)) }
     }
 }

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SelectedProfileDao {
     @Query("SELECT * FROM SELECTED_PROFILE LIMIT 1")
-    fun findSelected(): Flow<SelectedProfileEntity>
+    fun findSelected(): Flow<SelectedProfileEntity?>
 
     @Query("DELETE FROM SELECTED_PROFILE")
     suspend fun deleteSelected()

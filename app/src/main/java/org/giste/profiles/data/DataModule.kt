@@ -56,14 +56,14 @@ class DataModule {
 //        profileDetailDao: ProfileDetailDao,
         profileMapper: ProfileMapper,
 //        profileDetailMapper: ProfileDetailMapper,
-//        selectedProfileDao: SelectedProfileDao
+        selectedProfileDao: SelectedProfileDao
     ): ProfileRepository {
         return ProfileRepositoryImpl(
             profileDao = profileDao,
 //            profileDetailDao = profileDetailDao,
             profileMapper = profileMapper,
 //            profileDetailMapper = profileDetailMapper,
-//            selectedProfileDao = selectedProfileDao
+            selectedProfileDao = selectedProfileDao
         )
     }
 }

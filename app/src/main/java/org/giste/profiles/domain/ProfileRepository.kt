@@ -12,4 +12,8 @@ interface ProfileRepository {
     suspend fun update(profile: Profile): Int
 
     suspend fun delete(profile: Profile)
+
+    fun findSelectedProfile(): Flow<Long>
+
+    suspend fun selectProfile(id: Long)
 }
