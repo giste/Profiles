@@ -19,4 +19,7 @@ interface ProfileDao {
 
     @Delete
     suspend fun delete(profile: ProfileEntity)
+
+    @Query("SELECT * FROM profiles WHERE name = :name")
+    suspend fun findByName(name: String): ProfileEntity?
 }

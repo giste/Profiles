@@ -142,4 +142,18 @@ class ProfileDaoTests {
         val newProfile = ProfileEntity(name = "profile 1")
         profileDao.add(newProfile)
     }
+
+    @Test
+    fun findByName_nameDoesNotExist_returnNull() = runBlocking {
+        val profile = profileDao.findByName("profile 4")
+
+        assertThat(profile, equalTo(null))
+    }
+
+    @Test
+    fun findByName_nameExists_returnProfile() = runBlocking {
+        val profile = profileDao.findByName("profile 2")
+
+        assertThat(profile, equalTo(profile2))
+    }
 }
