@@ -1,7 +1,7 @@
 package org.giste.profiles.ui
 
-//import org.giste.profiles.domain.FindSelectedProfileUseCase
-//import org.giste.profiles.domain.SelectProfileUseCase
+import org.giste.profiles.domain.FindSelectedProfileUseCase
+import org.giste.profiles.domain.SelectProfileUseCase
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,8 +21,8 @@ import javax.inject.Inject
 class ManagerViewModel @Inject constructor(
     findProfilesUseCase: FindProfilesUseCase,
     private val deleteProfileUseCase: DeleteProfileUseCase,
-//    private val selectProfileUseCase: SelectProfileUseCase,
-//    findSelectedProfileUseCase: FindSelectedProfileUseCase
+    private val selectProfileUseCase: SelectProfileUseCase,
+    findSelectedProfileUseCase: FindSelectedProfileUseCase
 ) : ViewModel() {
     var profileList by mutableStateOf<List<Profile>>(listOf())
         private set
@@ -34,10 +34,10 @@ class ManagerViewModel @Inject constructor(
             profileList = it
         }.launchIn(viewModelScope)
 
-//        findSelectedProfileUseCase.invoke().onEach {
-//            Log.d("ManagerViewModel", "findSelectedProfileUseCase: $it")
-//            selectedProfileId = it
-//        }.launchIn(viewModelScope)
+        findSelectedProfileUseCase.invoke().onEach {
+            Log.d("ManagerViewModel", "findSelectedProfileUseCase: $it")
+            selectedProfileId = it
+        }.launchIn(viewModelScope)
     }
 
     fun deleteProfile(profile: Profile) {
@@ -46,13 +46,9 @@ class ManagerViewModel @Inject constructor(
         }
     }
 
-//    fun onProfileSelected(profile: Profile) {
-//        selectProfile(profile)
-//    }
-//
-//    private fun selectProfile(profile: Profile) {
-//        viewModelScope.launch {
-//            selectProfileUseCase.invoke(profile)
-//        }
-//    }
+    fun onProfileSelected(profile: Profile) {
+        viewModelScope.launch {
+            selectProfileUseCase.invoke(profile)
+        }
+    }
 }

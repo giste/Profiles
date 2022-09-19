@@ -80,7 +80,7 @@ fun ManagerScreen(
     ManagerContent(
         profileList = managerViewModel.profileList,
         selectedId = managerViewModel.selectedProfileId,
-        onProfileSelect = {}, // managerViewModel::onProfileSelected,
+        onProfileSelect = managerViewModel::onProfileSelected,
         onProfileClick = { profile -> navigator.navigate(ProfileScreenDestination(profile.id), true) },
         onProfileDelete = managerViewModel::deleteProfile
     )
