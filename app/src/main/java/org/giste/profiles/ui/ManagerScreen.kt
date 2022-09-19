@@ -87,7 +87,7 @@ fun ManagerScreen(
 }
 
 @Composable
-fun ManagerContent(
+private fun ManagerContent(
     profileList: List<Profile>,
     selectedId: Long,
     onProfileSelect: (Profile) -> Unit,
@@ -114,7 +114,7 @@ fun ManagerContent(
 }
 
 @Composable
-fun ProfileRow(
+private fun ProfileRow(
     isSelected: Boolean,
     name: String,
     onRadioSelect: () -> Unit,

@@ -18,7 +18,7 @@ class DialogScreenTests {
     fun dialogIsInvoked_everyPartIsVisible() {
         composeTestRule.setContent {
             ProfilesTheme {
-                DialogBody(
+                DialogScreen(
                     title = "Title",
                     cancelLabel = "Cancel",
                     acceptLabel = "Accept",
@@ -39,7 +39,7 @@ class DialogScreenTests {
     fun cancelIsClicked_dialogIsClosed() {
         composeTestRule.setContent {
             ProfilesTheme {
-                DialogBody(
+                DialogScreen(
                     title = "Title",
                     cancelLabel = "Cancel",
                     acceptLabel = "Accept",
@@ -57,7 +57,7 @@ class DialogScreenTests {
     fun acceptIsClicked_dialogIsClosed() {
         composeTestRule.setContent {
             ProfilesTheme {
-                DialogBody(
+                DialogScreen(
                     title = "Title",
                     cancelLabel = "Cancel",
                     acceptLabel = "Accept",
@@ -77,7 +77,7 @@ class DialogScreenTests {
 
         composeTestRule.setContent {
             ProfilesTheme {
-                DialogBody(
+                DialogScreen(
                     title = "Title",
                     cancelLabel = "Cancel",
                     acceptLabel = "Accept",
@@ -100,7 +100,7 @@ class DialogScreenTests {
 
         composeTestRule.setContent {
             ProfilesTheme {
-                DialogBody(
+                DialogScreen(
                     title = "Title",
                     cancelLabel = "Cancel",
                     acceptLabel = "Accept",

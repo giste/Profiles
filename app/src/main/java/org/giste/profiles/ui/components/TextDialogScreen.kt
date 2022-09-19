@@ -20,7 +20,7 @@ import org.giste.profiles.R
 @Preview
 @Composable
 fun TextDialogPreview() {
-    TextDialog(
+    TextDialogScreen(
         title = "Title",
         cancelLabel = "Cancel",
         acceptLabel = "Accept",
@@ -34,7 +34,7 @@ fun TextDialogPreview() {
 }
 
 @Composable
-fun TextDialog(
+fun TextDialogScreen(
     title: String,
     cancelLabel: String = stringResource(R.string.dialog_cancel_label),
     acceptLabel: String = stringResource(R.string.dialog_accept_label),
@@ -58,7 +58,7 @@ fun TextDialog(
     var text by remember { mutableStateOf(initText) }
     var error by remember { mutableStateOf(getErrorForText(text)) }
 
-    DialogBody(
+    DialogScreen(
         title = title,
         cancelLabel = cancelLabel,
         acceptLabel = acceptLabel,
@@ -66,7 +66,7 @@ fun TextDialog(
         onAccept = { onAccept(text) },
         acceptEnabled = { error.isBlank() }
     ) {
-        Content(
+        TextDialogContent(
             label = label,
             text = text,
             onTextChange = {
@@ -82,7 +82,7 @@ fun TextDialog(
 }
 
 @Composable
-private fun Content(
+private fun TextDialogContent(
     label: String,
     text: String,
     onTextChange: (String) -> Unit,

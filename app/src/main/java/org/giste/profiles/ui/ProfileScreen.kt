@@ -48,7 +48,7 @@ fun ProfileScreen(
 }
 
 @Composable
-fun ProfileContent(
+private fun ProfileContent(
     name: String,
     onNameChange: (String) -> Unit
 ) {
@@ -61,7 +61,7 @@ fun ProfileContent(
 }
 
 @Composable
-fun ProfileName(
+private fun ProfileName(
     name: String,
     onChange: (String) -> Unit
 ) {

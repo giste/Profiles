@@ -14,7 +14,7 @@ class TextDialogTests {
     fun textNotBlankIsInvoked_textFieldIsVisible() {
         composeTestRule.setContent {
             ProfilesTheme {
-                TextDialog(
+                TextDialogScreen(
                     title = "Title",
                     onAccept = { },
                     label = "Label"
@@ -29,7 +29,7 @@ class TextDialogTests {
     fun onChange_thereIsAnError_ErrorTextIsDisplayedAndAcceptIsNotEnabled() {
         composeTestRule.setContent {
             ProfilesTheme {
-                TextDialog(
+                TextDialogScreen(
                     title = "Title",
                     onAccept = { },
                     label = "Label",
@@ -54,7 +54,7 @@ class TextDialogTests {
     fun onChange_thereIsNoError_ErrorTextIsNotDisplayedAndAcceptIsEnabled() {
         composeTestRule.setContent {
             ProfilesTheme {
-                TextDialog(
+                TextDialogScreen(
                     title = "Title",
                     onAccept = { },
                     label = "Label",
@@ -79,7 +79,7 @@ class TextDialogTests {
     fun onChange_maxLengthIsDefinedAndTextIsLonger_textIsNotUpdated() {
         composeTestRule.setContent {
             ProfilesTheme {
-                TextDialog(
+                TextDialogScreen(
                     title = "Title",
                     onAccept = { },
                     label = "Label",

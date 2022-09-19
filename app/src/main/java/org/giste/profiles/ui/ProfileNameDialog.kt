@@ -13,7 +13,7 @@ import com.ramcosta.composedestinations.spec.DestinationStyle
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.giste.profiles.R
-import org.giste.profiles.ui.components.TextDialog
+import org.giste.profiles.ui.components.TextDialogScreen
 import org.giste.profiles.ui.destinations.ProfileScreenDestination
 
 @Preview
@@ -59,14 +59,14 @@ fun ProfileNameDialog(
 }
 
 @Composable
-fun ProfileNameContent(
+private fun ProfileNameContent(
     title: String,
     label: String,
     onAccept: (String) -> Unit,
     onDismiss: () -> Unit,
     getErrorForText: (String) -> String
 ) {
-    TextDialog(
+    TextDialogScreen(
         title = title,
         onDismiss = onDismiss,
         onAccept = onAccept,

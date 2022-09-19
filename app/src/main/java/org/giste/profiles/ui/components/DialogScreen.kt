@@ -16,7 +16,7 @@ import org.giste.profiles.R
 @Preview(showBackground = true)
 @Composable
 fun DialogPreview() {
-    DialogScreen(
+    DialogContent(
         show = true,
         title = "Title",
         cancelLabel = "Cancel",
@@ -30,10 +30,10 @@ fun DialogPreview() {
 }
 
 @Composable
-fun DialogBody(
+fun DialogScreen(
     title: String,
     cancelLabel: String = stringResource(R.string.dialog_cancel_label),
-    acceptLabel: String= stringResource(R.string.dialog_accept_label),
+    acceptLabel: String = stringResource(R.string.dialog_accept_label),
     onDismiss: () -> Unit = {},
     onAccept: () -> Unit,
     acceptEnabled: () -> Boolean = { true },
@@ -41,7 +41,7 @@ fun DialogBody(
 ) {
     var show by remember { mutableStateOf(true) }
 
-    DialogScreen(
+    DialogContent(
         show = show,
         title = title,
         cancelLabel = cancelLabel,
@@ -61,7 +61,7 @@ fun DialogBody(
 }
 
 @Composable
-private fun DialogScreen(
+private fun DialogContent(
     show: Boolean,
     title: String,
     cancelLabel: String,
