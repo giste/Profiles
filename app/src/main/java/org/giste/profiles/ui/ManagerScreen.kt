@@ -25,13 +25,13 @@ import org.giste.profiles.R
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.ui.components.FabSettings
 import org.giste.profiles.ui.components.TopBarSettings
-import org.giste.profiles.ui.destinations.ProfileBodyDestination
-import org.giste.profiles.ui.destinations.ProfileNameBodyDestination
+import org.giste.profiles.ui.destinations.ProfileScreenDestination
+import org.giste.profiles.ui.destinations.ProfileNameDialogDestination
 
 @Preview(showBackground = true)
 @Composable
 fun ManagerPreview() {
-    ManagerScreen(
+    ManagerContent(
         profileList = listOf(
             Profile(id = 1L, name = "Profile 1"),
             Profile(id = 2L, name = "Profile 2"),
@@ -47,9 +47,9 @@ fun ManagerPreview() {
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun ManagerBody(
+fun ManagerScreen(
     navigator: DestinationsNavigator,
-    resultRecipient: ResultRecipient<ProfileNameBodyDestination, Long>,
+    resultRecipient: ResultRecipient<ProfileNameDialogDestination, Long>,
     topBarSettings: TopBarSettings,
     fabSettings: FabSettings
 ) {
@@ -60,7 +60,7 @@ fun ManagerBody(
         when(result) {
             is NavResult.Canceled -> {}
             is NavResult.Value -> {
-                navigator.navigate(ProfileBodyDestination(result.value))
+                navigator.navigate(ProfileScreenDestination(result.value))
             }
         }
     }
@@ -73,21 +73,21 @@ fun ManagerBody(
         fabSettings.config(
             visible = true,
             icon = Icons.Default.Add,
-            onClick = { navigator.navigate(ProfileNameBodyDestination) }
+            onClick = { navigator.navigate(ProfileNameDialogDestination) }
         )
     }
 
-    ManagerScreen(
+    ManagerContent(
         profileList = managerViewModel.profileList,
         selectedId = managerViewModel.selectedProfileId,
         onProfileSelect = {}, // managerViewModel::onProfileSelected,
-        onProfileClick = { profile -> navigator.navigate(ProfileBodyDestination(profile.id), true) },
+        onProfileClick = { profile -> navigator.navigate(ProfileScreenDestination(profile.id), true) },
         onProfileDelete = managerViewModel::deleteProfile
     )
 }
 
 @Composable
-fun ManagerScreen(
+fun ManagerContent(
     profileList: List<Profile>,
     selectedId: Long,
     onProfileSelect: (Profile) -> Unit,

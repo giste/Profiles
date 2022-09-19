@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import org.giste.profiles.domain.FindProfileByIdUseCase
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.UpdateProfileUseCase
-import org.giste.profiles.ui.destinations.ProfileBodyDestination
+import org.giste.profiles.ui.destinations.ProfileScreenDestination
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +26,7 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
     var profile by mutableStateOf(Profile())
         private set
-    private var id: Long = ProfileBodyDestination.argsFrom(state).id
+    private var id: Long = ProfileScreenDestination.argsFrom(state).id
 
     init {
         viewModelScope.launch {

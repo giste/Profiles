@@ -21,7 +21,7 @@ import org.giste.profiles.ui.components.TopBarSettings
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
-    ProfileScreen(
+    ProfileContent(
         name = "Profile 1",
         onNameChange = {}
     )
@@ -29,7 +29,7 @@ fun ProfilePreview() {
 
 @Destination(navArgsDelegate = ProfileScreenNavArgs::class)
 @Composable
-fun ProfileBody(
+fun ProfileScreen(
     topBarSettings: TopBarSettings,
     fabSettings: FabSettings
 ) {
@@ -41,14 +41,14 @@ fun ProfileBody(
         fabSettings.config(visible = false)
     }
 
-    ProfileScreen(
+    ProfileContent(
         name = profileName,
         onNameChange = profileViewModel::onNameChange
     )
 }
 
 @Composable
-fun ProfileScreen(
+fun ProfileContent(
     name: String,
     onNameChange: (String) -> Unit
 ) {

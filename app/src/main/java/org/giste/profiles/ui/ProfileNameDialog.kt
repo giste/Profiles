@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.giste.profiles.R
 import org.giste.profiles.ui.components.TextDialog
-import org.giste.profiles.ui.destinations.ProfileBodyDestination
+import org.giste.profiles.ui.destinations.ProfileScreenDestination
 
 @Preview
 @Composable
 fun ProfileNamePreview(){
-    ProfileNameDialog(
+    ProfileNameContent(
         title = "New Profile",
         label = "Name",
         onAccept = {},
@@ -30,7 +30,7 @@ fun ProfileNamePreview(){
 
 @Destination(style = DestinationStyle.Dialog::class)
 @Composable
-fun ProfileNameBody(
+fun ProfileNameDialog(
     navigator: DestinationsNavigator,
     resultNavigator: ResultBackNavigator<Long>
 ) {
@@ -38,12 +38,12 @@ fun ProfileNameBody(
 
     LaunchedEffect("newProfile") {
         profileNameViewModel.newProfileIdFlow.onEach { newProfileId ->
-            Log.d("ProfileManagerBody", "navigate(${ProfileBodyDestination.route}/$newProfileId)")
+            Log.d("ProfileManagerBody", "navigate(${ProfileScreenDestination.route}/$newProfileId)")
             resultNavigator.navigateBack(newProfileId)
         }.launchIn(this)
     }
 
-    ProfileNameDialog(
+    ProfileNameContent(
         title = stringResource(id = R.string.profile_name_dialog_title),
         label = stringResource(id = R.string.profile_name_dialog_label),
         onAccept = { profileNameViewModel.onAccept(it) },
@@ -59,7 +59,7 @@ fun ProfileNameBody(
 }
 
 @Composable
-fun ProfileNameDialog(
+fun ProfileNameContent(
     title: String,
     label: String,
     onAccept: (String) -> Unit,
