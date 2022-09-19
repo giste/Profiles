@@ -145,7 +145,7 @@ class ProfileRepositoryTests {
     fun selectProfile_daoIsInvoked() = runTest {
         coEvery { selectedProfileDao.selectProfile(SelectedProfileEntity(1L)) } returns Unit
 
-        repository.selectProfile(1L)
+        repository.selectProfile(PROFILE_1)
 
         coVerify(exactly = 1) { selectedProfileDao.selectProfile(SelectedProfileEntity(1L)) }
     }

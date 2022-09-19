@@ -38,8 +38,8 @@ class ProfileRepositoryImpl(
             .map { it?.selectedId ?: 0L }
     }
 
-    override suspend fun selectProfile(id: Long) {
-        selectedProfileDao.selectProfile(SelectedProfileEntity(id))
+    override suspend fun selectProfile(profile: Profile) {
+        selectedProfileDao.selectProfile(SelectedProfileEntity(profile.id))
     }
 
 }

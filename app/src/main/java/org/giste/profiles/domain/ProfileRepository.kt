@@ -15,5 +15,5 @@ interface ProfileRepository {
 
     fun findSelectedProfile(): Flow<Long>
 
-    suspend fun selectProfile(id: Long)
+    suspend fun selectProfile(profile: Profile)
 }
