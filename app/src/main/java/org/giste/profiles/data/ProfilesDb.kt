@@ -8,7 +8,8 @@ import androidx.room.RoomDatabase
         ProfileEntity::class,
         SelectedProfileEntity::class
     ],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class ProfilesDb : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
