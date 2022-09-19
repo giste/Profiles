@@ -31,9 +31,6 @@ class ProfileViewModelTests {
     private lateinit var findProfileByIdUseCase: FindProfileByIdUseCase
 
     @MockK
-    private lateinit var addProfileUseCase: AddProfileUseCase
-
-    @MockK
     private lateinit var updateProfileUseCase: UpdateProfileUseCase
 
     @MockK
