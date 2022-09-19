@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.equalTo
@@ -45,7 +44,6 @@ class ProfileDaoTests {
         db.close()
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun findAll_profilesExist_returnsProfiles() = runBlocking {
         val profileList = profileDao.findAll().first()
