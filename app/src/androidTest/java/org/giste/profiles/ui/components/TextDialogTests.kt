@@ -30,7 +30,7 @@ class TextDialogTests {
     }
 
     @Test
-    fun onChange_thereIsAnError_ErrorTextIsDisplayedAndAcceptIsNotEnabled() {
+    fun thereIsAnError_ErrorTextIsDisplayedAndAcceptIsNotEnabled() {
         composeTestRule.setContent {
             ProfilesTheme {
                 TextDialogScreen(
@@ -44,13 +44,12 @@ class TextDialogTests {
             }
         }
 
-        composeTestRule.onNodeWithTag("TextField").performTextReplacement("")
-        composeTestRule.onNodeWithTag("ErrorText").assertTextEquals("Can't be empty")
+        composeTestRule.onNodeWithTag("ErrorText").assertTextEquals("Error")
         composeTestRule.onNodeWithTag("AcceptButton").assertIsNotEnabled()
     }
 
     @Test
-    fun onChange_thereIsNoError_ErrorTextIsNotDisplayedAndAcceptIsEnabled() {
+    fun thereIsNoError_ErrorTextIsNotDisplayedAndAcceptIsEnabled() {
         composeTestRule.setContent {
             ProfilesTheme {
                 TextDialogScreen(
@@ -64,30 +63,8 @@ class TextDialogTests {
             }
         }
 
-        composeTestRule.onNodeWithTag("TextField").performTextReplacement("Some text")
         composeTestRule.onNodeWithTag("ErrorText").assertDoesNotExist()
         composeTestRule.onNodeWithTag("AcceptButton").assertIsEnabled()
     }
 
-    @Test
-    fun onChange_maxLengthIsDefinedAndTextIsLonger_textIsNotUpdated() {
-        composeTestRule.setContent {
-            ProfilesTheme {
-                TextDialogScreen(
-                    title = "Title",
-                    onAccept = { },
-                    label = "Label",
-                    text = "1234567890",
-                    error = "",
-                    onTextChange = {},
-                    maxLength = 10
-                )
-            }
-        }
-
-        composeTestRule.onNodeWithTag("TextField").performTextReplacement("12345678901")
-        composeTestRule.onNodeWithTag("TextField")
-            .assert(hasText(text = "1234567890", substring = false))
-        composeTestRule.onNodeWithTag("LengthText", true).assert(hasText("10/10"))
-    }
 }

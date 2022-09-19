@@ -16,6 +16,7 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.giste.profiles.R
+import java.lang.Integer.min
 
 @Preview
 @Composable
@@ -47,10 +48,6 @@ fun TextDialogScreen(
     onTextChange: (String) -> Unit,
     maxLength: Int = 0
 ) {
-    if (maxLength < 0) {
-        throw IllegalArgumentException("Max. length must be greater than zero")
-    }
-
     DialogScreen(
         title = title,
         cancelLabel = cancelLabel,
@@ -64,7 +61,7 @@ fun TextDialogScreen(
             text = text,
             onTextChange = onTextChange,
             error = error,
-            maxLength = maxLength
+            maxLength = min(maxLength, 0)
         )
     }
 }
@@ -78,7 +75,7 @@ private fun TextDialogContent(
     maxLength: Int
 ) {
     val textFieldContentDescription =
-        stringResource(R.string.dialog_text_not_blank_text_field_content_description, label)
+        stringResource(R.string.dialog_text_field_content_description, label)
     val isError = error != ""
 
     Column {
