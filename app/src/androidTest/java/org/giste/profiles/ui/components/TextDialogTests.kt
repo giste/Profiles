@@ -90,7 +90,8 @@ class TextDialogTests {
         }
 
         composeTestRule.onNodeWithTag("TextField").performTextReplacement("12345678901")
-        composeTestRule.onNodeWithTag("TextField").assert(hasText(text = "1234567890", substring = false))
+        composeTestRule.onNodeWithTag("TextField")
+            .assert(hasText(text = "1234567890", substring = false))
         composeTestRule.onNodeWithTag("LengthText", true).assert(hasText("10/10"))
     }
 }
