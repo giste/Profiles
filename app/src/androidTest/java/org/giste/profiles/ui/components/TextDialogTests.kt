@@ -11,13 +11,17 @@ class TextDialogTests {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun textNotBlankIsInvoked_textFieldIsVisible() {
+    fun textDialogIsInvoked_textFieldIsVisible() {
         composeTestRule.setContent {
             ProfilesTheme {
                 TextDialogScreen(
                     title = "Title",
                     onAccept = { },
-                    label = "Label"
+                    label = "Label",
+                    text = "Text",
+                    error = "",
+                    onTextChange = {},
+                    maxLength = 20
                 )
             }
         }
@@ -33,14 +37,9 @@ class TextDialogTests {
                     title = "Title",
                     onAccept = { },
                     label = "Label",
-                    initialText = "Some text",
-                    getErrorForText = {
-                        if (it.isBlank()) {
-                            "Can't be empty"
-                        } else {
-                            ""
-                        }
-                    }
+                    text = "Some text",
+                    error = "Error",
+                    onTextChange = {}
                 )
             }
         }
@@ -58,14 +57,9 @@ class TextDialogTests {
                     title = "Title",
                     onAccept = { },
                     label = "Label",
-                    initialText = "",
-                    getErrorForText = {
-                        if (it.isBlank()) {
-                            "Can't be empty"
-                        } else {
-                            ""
-                        }
-                    }
+                    text = "",
+                    error = "",
+                    onTextChange = {}
                 )
             }
         }
@@ -83,7 +77,9 @@ class TextDialogTests {
                     title = "Title",
                     onAccept = { },
                     label = "Label",
-                    initialText = "1234567890",
+                    text = "1234567890",
+                    error = "",
+                    onTextChange = {},
                     maxLength = 10
                 )
             }

@@ -27,8 +27,9 @@ fun TextDialogPreview() {
         onDismiss = { },
         onAccept = { },
         label = "Label",
-        initialText = "Initial text",
-        getErrorForText = { "Error text" },
+        text = "Initial text",
+        error = "Error text",
+        onTextChange = {},
         maxLength = 20
     )
 }
@@ -41,22 +42,14 @@ fun TextDialogScreen(
     onDismiss: () -> Unit = {},
     onAccept: (String) -> Unit,
     label: String,
-    initialText: String = "",
-    getErrorForText: (String) -> String = { "" },
+    text: String,
+    error: String,
+    onTextChange: (String) -> Unit,
     maxLength: Int = 0
 ) {
     if (maxLength < 0) {
         throw IllegalArgumentException("Max. length must be greater than zero")
     }
-
-    val initText = if (maxLength > 0) {
-        initialText.take(maxLength)
-    } else {
-        initialText
-    }
-
-    var text by remember { mutableStateOf(initText) }
-    var error by remember { mutableStateOf(getErrorForText(text)) }
 
     DialogScreen(
         title = title,
@@ -69,12 +62,7 @@ fun TextDialogScreen(
         TextDialogContent(
             label = label,
             text = text,
-            onTextChange = {
-                if (maxLength == 0 || it.length <= maxLength) {
-                    text = it
-                    error = getErrorForText(text)
-                }
-            },
+            onTextChange = onTextChange,
             error = error,
             maxLength = maxLength
         )
@@ -116,7 +104,8 @@ private fun TextDialogContent(
                         style = MaterialTheme.typography.caption
                     )
                 }
-            }
+            },
+            singleLine = true
         )
         if (isError) {
             Text(

@@ -21,4 +21,8 @@
 
     <string name="profile_name_dialog_title">New Profile</string>
     <string name="profile_name_dialog_label">Name</string>
+    <string name="profile_name_dialog_profile_exists">There is a profile with this name</string>
+
+    <string name="validation_no_error"></string>
+    <string name="validation_string_not_blank">Can not be blank</string>
 </resources>

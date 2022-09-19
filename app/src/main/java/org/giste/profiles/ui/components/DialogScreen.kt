@@ -2,7 +2,7 @@ package org.giste.profiles.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -17,7 +17,6 @@ import org.giste.profiles.R
 @Composable
 fun DialogPreview() {
     DialogContent(
-        show = true,
         title = "Title",
         cancelLabel = "Cancel",
         acceptLabel = "Accept",
@@ -39,21 +38,12 @@ fun DialogScreen(
     acceptEnabled: () -> Boolean = { true },
     content: @Composable () -> Unit
 ) {
-    var show by remember { mutableStateOf(true) }
-
     DialogContent(
-        show = show,
         title = title,
         cancelLabel = cancelLabel,
         acceptLabel = acceptLabel,
-        onDismiss = {
-            onDismiss()
-            show = false
-        },
-        onAccept = {
-            onAccept()
-            show = false
-        },
+        onDismiss = onDismiss,
+        onAccept = onAccept,
         acceptEnabled = acceptEnabled()
     ) {
         content()
@@ -62,7 +52,6 @@ fun DialogScreen(
 
 @Composable
 private fun DialogContent(
-    show: Boolean,
     title: String,
     cancelLabel: String,
     acceptLabel: String,
@@ -71,27 +60,25 @@ private fun DialogContent(
     acceptEnabled: Boolean,
     content: @Composable () -> Unit
 ) {
-    if (show) {
-        Dialog(onDismissRequest = onDismiss) {
-            Card {
-                Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .semantics { testTag = "Root" }
-                ) {
-                    DialogTitle(title = title)
-                    Divider(thickness = 1.dp)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    DialogContent(content)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    DialogButtons(
-                        cancelLabel = cancelLabel,
-                        acceptLabel = acceptLabel,
-                        onDismiss = onDismiss,
-                        onAccept = onAccept,
-                        acceptEnabled = acceptEnabled
-                    )
-                }
+    Dialog(onDismissRequest = onDismiss) {
+        Card {
+            Column(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .semantics { testTag = "Root" }
+            ) {
+                DialogTitle(title = title)
+                Divider(thickness = 1.dp)
+                Spacer(modifier = Modifier.height(8.dp))
+                DialogContent(content)
+                Spacer(modifier = Modifier.height(8.dp))
+                DialogButtons(
+                    cancelLabel = cancelLabel,
+                    acceptLabel = acceptLabel,
+                    onDismiss = onDismiss,
+                    onAccept = onAccept,
+                    acceptEnabled = acceptEnabled
+                )
             }
         }
     }

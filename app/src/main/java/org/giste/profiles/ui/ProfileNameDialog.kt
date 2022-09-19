@@ -18,13 +18,16 @@ import org.giste.profiles.ui.destinations.ProfileScreenDestination
 
 @Preview
 @Composable
-fun ProfileNamePreview(){
+fun ProfileNamePreview() {
     ProfileNameContent(
         title = "New Profile",
         label = "Name",
         onAccept = {},
         onDismiss = { },
-        getErrorForText = { "" }
+        name = "Profile name",
+        error = "Error text",
+        onNameChange = {},
+        maxLength = 20
     )
 }
 
@@ -48,13 +51,10 @@ fun ProfileNameDialog(
         label = stringResource(id = R.string.profile_name_dialog_label),
         onAccept = { profileNameViewModel.onAccept(it) },
         onDismiss = { navigator.navigateUp() },
-        getErrorForText = {
-            if (it.isBlank()) {
-                "Can't be empty"
-            } else {
-                ""
-            }
-        }
+        name = profileNameViewModel.name,
+        error = stringResource(id = profileNameViewModel.errorResource),
+        onNameChange = profileNameViewModel::onNameChange,
+        maxLength = ProfileNameViewModel.maxLength
     )
 }
 
@@ -64,14 +64,19 @@ private fun ProfileNameContent(
     label: String,
     onAccept: (String) -> Unit,
     onDismiss: () -> Unit,
-    getErrorForText: (String) -> String
+    name: String,
+    error: String,
+    onNameChange: (String) -> Unit,
+    maxLength: Int
 ) {
     TextDialogScreen(
         title = title,
         onDismiss = onDismiss,
         onAccept = onAccept,
         label = label,
-        getErrorForText = getErrorForText,
-        maxLength = 20
+        text = name,
+        error = error,
+        onTextChange = onNameChange,
+        maxLength = maxLength
     )
 }
