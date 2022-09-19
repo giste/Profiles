@@ -42,12 +42,12 @@ class DataModule {
 //    fun provideSettingDao(profilesDb: ProfilesDb): SettingDao {
 //        return profilesDb.settingDao()
 //    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideSelectedProfileDao(profilesDb: ProfilesDb): SelectedProfileDao {
-//        return profilesDb.selectedProfileDao()
-//    }
+
+    @Provides
+    @Singleton
+    fun provideSelectedProfileDao(profilesDb: ProfilesDb): SelectedProfileDao {
+        return profilesDb.selectedProfileDao()
+    }
 
     @Provides
     @Singleton

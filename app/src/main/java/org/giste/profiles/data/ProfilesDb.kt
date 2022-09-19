@@ -5,8 +5,12 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [
-        ProfileEntity::class],
-    version = 1)
+        ProfileEntity::class,
+        SelectedProfileEntity::class
+    ],
+    version = 1
+)
 abstract class ProfilesDb : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
+    abstract fun selectedProfileDao(): SelectedProfileDao
 }
