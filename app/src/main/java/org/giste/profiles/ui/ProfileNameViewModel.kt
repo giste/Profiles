@@ -24,14 +24,8 @@ class ProfileNameViewModel @Inject constructor(
     private val _newProfileIdFlow = MutableSharedFlow<Long>(extraBufferCapacity = 1)
     val newProfileIdFlow = _newProfileIdFlow.asSharedFlow()
 
-    var name by mutableStateOf("")
-        private set
     var errorResource by mutableStateOf(R.string.validation_no_error)
         private set
-
-    companion object {
-        const val maxLength = 20
-    }
 
     fun onAccept(name: String) {
         viewModelScope.launch {
@@ -48,15 +42,7 @@ class ProfileNameViewModel @Inject constructor(
         }
     }
 
-    fun onNameChange(name: String) {
-        if (name.length <= maxLength) {
-            this.name = name
-        }
-
-        validateName(name)
-    }
-
-    private fun validateName(name: String) {
+    fun onValidate(name: String) {
         viewModelScope.launch {
             errorResource = if (name.isBlank()) {
                 R.string.validation_string_not_blank

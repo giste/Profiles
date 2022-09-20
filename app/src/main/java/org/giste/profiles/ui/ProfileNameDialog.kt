@@ -24,10 +24,8 @@ fun ProfileNamePreview() {
         label = "Name",
         onAccept = {},
         onDismiss = { },
-        name = "Profile name",
         error = "Error text",
-        onNameChange = {},
-        maxLength = 20
+        onValidate = {}
     )
 }
 
@@ -51,10 +49,8 @@ fun ProfileNameDialog(
         label = stringResource(id = R.string.profile_name_dialog_label),
         onAccept = { profileNameViewModel.onAccept(it) },
         onDismiss = { navigator.navigateUp() },
-        name = profileNameViewModel.name,
         error = stringResource(id = profileNameViewModel.errorResource),
-        onNameChange = profileNameViewModel::onNameChange,
-        maxLength = ProfileNameViewModel.maxLength
+        onValidate = profileNameViewModel::onValidate
     )
 }
 
@@ -64,19 +60,17 @@ private fun ProfileNameContent(
     label: String,
     onAccept: (String) -> Unit,
     onDismiss: () -> Unit,
-    name: String,
     error: String,
-    onNameChange: (String) -> Unit,
-    maxLength: Int
+    onValidate: (String) -> Unit
 ) {
     TextDialogScreen(
         title = title,
         onDismiss = onDismiss,
         onAccept = onAccept,
         label = label,
-        text = name,
+        initialText = "",
         error = error,
-        onTextChange = onNameChange,
-        maxLength = maxLength
+        onValidate = onValidate,
+        maxLength = 20
     )
 }

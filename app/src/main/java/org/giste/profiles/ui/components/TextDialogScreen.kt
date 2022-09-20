@@ -9,9 +9,7 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -39,9 +37,9 @@ fun TextDialogPreview() {
         onDismiss = { },
         onAccept = { },
         label = "Label",
-        text = "Initial text",
+        initialText = "Initial text",
         error = "Error text",
-        onTextChange = {},
+        onValidate = {},
         maxLength = 20
     )
 }
@@ -54,11 +52,18 @@ fun TextDialogScreen(
     onDismiss: () -> Unit = {},
     onAccept: (String) -> Unit,
     label: String,
-    text: String,
+    initialText: String = "",
     error: String,
-    onTextChange: (String) -> Unit,
+    onValidate: (String) -> Unit,
     maxLength: Int = 0
 ) {
+    val initText = if (maxLength > 0) {
+        initialText.take(maxLength)
+    } else {
+        initialText
+    }
+    var text by remember { mutableStateOf(initText) }
+
     DialogScreen(
         title = title,
         cancelLabel = cancelLabel,
@@ -70,7 +75,12 @@ fun TextDialogScreen(
         TextDialogContent(
             label = label,
             text = text,
-            onTextChange = onTextChange,
+            onValueChange = {
+                if (maxLength == 0 || it.length <= maxLength) {
+                    text = it
+                    onValidate(text)
+                }
+            },
             error = error,
             maxLength = min(maxLength, 0),
             onAccept = { onAccept(text) }
@@ -83,21 +93,21 @@ fun TextDialogScreen(
 private fun TextDialogContent(
     label: String,
     text: String,
-    onTextChange: (String) -> Unit,
+    onValueChange: (String) -> Unit,
     error: String,
     maxLength: Int,
     onAccept: () -> Unit
 ) {
     val textFieldContentDescription =
         stringResource(R.string.dialog_text_field_content_description, label)
-    val isError = error != ""
+    val isError = error.isNotBlank()
     val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
 
     Column {
         TextField(
             value = text,
-            onValueChange = onTextChange,
+            onValueChange = onValueChange,
             label = { Text(label) },
             modifier = Modifier
                 .fillMaxWidth()

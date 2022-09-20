@@ -18,9 +18,9 @@ class TextDialogTests {
                     title = "Title",
                     onAccept = { },
                     label = "Label",
-                    text = "Text",
+                    initialText = "Text",
                     error = "",
-                    onTextChange = {},
+                    onValidate = {},
                     maxLength = 20
                 )
             }
@@ -37,9 +37,9 @@ class TextDialogTests {
                     title = "Title",
                     onAccept = { },
                     label = "Label",
-                    text = "Some text",
+                    initialText = "Some text",
                     error = "Error",
-                    onTextChange = {}
+                    onValidate = {}
                 )
             }
         }
@@ -56,9 +56,9 @@ class TextDialogTests {
                     title = "Title",
                     onAccept = { },
                     label = "Label",
-                    text = "",
+                    initialText = "",
                     error = "",
-                    onTextChange = {}
+                    onValidate = {}
                 )
             }
         }
