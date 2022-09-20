@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.giste.profiles.domain.ProfileRepository
+import org.giste.profiles.domain.SystemProperties
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -65,5 +66,11 @@ class DataModule {
 //            profileDetailMapper = profileDetailMapper,
             selectedProfileDao = selectedProfileDao
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideSystemProperties(@ApplicationContext appContext: Context): SystemProperties {
+        return SystemPropertiesDataSource(appContext)
     }
 }
