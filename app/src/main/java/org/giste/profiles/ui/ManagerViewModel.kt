@@ -1,7 +1,7 @@
 package org.giste.profiles.ui
 
-import org.giste.profiles.domain.FindSelectedProfileUseCase
-import org.giste.profiles.domain.SelectProfileUseCase
+import org.giste.profiles.domain.usecases.FindSelectedProfileUseCase
+import org.giste.profiles.domain.usecases.SelectProfileUseCase
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,8 +12,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.giste.profiles.domain.DeleteProfileUseCase
-import org.giste.profiles.domain.FindProfilesUseCase
+import org.giste.profiles.domain.usecases.DeleteProfileUseCase
+import org.giste.profiles.domain.usecases.FindProfilesUseCase
 import org.giste.profiles.domain.Profile
 import javax.inject.Inject
 

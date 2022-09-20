@@ -11,9 +11,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.giste.profiles.domain.FindProfileByIdUseCase
+import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
 import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.UpdateProfileUseCase
+import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.giste.profiles.ui.destinations.ProfileScreenDestination
 import javax.inject.Inject
 

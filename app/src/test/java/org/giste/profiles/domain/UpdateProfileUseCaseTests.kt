@@ -1,12 +1,12 @@
 package org.giste.profiles.domain
 
-import android.database.sqlite.SQLiteConstraintException
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before

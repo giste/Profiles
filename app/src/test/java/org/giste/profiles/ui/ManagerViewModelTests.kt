@@ -9,6 +9,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.giste.profiles.domain.*
+import org.giste.profiles.domain.usecases.DeleteProfileUseCase
+import org.giste.profiles.domain.usecases.FindProfilesUseCase
+import org.giste.profiles.domain.usecases.FindSelectedProfileUseCase
+import org.giste.profiles.domain.usecases.SelectProfileUseCase
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule

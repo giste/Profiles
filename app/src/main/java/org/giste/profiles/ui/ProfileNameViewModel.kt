@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.giste.profiles.R
-import org.giste.profiles.domain.AddProfileUseCase
-import org.giste.profiles.domain.CheckIfProfileExistsUseCase
+import org.giste.profiles.domain.usecases.AddProfileUseCase
+import org.giste.profiles.domain.usecases.CheckIfProfileExistsUseCase
 import org.giste.profiles.domain.Profile
 import javax.inject.Inject
 

@@ -10,10 +10,9 @@ import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
-import org.giste.profiles.domain.AddProfileUseCase
-import org.giste.profiles.domain.FindProfileByIdUseCase
+import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
 import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.UpdateProfileUseCase
+import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
