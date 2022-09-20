@@ -3,18 +3,29 @@ package org.giste.profiles.ui.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import org.giste.profiles.R
 import java.lang.Integer.min
 
@@ -61,22 +72,27 @@ fun TextDialogScreen(
             text = text,
             onTextChange = onTextChange,
             error = error,
-            maxLength = min(maxLength, 0)
+            maxLength = min(maxLength, 0),
+            onAccept = { onAccept(text) }
         )
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TextDialogContent(
     label: String,
     text: String,
     onTextChange: (String) -> Unit,
     error: String,
-    maxLength: Int
+    maxLength: Int,
+    onAccept: () -> Unit
 ) {
     val textFieldContentDescription =
         stringResource(R.string.dialog_text_field_content_description, label)
     val isError = error != ""
+    val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
 
     Column {
         TextField(
@@ -88,8 +104,8 @@ private fun TextDialogContent(
                 .semantics {
                     contentDescription = textFieldContentDescription
                     testTag = "TextField"
-                },
-            isError = isError,
+                }
+                .focusRequester(focusRequester),
             trailingIcon = {
                 if (maxLength > 0) {
                     Text(
@@ -102,6 +118,15 @@ private fun TextDialogContent(
                     )
                 }
             },
+            isError = isError,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                autoCorrect = false,
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { onAccept() }
+            ),
             singleLine = true
         )
         if (isError) {
@@ -113,6 +138,12 @@ private fun TextDialogContent(
                 color = MaterialTheme.colors.error,
                 style = MaterialTheme.typography.caption
             )
+        }
+
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+            delay(100)
+            keyboard?.show()
         }
     }
 }
