@@ -1,7 +1,8 @@
 package org.giste.profiles.domain
 
-sealed interface Setting<T: Any> {
+sealed interface Setting<out T> {
     val id: Long
-    var override: Boolean
-    var value: T
+    val profileId: Long
+    val override: Boolean
+    val value: T
 }
