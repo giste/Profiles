@@ -1,0 +1,17 @@
+package org.giste.profiles.domain
+
+enum class SettingType {
+    VOLUME_MEDIA,
+    VOLUME_RING,
+    VOLUME_NOTIFICATION,
+    VOLUME_ALARM,
+    RING_MODE,
+    CONNECTION_WIFI,
+    CONNECTION_DATA,
+    CONNECTION_BLUETOOTH,
+    CONNECTION_NFC,
+    CONNECTION_AIRPLANE,
+    LOCATION,
+    BRIGHTNESS_AUTO,
+    BRIGHTNESS
+}

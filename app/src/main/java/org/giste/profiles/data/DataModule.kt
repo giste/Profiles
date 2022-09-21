@@ -32,17 +32,17 @@ class DataModule {
         return profilesDb.profileDao()
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideProfileDetailDao(profilesDb: ProfilesDb): ProfileDetailDao {
-//        return profilesDb.profileDetailDao()
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideSettingDao(profilesDb: ProfilesDb): SettingDao {
-//        return profilesDb.settingDao()
-//    }
+    @Provides
+    @Singleton
+    fun provideProfileDetailDao(profilesDb: ProfilesDb): ProfileDetailDao {
+        return profilesDb.profileDetailDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSettingDao(profilesDb: ProfilesDb): SettingDao {
+        return profilesDb.settingDao()
+    }
 
     @Provides
     @Singleton

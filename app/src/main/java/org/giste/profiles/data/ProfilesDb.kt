@@ -6,7 +6,8 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [
         ProfileEntity::class,
-        SelectedProfileEntity::class
+        SelectedProfileEntity::class,
+        SettingEntity::class
     ],
     version = 1,
     exportSchema = false
@@ -14,4 +15,6 @@ import androidx.room.RoomDatabase
 abstract class ProfilesDb : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
     abstract fun selectedProfileDao(): SelectedProfileDao
+    abstract fun settingDao(): SettingDao
+    abstract fun profileDetailDao(): ProfileDetailDao
 }
