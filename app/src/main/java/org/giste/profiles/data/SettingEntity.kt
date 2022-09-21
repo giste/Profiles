@@ -7,7 +7,7 @@ import org.giste.profiles.domain.SettingType
     tableName = "settings",
     foreignKeys = [ForeignKey(
         entity = ProfileEntity::class,
-        parentColumns = ["id"],
+        parentColumns = ["profile_id"],
         childColumns = ["profile_id"],
         onDelete = ForeignKey.CASCADE
     )],

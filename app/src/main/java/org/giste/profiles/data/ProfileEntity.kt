@@ -8,7 +8,7 @@ import androidx.room.*
 )
 data class ProfileEntity(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "profile_id")
     val id: Long = 0,
 
     @ColumnInfo(name = "name", collate = ColumnInfo.NOCASE)

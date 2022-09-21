@@ -23,8 +23,8 @@ abstract class ProfileDetailDao(db: ProfilesDb) {
 
     @Query(
         "SELECT * FROM profiles " +
-                "INNER JOIN settings ON profiles.id = settings.profile_id " +
-                "WHERE profiles.id = :id"
+                "INNER JOIN settings ON profiles.profile_id = settings.profile_id " +
+                "WHERE profiles.profile_id = :id"
     )
     abstract fun findById(id: Long): Flow<Map<ProfileEntity, List<SettingEntity>>>
 

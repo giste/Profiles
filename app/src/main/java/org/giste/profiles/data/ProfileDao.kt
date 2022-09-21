@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProfileDao {
-    @Query("SELECT * FROM PROFILES")
+    @Query("SELECT * FROM profiles")
     fun findAll(): Flow<List<ProfileEntity>>
 
-    @Query("SELECT * FROM PROFILES WHERE ID = :id")
+    @Query("SELECT * FROM profiles WHERE profile_id = :id")
     fun findById(id: Long): Flow<ProfileEntity?>
 
     @Insert
