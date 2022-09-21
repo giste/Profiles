@@ -12,5 +12,5 @@ data class ProfileEntity(
     val id: Long = 0,
 
     @ColumnInfo(name = "name", collate = ColumnInfo.NOCASE)
-    var name: String = ""
+    val name: String
 )
