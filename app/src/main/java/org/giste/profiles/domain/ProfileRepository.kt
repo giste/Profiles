@@ -5,17 +5,17 @@ import kotlinx.coroutines.flow.Flow
 interface ProfileRepository {
     fun findAll(): Flow<List<Profile>>
 
-    fun findById(id: Long): Flow<Profile>
+    fun findById(id: Long): Flow<ProfileDetail>
 
-    suspend fun add(profile: Profile): Long
+    suspend fun add(profileDetail: ProfileDetail): Long
 
-    suspend fun update(profile: Profile): Int
+    suspend fun update(profileDetail: ProfileDetail): Int
 
     suspend fun delete(profile: Profile)
 
     fun findSelectedProfile(): Flow<Long>
 
-    suspend fun selectProfile(profile: Profile)
+    suspend fun selectProfile(profileDetail: ProfileDetail)
 
     suspend fun checkIfExists(name: String): Boolean
 }

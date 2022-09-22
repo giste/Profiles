@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
 import org.giste.profiles.domain.Profile
+import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -39,7 +40,7 @@ class ProfileViewModelTests {
     fun init_idIsNotZero_profileIsLoaded() = runTest {
         every { state.get<Long>("id") } returns 1
         coEvery { findProfileByIdUseCase.invoke(1) } returns flow {
-            emit(Profile(1,"Profile 1"))
+            emit(ProfileDetail(1,"Profile 1"))
         }
 
         val profileViewModel = ProfileViewModel(
@@ -59,8 +60,8 @@ class ProfileViewModelTests {
     fun onNameChange_updatesProfile() = runTest {
         every { state.get<Long>("id") } returns 1
         coEvery { findProfileByIdUseCase.invoke(1) } returns flow {
-            emit(Profile(1,"Profile 1"))
-            emit(Profile(1,"Updated name"))
+            emit(ProfileDetail(1,"Profile 1"))
+            emit(ProfileDetail(1,"Updated name"))
         }
         coEvery { updateProfileUseCase.invoke(Profile(1,"Updated name")) } returns 1
 

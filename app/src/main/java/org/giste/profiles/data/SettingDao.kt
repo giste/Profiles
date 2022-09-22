@@ -18,7 +18,7 @@ interface SettingDao {
     suspend fun update(setting: SettingEntity)
 
     @Update
-    suspend fun update(settings: List<SettingEntity>)
+    suspend fun update(settings: List<SettingEntity>): Int
 
     @Query("SELECT * FROM settings WHERE profile_id = :profileId")
     fun findByProfileId(profileId: Long): Flow<List<SettingEntity>>

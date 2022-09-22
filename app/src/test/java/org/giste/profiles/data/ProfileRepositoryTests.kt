@@ -38,12 +38,22 @@ class ProfileRepositoryTests {
     @MockK
     private lateinit var selectedProfileDao: SelectedProfileDao
 
-    private val mapper = ProfileMapper()
+    @MockK
+    private lateinit var profileDetailDao: ProfileDetailDao
+
+    private val profileMapper = ProfileMapper()
+    private val profileDetailMapper = ProfileDetailMapper(SettingMapper())
     private lateinit var repository: ProfileRepository
 
     @Before
     fun setUp() {
-        repository = ProfileRepositoryImpl(profileDao, mapper, selectedProfileDao)
+        repository = ProfileRepositoryImpl(
+            profileDao = profileDao,
+            profileMapper = profileMapper,
+            selectedProfileDao =  selectedProfileDao,
+            profileDetailDao =  profileDetailDao,
+            profileDetailMapper = profileDetailMapper
+        )
     }
 
     @Test

@@ -54,17 +54,19 @@ class DataModule {
     @Singleton
     fun provideProfileRepository(
         profileDao: ProfileDao,
-//        profileDetailDao: ProfileDetailDao,
+        profileDetailDao: ProfileDetailDao,
         profileMapper: ProfileMapper,
-//        profileDetailMapper: ProfileDetailMapper,
-        selectedProfileDao: SelectedProfileDao
+        profileDetailMapper: ProfileDetailMapper,
+        selectedProfileDao: SelectedProfileDao,
+        settingMapper: SettingMapper
     ): ProfileRepository {
         return ProfileRepositoryImpl(
             profileDao = profileDao,
-//            profileDetailDao = profileDetailDao,
+            profileDetailDao = profileDetailDao,
             profileMapper = profileMapper,
-//            profileDetailMapper = profileDetailMapper,
-            selectedProfileDao = selectedProfileDao
+            profileDetailMapper = profileDetailMapper,
+            selectedProfileDao = selectedProfileDao,
+            settingMapper = settingMapper
         )
     }
 

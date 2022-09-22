@@ -20,6 +20,10 @@ class SettingMapper @Inject constructor() {
         }
     }
 
+    fun toEntity(settingList: Map<SettingType, Setting<Any>>): List<SettingEntity> {
+        return settingList.values.map { toEntity(it) }
+    }
+
     fun toModel(settingEntity: SettingEntity): Setting<Any> {
         with(settingEntity) {
             when (type) {
@@ -40,5 +44,13 @@ class SettingMapper @Inject constructor() {
         }
     }
 
+    fun toModel(settingEntityList: List<SettingEntity>): Map<SettingType, Setting<Any>> {
+        val settingMap = mutableMapOf<SettingType, Setting<Any>>()
 
+        settingEntityList.forEach {
+            settingMap[it.type] = toModel(it)
+        }
+
+        return settingMap.toMap()
+    }
 }

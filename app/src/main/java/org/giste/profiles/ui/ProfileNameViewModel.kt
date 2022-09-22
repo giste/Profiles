@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.giste.profiles.R
+import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.usecases.AddProfileUseCase
 import org.giste.profiles.domain.usecases.CheckIfProfileExistsUseCase
-import org.giste.profiles.domain.Profile
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +30,7 @@ class ProfileNameViewModel @Inject constructor(
     fun onAccept(name: String) {
         viewModelScope.launch {
             try {
-                val newProfileId = addProfileUseCase.invoke(Profile(name = name))
+                val newProfileId = addProfileUseCase.invoke(ProfileDetail(name = name))
                 _newProfileIdFlow.tryEmit(newProfileId)
             } catch (e: Throwable) {
                 Log.d("onAccept", "e: $e")

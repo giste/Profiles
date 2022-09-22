@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
 import org.giste.profiles.domain.Profile
+import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.giste.profiles.ui.destinations.ProfileScreenDestination
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class ProfileViewModel @Inject constructor(
     private val updateProfileUseCase: UpdateProfileUseCase,
     state: SavedStateHandle
 ) : ViewModel() {
-    var profile by mutableStateOf(Profile())
+    var profile by mutableStateOf(ProfileDetail())
         private set
     private var id: Long = ProfileScreenDestination.argsFrom(state).id
 
@@ -34,10 +35,10 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun onNameChange(name: String) {
-        val updatedProfile = profile.copy(name = name)
-        viewModelScope.launch {
-            updateProfileUseCase.invoke(updatedProfile)
-            Log.d("ProfileViewModel", "Updated profile: $updatedProfile")
-        }
+//        val updatedProfile = profile.copy(name = name)
+//        viewModelScope.launch {
+//            updateProfileUseCase.invoke(updatedProfile)
+//            Log.d("ProfileViewModel", "Updated profile: $updatedProfile")
+//        }
     }
 }
