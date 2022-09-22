@@ -1,9 +1,9 @@
 package org.giste.profiles.domain
 
-data class VolumeSetting(
+data class IntSetting(
     override val id: Long,
     override val profileId: Long,
+    override val type: SettingType,
     override val override: Boolean,
-    val type: VolumeType,
     override val value: Int = 0
 ) : Setting<Int>
