@@ -63,7 +63,7 @@ class ProfileViewModelTests {
             emit(ProfileDetail(1,"Profile 1"))
             emit(ProfileDetail(1,"Updated name"))
         }
-        coEvery { updateProfileUseCase.invoke(Profile(1,"Updated name")) } returns 1
+        coEvery { updateProfileUseCase.invoke(ProfileDetail(1,"Updated name")) } returns 1
 
         val profileViewModel = ProfileViewModel(
             findProfileByIdUseCase,
@@ -75,7 +75,7 @@ class ProfileViewModelTests {
         assertThat(profileViewModel.profile, equalTo(Profile(1,"Updated name")))
         coVerify(exactly = 1) {
             findProfileByIdUseCase.invoke(1)
-            updateProfileUseCase.invoke(Profile(1,"Updated name"))
+            updateProfileUseCase.invoke(ProfileDetail(1,"Updated name"))
         }
     }
 }

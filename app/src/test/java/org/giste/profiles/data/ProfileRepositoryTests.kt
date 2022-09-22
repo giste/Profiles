@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.giste.profiles.domain.Profile
+import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.ProfileRepository
+import org.giste.profiles.domain.SettingType
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
@@ -25,8 +27,17 @@ class ProfileRepositoryTests {
         private val PROFILE_1 = Profile(1, "Profile 1")
         private val PROFILE_2 = Profile(2, "Profile 2")
 
-        private val PROFILE_DTO_1 = ProfileEntity(1, "Profile 1")
-        private val PROFILE_DTO_2 = ProfileEntity(2, "Profile 2")
+        private val PROFILE_DETAIL_1 = ProfileDetail(1, "Profile 1")
+
+        private val PROFILE_ENTITY_1 = ProfileEntity(1, "Profile 1")
+        private val PROFILE_ENTITY_2 = ProfileEntity(2, "Profile 2")
+
+        private val SETTING_ENTITY_LIST = listOf(
+            SettingEntity(0, 1, SettingType.VOLUME_MEDIA, false, 0),
+            SettingEntity(0, 1, SettingType.VOLUME_RING, false, 0),
+            SettingEntity(0, 1, SettingType.VOLUME_NOTIFICATION, false, 0),
+            SettingEntity(0, 1, SettingType.VOLUME_ALARM, false, 0)
+        )
     }
 
     @get:Rule
@@ -43,6 +54,8 @@ class ProfileRepositoryTests {
 
     private val profileMapper = ProfileMapper()
     private val profileDetailMapper = ProfileDetailMapper(SettingMapper())
+    private val settingMapper = SettingMapper()
+
     private lateinit var repository: ProfileRepository
 
     @Before
@@ -50,15 +63,23 @@ class ProfileRepositoryTests {
         repository = ProfileRepositoryImpl(
             profileDao = profileDao,
             profileMapper = profileMapper,
-            selectedProfileDao =  selectedProfileDao,
-            profileDetailDao =  profileDetailDao,
-            profileDetailMapper = profileDetailMapper
+            selectedProfileDao = selectedProfileDao,
+            profileDetailDao = profileDetailDao,
+            profileDetailMapper = profileDetailMapper,
+            settingMapper = settingMapper
         )
     }
 
     @Test
     fun findAll_thereAreProfiles_returnsProfileList() = runTest {
-        every { profileDao.findAll() } returns flow { emit(listOf(PROFILE_DTO_1, PROFILE_DTO_2)) }
+        every { profileDao.findAll() } returns flow {
+            emit(
+                listOf(
+                    PROFILE_ENTITY_1,
+                    PROFILE_ENTITY_2
+                )
+            )
+        }
 
         val readProfiles = repository.findAll().first()
 
@@ -78,57 +99,77 @@ class ProfileRepositoryTests {
 
     @Test
     fun findById_profileExist_returnsProfile() = runTest {
-        every { profileDao.findById(1) } returns flow { emit(PROFILE_DTO_1) }
+        every { profileDetailDao.findById(1) } returns flow {
+            emit(mapOf(PROFILE_ENTITY_1 to SETTING_ENTITY_LIST))
+        }
 
         val readProfile = repository.findById(1).first()
 
-        assertThat(readProfile, equalTo(PROFILE_1))
-        verify(exactly = 1) { profileDao.findById(1) }
+        assertThat(readProfile, equalTo(PROFILE_DETAIL_1))
+        verify(exactly = 1) { profileDetailDao.findById(1) }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test(expected = NoSuchElementException::class)
     fun findById_profileDoesNotExist_throwsException() = runTest {
-        every { profileDao.findById(1) } returns flow { emit(null) }
+        every { profileDetailDao.findById(1) } returns flow { emit(mapOf()) }
 
         repository.findById(1).first()
     }
 
     @Test
     fun add_profileIdDoesNotExist_returnsId() = runTest {
-        val newProfile = Profile(name = "New profile")
+        val newProfile = ProfileDetail(name = "New profile")
         val newProfileEntity = ProfileEntity(name = "New profile")
-        coEvery { profileDao.add(newProfileEntity) } returns 1
+        coEvery {
+            profileDetailDao.add(
+                newProfileEntity, listOf(
+                    SettingEntity(0, 0, SettingType.VOLUME_MEDIA, false, 0),
+                    SettingEntity(0, 0, SettingType.VOLUME_RING, false, 0),
+                    SettingEntity(0, 0, SettingType.VOLUME_NOTIFICATION, false, 0),
+                    SettingEntity(0, 0, SettingType.VOLUME_ALARM, false, 0)
+                )
+            )
+        } returns 1
 
         val id = repository.add(newProfile)
 
         assertThat(id, equalTo(1))
-        coVerify(exactly = 1) { profileDao.add(newProfileEntity) }
+        coVerify(exactly = 1) {
+            profileDetailDao.add(
+                newProfileEntity, listOf(
+                    SettingEntity(0, 0, SettingType.VOLUME_MEDIA, false, 0),
+                    SettingEntity(0, 0, SettingType.VOLUME_RING, false, 0),
+                    SettingEntity(0, 0, SettingType.VOLUME_NOTIFICATION, false, 0),
+                    SettingEntity(0, 0, SettingType.VOLUME_ALARM, false, 0)
+                )
+            )
+        }
     }
 
     @Test(expected = SQLiteConstraintException::class)
     fun add_profileIdExists_throwsException() = runTest {
-        coEvery { profileDao.add(PROFILE_DTO_1) } throws SQLiteConstraintException()
+        coEvery { profileDetailDao.add(PROFILE_ENTITY_1, SETTING_ENTITY_LIST) } throws SQLiteConstraintException()
 
-        repository.add(PROFILE_1)
+        repository.add(PROFILE_DETAIL_1)
     }
 
     @Test
     fun update_profileExists_updatesProfile() = runTest {
-        coEvery { profileDao.update(PROFILE_DTO_1) } returns 1
+        coEvery { profileDetailDao.update(PROFILE_ENTITY_1, SETTING_ENTITY_LIST) } returns 1
 
-        val updated = repository.update(PROFILE_1)
+        val updated = repository.update(PROFILE_DETAIL_1)
 
         assertThat(updated, equalTo(1))
-        coVerify(exactly = 1) { profileDao.update(PROFILE_DTO_1) }
+        coVerify(exactly = 1) { profileDetailDao.update(PROFILE_ENTITY_1, SETTING_ENTITY_LIST) }
     }
 
     @Test
     fun delete_profileExists_deletesProfile() = runTest {
-        coEvery { profileDao.delete(PROFILE_DTO_1) } returns Unit
+        coEvery { profileDao.delete(PROFILE_ENTITY_1) } returns Unit
 
         repository.delete(PROFILE_1)
 
-        coVerify(exactly = 1) { profileDao.delete(PROFILE_DTO_1) }
+        coVerify(exactly = 1) { profileDao.delete(PROFILE_ENTITY_1) }
     }
 
     @Test

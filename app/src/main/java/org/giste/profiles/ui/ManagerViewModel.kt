@@ -48,8 +48,7 @@ class ManagerViewModel @Inject constructor(
 
     fun onProfileSelected(profile: Profile) {
         viewModelScope.launch {
-            TODO("Find profile by id")
-            //selectProfileUseCase.invoke()
+            selectProfileUseCase.invoke(profile)
         }
     }
 }

@@ -16,7 +16,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class UpdateProfileUseCaseTests {
     companion object {
-        private val PROFILE_1 = Profile(1, "Profile 1")
+        private val PROFILE_1 = ProfileDetail(1, "Profile 1")
     }
 
     @get:Rule

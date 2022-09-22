@@ -20,10 +20,10 @@ class ProfileRepositoryImpl(
 
     override fun findById(id: Long): Flow<ProfileDetail> {
         return profileDetailDao.findById(id).map { map ->
-            profileDetailMapper.toModel(
-                profileEntity = map.keys.first(),
-                settingList = map.values.first()
-            )
+                profileDetailMapper.toModel(
+                    profileEntity = map.keys.first(),
+                    settingList = map.values.first()
+                )
         }
     }
 
@@ -50,8 +50,8 @@ class ProfileRepositoryImpl(
             .map { it?.selectedId ?: 0L }
     }
 
-    override suspend fun selectProfile(profileDetail: ProfileDetail) {
-        selectedProfileDao.selectProfile(SelectedProfileEntity(profileDetail.id))
+    override suspend fun selectProfile(profile: Profile) {
+        selectedProfileDao.selectProfile(SelectedProfileEntity(profile.id))
     }
 
     override suspend fun checkIfExists(name: String): Boolean {

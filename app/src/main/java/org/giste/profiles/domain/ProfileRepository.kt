@@ -15,7 +15,7 @@ interface ProfileRepository {
 
     fun findSelectedProfile(): Flow<Long>
 
-    suspend fun selectProfile(profileDetail: ProfileDetail)
+    suspend fun selectProfile(profile: Profile)
 
     suspend fun checkIfExists(name: String): Boolean
 }

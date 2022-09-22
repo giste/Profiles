@@ -4,9 +4,6 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 
 @Dao
 abstract class ProfileDetailDao(db: ProfilesDb) {
@@ -16,9 +13,7 @@ abstract class ProfileDetailDao(db: ProfilesDb) {
     @Transaction
     open suspend fun add(profile: ProfileEntity, settings: List<SettingEntity>): Long {
         val id = profileDao.add(profile)
-        val updatedSettings = settings.asFlow()
-            .map { it.copy(profileId = id) }
-            .toList()
+        val updatedSettings = settings.map { it.copy(profileId = id) }
 
         settingDao.add(updatedSettings)
 
