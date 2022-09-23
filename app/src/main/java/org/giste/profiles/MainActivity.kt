@@ -57,11 +57,18 @@ fun ProfileApp() {
 
         val (fabVisible, setFabVisible) = remember { mutableStateOf(false) }
         val (fabIcon, setFabIcon) = remember { mutableStateOf(Icons.Default.Add) }
+        val (contentDescription, setContentDescription) = remember { mutableStateOf("") }
         val (fabOnClick, setFabOnClick) = remember { mutableStateOf({ }) }
         val fabSettings = object : FabSettings {
-            override fun config(visible: Boolean, icon: ImageVector, onClick: () -> Unit) {
+            override fun config(
+                visible: Boolean,
+                icon: ImageVector,
+                contentDescription: String,
+                onClick: () -> Unit
+            ) {
                 setFabVisible(visible)
                 setFabIcon(icon)
+                setContentDescription(contentDescription)
                 setFabOnClick(onClick)
             }
         }
@@ -79,6 +86,7 @@ fun ProfileApp() {
                 FloatingButton(
                     visible = fabVisible,
                     icon = fabIcon,
+                    contentDescription = contentDescription,
                     onClick = fabOnClick
                 )
             }
@@ -134,6 +142,7 @@ fun TopBar(upVisible: Boolean, title: String, navController: NavHostController) 
 fun FloatingButton(
     visible: Boolean,
     icon: ImageVector,
+    contentDescription: String,
     onClick: () -> Unit
 ) {
     if (visible) {
@@ -142,7 +151,7 @@ fun FloatingButton(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = stringResource(id = R.string.manager_screen_add_profile_content_description)
+                contentDescription = contentDescription
             )
         }
     }

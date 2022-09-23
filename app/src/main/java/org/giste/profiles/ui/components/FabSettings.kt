@@ -8,6 +8,7 @@ interface FabSettings {
     fun config(
         visible: Boolean = false,
         icon: ImageVector = Icons.Default.Add,
+        contentDescription: String = "",
         onClick: () -> Unit = {}
     )
 }

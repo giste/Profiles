@@ -4,7 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.RadioButton
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -25,8 +28,8 @@ import org.giste.profiles.R
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.ui.components.FabSettings
 import org.giste.profiles.ui.components.TopBarSettings
-import org.giste.profiles.ui.destinations.ProfileScreenDestination
 import org.giste.profiles.ui.destinations.ProfileNameDialogDestination
+import org.giste.profiles.ui.destinations.ProfileScreenDestination
 
 @Preview(showBackground = true)
 @Composable
@@ -55,9 +58,12 @@ fun ManagerScreen(
 ) {
     val managerViewModel: ManagerViewModel = hiltViewModel()
     val title = stringResource(id = R.string.manager_screen_title)
-    
+    val fabContentDescription = stringResource(
+        id = R.string.manager_screen_add_profile_content_description
+    )
+
     resultRecipient.onNavResult { result ->
-        when(result) {
+        when (result) {
             is NavResult.Canceled -> {}
             is NavResult.Value -> {
                 navigator.navigate(ProfileScreenDestination(result.value))
@@ -73,6 +79,7 @@ fun ManagerScreen(
         fabSettings.config(
             visible = true,
             icon = Icons.Default.Add,
+            contentDescription = fabContentDescription,
             onClick = { navigator.navigate(ProfileNameDialogDestination) }
         )
     }
@@ -81,7 +88,12 @@ fun ManagerScreen(
         profileList = managerViewModel.profileList,
         selectedId = managerViewModel.selectedProfileId,
         onProfileSelect = managerViewModel::onProfileSelected,
-        onProfileClick = { profile -> navigator.navigate(ProfileScreenDestination(profile.id), true) },
+        onProfileClick = { profile ->
+            navigator.navigate(
+                ProfileScreenDestination(profile.id),
+                true
+            )
+        },
         onProfileDelete = managerViewModel::deleteProfile
     )
 }
@@ -132,7 +144,7 @@ private fun ProfileRow(
         IconButton(onClick = { onDelete() }) {
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = stringResource(id = R.string.profile_screen_delete_profile_content_description)
+                contentDescription = stringResource(id = R.string.manager_screen_delete_profile_content_description)
             )
         }
     }
