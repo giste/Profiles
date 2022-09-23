@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.ProfileDetail
+import org.giste.profiles.domain.SettingType
 import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.giste.profiles.ui.destinations.ProfileScreenDestination
 import javax.inject.Inject
@@ -34,11 +35,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun onNameChange(name: String) {
-//        val updatedProfile = profile.copy(name = name)
-//        viewModelScope.launch {
-//            updateProfileUseCase.invoke(updatedProfile)
-//            Log.d("ProfileViewModel", "Updated profile: $updatedProfile")
-//        }
+    fun onOverrideChange(type: SettingType, value: Boolean) {
+
     }
 }
