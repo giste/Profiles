@@ -26,17 +26,11 @@ class SettingMapper @Inject constructor() {
 
     fun toModel(settingEntity: SettingEntity): Setting<Any> {
         with(settingEntity) {
-            when (type) {
+            return when (type) {
                 SettingType.VOLUME_MEDIA,
                 SettingType.VOLUME_RING,
                 SettingType.VOLUME_NOTIFICATION,
-                SettingType.VOLUME_ALARM -> return IntSetting(
-                    id = id,
-                    profileId = profileId,
-                    override = override,
-                    value = value,
-                    type = type
-                )
+                SettingType.VOLUME_ALARM -> IntSetting(id, profileId,   type, override, value)
             }
         }
     }
