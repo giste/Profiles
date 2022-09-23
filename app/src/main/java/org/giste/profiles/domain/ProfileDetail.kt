@@ -3,12 +3,8 @@ package org.giste.profiles.domain
 data class ProfileDetail(
     val id: Long = 0,
     val name: String = "",
-    val settings: Map<SettingType, Setting<Any>> = SettingType.values().associate {
-        when (it) {
-            SettingType.VOLUME_MEDIA,
-            SettingType.VOLUME_RING,
-            SettingType.VOLUME_NOTIFICATION,
-            SettingType.VOLUME_ALARM -> Pair(it, IntSetting(profileId = id, type = it))
-        }
-    }
+    val mediaVolume: IntSetting = IntSetting(profileId = id, type = SettingType.VOLUME_MEDIA),
+    val ringVolume: IntSetting = IntSetting(profileId = id, type = SettingType.VOLUME_RING),
+    val notificationVolume: IntSetting = IntSetting(profileId = id, type = SettingType.VOLUME_NOTIFICATION),
+    val alarmVolume: IntSetting = IntSetting(profileId = id, type = SettingType.VOLUME_ALARM)
 )

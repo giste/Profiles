@@ -11,10 +11,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
-import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.SettingType
+import org.giste.profiles.domain.SystemProperties
+import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
 import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.giste.profiles.ui.destinations.ProfileScreenDestination
 import javax.inject.Inject
@@ -23,11 +23,21 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     findProfileByIdUseCase: FindProfileByIdUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase,
+    systemProperties: SystemProperties,
     state: SavedStateHandle
 ) : ViewModel() {
     var profile by mutableStateOf(ProfileDetail())
         private set
     private var id: Long = ProfileScreenDestination.argsFrom(state).id
+
+    val minMediaVolume = systemProperties.streamMediaMinValue
+    val maxMediaVolume = systemProperties.streamMediaMaxValue
+    val minRingVolume = systemProperties.streamRingMinValue
+    val maxRingVolume = systemProperties.streamRingMaxValue
+    val minNotificationVolume = systemProperties.streamNotificationMinValue
+    val maxNotificationVolume = systemProperties.streamNotificationMaxValue
+    val minAlarmVolume = systemProperties.streamAlarmMinValue
+    val maxAlarmVolume = systemProperties.streamAlarmMaxValue
 
     init {
         viewModelScope.launch {
@@ -36,6 +46,53 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun onOverrideChange(type: SettingType, value: Boolean) {
+        viewModelScope.launch {
+            val updatedProfile = when (type) {
+                SettingType.VOLUME_MEDIA ->
+                    profile.copy(
+                        mediaVolume = profile.mediaVolume.copy(override = value)
+                    )
+                SettingType.VOLUME_RING ->
+                    profile.copy(
+                        ringVolume = profile.ringVolume.copy(override = value)
+                    )
+                SettingType.VOLUME_NOTIFICATION ->
+                    profile.copy(
+                        notificationVolume = profile.notificationVolume.copy(override = value)
+                    )
+                SettingType.VOLUME_ALARM ->
+                    profile.copy(
+                        alarmVolume = profile.alarmVolume.copy(override = value)
+                    )
+            }
 
+            updateProfileUseCase.invoke(updatedProfile)
+        }
+    }
+
+    fun onValueChange(type: SettingType, value: Any) {
+        viewModelScope.launch {
+            val updatedProfile = when (type) {
+                SettingType.VOLUME_MEDIA ->
+                    profile.copy(
+                        mediaVolume = profile.mediaVolume.copy(value = value as Int)
+                    )
+                SettingType.VOLUME_RING ->
+                    profile.copy(
+                        ringVolume = profile.ringVolume.copy(value = value as Int)
+                    )
+                SettingType.VOLUME_NOTIFICATION ->
+                    profile.copy(
+                        notificationVolume = profile.notificationVolume.copy(value = value as Int)
+                    )
+                SettingType.VOLUME_ALARM ->
+                    profile.copy(
+                        alarmVolume = profile.alarmVolume.copy(value = value as Int)
+                    )
+            }
+
+            Log.d("onValueChange", "updating: $updatedProfile")
+            updateProfileUseCase.invoke(updatedProfile)
+        }
     }
 }

@@ -5,8 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,12 +19,23 @@ import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.SettingType
 import org.giste.profiles.ui.components.FabSettings
 import org.giste.profiles.ui.components.TopBarSettings
+import kotlin.math.roundToInt
 
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
     ProfileContent(
-        ProfileDetail(name = "Profile Name")
+        profile = ProfileDetail(name = "Profile Name"),
+        onOverrideChange = { _, _ -> },
+        onValueChange = { _, _ -> },
+        minMediaVolume = 0,
+        maxMediaVolume = 15,
+        minRingVolume = 0,
+        maxRingVolume = 15,
+        minNotificationVolume = 0,
+        maxNotificationVolume = 15,
+        minAlarmVolume = 1,
+        maxAlarmVolume = 15,
     )
 }
 
@@ -44,13 +54,33 @@ fun ProfileScreen(
     }
 
     ProfileContent(
-        profileViewModel.profile,
+        profile = profileViewModel.profile,
+        onOverrideChange = profileViewModel::onOverrideChange,
+        onValueChange = profileViewModel::onValueChange,
+        minMediaVolume = profileViewModel.minMediaVolume,
+        maxMediaVolume = profileViewModel.maxMediaVolume,
+        minRingVolume = profileViewModel.minRingVolume,
+        maxRingVolume = profileViewModel.maxRingVolume,
+        minNotificationVolume = profileViewModel.minNotificationVolume,
+        maxNotificationVolume = profileViewModel.maxNotificationVolume,
+        minAlarmVolume = profileViewModel.minAlarmVolume,
+        maxAlarmVolume = profileViewModel.maxAlarmVolume,
     )
 }
 
 @Composable
 private fun ProfileContent(
     profile: ProfileDetail,
+    onOverrideChange: (SettingType, Boolean) -> Unit,
+    onValueChange: (SettingType, Any) -> Unit,
+    minMediaVolume: Int,
+    maxMediaVolume: Int,
+    minRingVolume: Int,
+    maxRingVolume: Int,
+    minNotificationVolume: Int,
+    maxNotificationVolume: Int,
+    minAlarmVolume: Int,
+    maxAlarmVolume: Int,
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
         ProfileName(
@@ -59,15 +89,48 @@ private fun ProfileContent(
         Spacer(modifier = Modifier.height(8.dp))
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Category(category = stringResource(id = R.string.profile_screen_category_volume_label))
-            profile.settings[SettingType.VOLUME_MEDIA]?.let {
-                SliderPreference(
+            with(profile.mediaVolume) {
+                SliderSetting(
                     label = stringResource(id = R.string.profile_screen_setting_volume_media_label),
-                    override = it.override,
-                    value = it.value as Int,
-                    min = 0,
-                    max = 15,
-                    onOverrideClick = {  },
-                    onSliderChange = {}
+                    override = override,
+                    initialValue = value,
+                    min = minMediaVolume,
+                    max = maxMediaVolume,
+                    onOverrideChange = { onOverrideChange(type, it) },
+                    onSliderChange = { onValueChange(type, it.roundToInt()) }
+                )
+            }
+            with(profile.ringVolume) {
+                SliderSetting(
+                    label = stringResource(id = R.string.profile_screen_setting_volume_ring_label),
+                    override = override,
+                    initialValue = value,
+                    min = minRingVolume,
+                    max = maxRingVolume,
+                    onOverrideChange = { onOverrideChange(type, it) },
+                    onSliderChange = { onValueChange(type, it.roundToInt()) }
+                )
+            }
+            with(profile.notificationVolume) {
+                SliderSetting(
+                    label = stringResource(id = R.string.profile_screen_setting_volume_notification_label),
+                    override = override,
+                    initialValue = value,
+                    min = minNotificationVolume,
+                    max = maxNotificationVolume,
+                    onOverrideChange = { onOverrideChange(type, it) },
+                    onSliderChange = { onValueChange(type, it.roundToInt()) }
+                )
+            }
+            with(profile.alarmVolume) {
+                SliderSetting(
+                    label = stringResource(id = R.string.profile_screen_setting_volume_alarm_label),
+                    override = override,
+                    initialValue = value,
+                    min = minAlarmVolume,
+                    max = maxAlarmVolume,
+                    onOverrideChange = { onOverrideChange(type, it) },
+                    onSliderChange = { onValueChange(type, it.roundToInt()) }
                 )
             }
         }
@@ -101,22 +164,22 @@ private fun Category(category: String) {
 }
 
 @Composable
-fun Preference(
+fun Setting(
     override: Boolean,
     label: String,
-    valueSetting: (@Composable () -> Unit),
-    onOverrideClick: (Boolean) -> Unit
+    valueContent: (@Composable () -> Unit),
+    onOverrideChange: (Boolean) -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
             modifier = Modifier
                 .weight(2f)
-                .clickable { onOverrideClick(!override) }
+                .clickable { onOverrideChange(!override) }
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Switch(
                     checked = override,
-                    onCheckedChange = { onOverrideClick(it) }
+                    onCheckedChange = { onOverrideChange(it) }
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = label)
@@ -124,32 +187,33 @@ fun Preference(
             }
         }
         Column(modifier = Modifier.weight(4f)) {
-            valueSetting()
+            valueContent()
         }
     }
 }
 
 @Composable
-fun SliderPreference(
+fun SliderSetting(
     label: String,
     override: Boolean,
-    value: Int,
+    initialValue: Int,
     min: Int,
     max: Int,
-    onOverrideClick: (Boolean) -> Unit,
+    onOverrideChange: (Boolean) -> Unit,
     onSliderChange: (Float) -> Unit
 ) {
-    Preference(
+    Setting(
         override = override,
         label = label,
-        onOverrideClick = onOverrideClick,
-        valueSetting = {
+        onOverrideChange = onOverrideChange,
+        valueContent = {
+            var value by remember { mutableStateOf(initialValue) }
             Slider(
                 value = value.toFloat(),
-                onValueChange = onSliderChange,
+                onValueChange = { value = it.roundToInt() },
                 enabled = override,
                 valueRange = min.toFloat().rangeTo(max.toFloat()),
-                //steps = max - min
+                onValueChangeFinished = { onSliderChange(value.toFloat()) }
             )
         }
     )

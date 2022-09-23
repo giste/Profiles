@@ -1,8 +1,8 @@
 package org.giste.profiles.data
 
+import org.giste.profiles.domain.IntSetting
 import org.giste.profiles.domain.Setting
 import org.giste.profiles.domain.SettingType
-import org.giste.profiles.domain.IntSetting
 import javax.inject.Inject
 
 class SettingMapper @Inject constructor() {
@@ -30,7 +30,7 @@ class SettingMapper @Inject constructor() {
                 SettingType.VOLUME_MEDIA,
                 SettingType.VOLUME_RING,
                 SettingType.VOLUME_NOTIFICATION,
-                SettingType.VOLUME_ALARM -> IntSetting(id, profileId,   type, override, value)
+                SettingType.VOLUME_ALARM -> IntSetting(id, profileId, type, override, value)
             }
         }
     }

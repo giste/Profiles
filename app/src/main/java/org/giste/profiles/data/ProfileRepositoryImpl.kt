@@ -2,9 +2,7 @@ package org.giste.profiles.data
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.ProfileDetail
-import org.giste.profiles.domain.ProfileRepository
+import org.giste.profiles.domain.*
 
 class ProfileRepositoryImpl(
     private val profileDao: ProfileDao,
@@ -20,24 +18,24 @@ class ProfileRepositoryImpl(
 
     override fun findById(id: Long): Flow<ProfileDetail> {
         return profileDetailDao.findById(id).map { map ->
-                profileDetailMapper.toModel(
-                    profileEntity = map.keys.first(),
-                    settingList = map.values.first()
-                )
+            profileDetailMapper.toModel(
+                profileEntity = map.keys.first(),
+                settingList = map.values.first()
+            )
         }
     }
 
     override suspend fun add(profileDetail: ProfileDetail): Long {
         return profileDetailDao.add(
             profileMapper.toEntity(profileDetail),
-            settingMapper.toEntity(profileDetail.settings)
+            settingMapper.toEntity(getSettingMap(profileDetail))
         )
     }
 
     override suspend fun update(profileDetail: ProfileDetail): Int {
         return profileDetailDao.update(
             profileMapper.toEntity(profileDetail),
-            settingMapper.toEntity(profileDetail.settings)
+            settingMapper.toEntity(getSettingMap(profileDetail))
         )
     }
 
@@ -58,4 +56,14 @@ class ProfileRepositoryImpl(
         return profileDao.findByName(name) != null
     }
 
+    private fun getSettingMap(profileDetail: ProfileDetail): Map<SettingType, Setting<Any>> {
+        with(profileDetail) {
+            return mapOf(
+                SettingType.VOLUME_MEDIA to mediaVolume,
+                SettingType.VOLUME_RING to ringVolume,
+                SettingType.VOLUME_NOTIFICATION to notificationVolume,
+                SettingType.VOLUME_ALARM to alarmVolume
+            )
+        }
+    }
 }

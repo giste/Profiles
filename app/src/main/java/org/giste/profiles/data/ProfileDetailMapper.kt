@@ -1,5 +1,6 @@
 package org.giste.profiles.data
 
+import org.giste.profiles.domain.IntSetting
 import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.Setting
 import org.giste.profiles.domain.SettingType
@@ -20,7 +21,10 @@ class ProfileDetailMapper @Inject constructor(
         return ProfileDetail(
             id = profileEntity.id,
             name = profileEntity.name,
-            settings = settingMap
+            mediaVolume = settingMap[SettingType.VOLUME_MEDIA] as IntSetting,
+            ringVolume = settingMap[SettingType.VOLUME_RING] as IntSetting,
+            notificationVolume = settingMap[SettingType.VOLUME_NOTIFICATION] as IntSetting,
+            alarmVolume = settingMap[SettingType.VOLUME_ALARM] as IntSetting
         )
     }
 }
