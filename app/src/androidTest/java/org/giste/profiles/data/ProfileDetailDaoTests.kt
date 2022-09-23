@@ -111,7 +111,7 @@ class ProfileDetailDaoTests {
     }
 
     @Test
-    fun findById_returnsProfileAndSettings() = runBlocking {
+    fun findById_settingsExist_returnsProfileAndSettings() = runBlocking {
         val profileMap = profileDetailDao.findById(profile1.id).first()
 
         assertThat(profileMap.keys, contains(profile1))
@@ -119,5 +119,15 @@ class ProfileDetailDaoTests {
             profileMap[profile1],
             contains(mediaVolume, ringVolume, notificationVolume, alarmVolume)
         )
+    }
+
+    @Test
+    fun findById_settingsDoNotExist_returnsProfile() = runBlocking {
+        val newProfile = ProfileEntity(name = "New Profile")
+        val id = profileDao.add(newProfile)
+
+        val readProfile = profileDetailDao.findById(id).first().keys.first()
+
+        assertThat(readProfile.name, equalTo(newProfile.name))
     }
 }
