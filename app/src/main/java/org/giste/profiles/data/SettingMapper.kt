@@ -37,20 +37,7 @@ class SettingMapper @Inject constructor() {
                     value = value,
                     type = type
                 )
-                else -> {
-                    throw RuntimeException("Not implemented!")
-                }
             }
         }
-    }
-
-    fun toModel(settingEntityList: List<SettingEntity>): Map<SettingType, Setting<Any>> {
-        val settingMap = mutableMapOf<SettingType, Setting<Any>>()
-
-        settingEntityList.forEach {
-            settingMap[it.type] = toModel(it)
-        }
-
-        return settingMap.toMap()
     }
 }

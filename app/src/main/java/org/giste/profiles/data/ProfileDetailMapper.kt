@@ -9,10 +9,18 @@ class ProfileDetailMapper @Inject constructor(
     private val settingMapper: SettingMapper
 ) {
     fun toModel(profileEntity: ProfileEntity, settingList: List<SettingEntity>): ProfileDetail {
+        val settingEntityMap = settingList.associateBy { it.type }
+
+        val settingMap: Map<SettingType, Setting<Any>> =
+            SettingType.values().associateWith {
+                settingEntityMap[it]?.let { setting -> settingMapper.toModel(setting) }
+                    ?: settingMapper.toModel(SettingEntity(profileId = profileEntity.id, type = it))
+            }
+
         return ProfileDetail(
             id = profileEntity.id,
             name = profileEntity.name,
-            settings = settingMapper.toModel(settingList)
+            settings = settingMap
         )
     }
 }
