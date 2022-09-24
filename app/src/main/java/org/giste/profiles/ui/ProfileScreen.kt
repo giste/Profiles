@@ -1,5 +1,6 @@
 package org.giste.profiles.ui
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -38,7 +39,7 @@ fun ProfilePreview() {
             override val streamNotificationMaxValue: Int = 7
             override val streamAlarmMinValue: Int = 1
             override val streamAlarmMaxValue: Int = 7
-        } ,
+        },
     )
 }
 
@@ -56,12 +57,14 @@ fun ProfileScreen(
         fabSettings.config(visible = false)
     }
 
-    ProfileContent(
-        profile = profileViewModel.profile,
-        onOverrideChange = profileViewModel::onOverrideChange,
-        onValueChange = profileViewModel::onValueChange,
-        profileViewModel.systemProperties,
-    )
+    if(profileViewModel.profile.id != 0L) {
+        ProfileContent(
+            profile = profileViewModel.profile,
+            onOverrideChange = profileViewModel::onOverrideChange,
+            onValueChange = profileViewModel::onValueChange,
+            profileViewModel.systemProperties,
+        )
+    }
 }
 
 @Composable
@@ -79,6 +82,8 @@ private fun ProfileContent(
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Category(category = stringResource(id = R.string.profile_screen_category_volume_label))
             with(profile.mediaVolume) {
+                Log.d("ProfileContent", "Media volume: $this")
+
                 SliderSetting(
                     label = stringResource(id = R.string.profile_screen_setting_volume_media_label),
                     override = override,
@@ -156,8 +161,8 @@ private fun Category(category: String) {
 fun Setting(
     override: Boolean,
     label: String,
-    valueContent: (@Composable () -> Unit),
-    onOverrideChange: (Boolean) -> Unit
+    onOverrideChange: (Boolean) -> Unit,
+    valueContent: (@Composable () -> Unit)
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
@@ -194,16 +199,18 @@ fun SliderSetting(
     Setting(
         override = override,
         label = label,
-        onOverrideChange = onOverrideChange,
-        valueContent = {
-            var value by remember { mutableStateOf(initialValue) }
-            Slider(
-                value = value.toFloat(),
-                onValueChange = { value = it.roundToInt() },
-                enabled = override,
-                valueRange = min.toFloat().rangeTo(max.toFloat()),
-                onValueChangeFinished = { onSliderChange(value.toFloat()) }
-            )
-        }
-    )
+        onOverrideChange = onOverrideChange
+    ) {
+        var value by remember { mutableStateOf(initialValue) }
+
+        Log.d("SliderSetting($label)", "Value: $value")
+
+        Slider(
+            value = value.toFloat(),
+            onValueChange = { value = it.roundToInt() },
+            enabled = override,
+            valueRange = min.toFloat().rangeTo(max.toFloat()),
+            onValueChangeFinished = { onSliderChange(value.toFloat()) }
+        )
+    }
 }

@@ -8,7 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.giste.profiles.domain.ProfileDetail
@@ -31,9 +31,10 @@ class ProfileViewModel @Inject constructor(
     private var id: Long = ProfileScreenDestination.argsFrom(state).id
 
     init {
-        viewModelScope.launch {
-            findProfileByIdUseCase.invoke(id).onEach { profile = it }.collect()
-        }
+        findProfileByIdUseCase.invoke(id).onEach {
+            Log.d("ProfileViewModel", "Profile found: $it")
+            profile = it
+        }.launchIn(viewModelScope)
     }
 
     fun onOverrideChange(type: SettingType, value: Boolean) {
@@ -62,6 +63,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun onValueChange(type: SettingType, value: Any) {
+        Log.d("ProfileViewModel","onValueChange($type, $value)")
         viewModelScope.launch {
             val updatedProfile = when (type) {
                 SettingType.VOLUME_MEDIA ->
