@@ -17,6 +17,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import org.giste.profiles.R
 import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.SettingType
+import org.giste.profiles.domain.SystemProperties
 import org.giste.profiles.ui.components.FabSettings
 import org.giste.profiles.ui.components.TopBarSettings
 import kotlin.math.roundToInt
@@ -28,14 +29,16 @@ fun ProfilePreview() {
         profile = ProfileDetail(name = "Profile Name"),
         onOverrideChange = { _, _ -> },
         onValueChange = { _, _ -> },
-        minMediaVolume = 0,
-        maxMediaVolume = 15,
-        minRingVolume = 0,
-        maxRingVolume = 15,
-        minNotificationVolume = 0,
-        maxNotificationVolume = 15,
-        minAlarmVolume = 1,
-        maxAlarmVolume = 15,
+        systemProperties = object : SystemProperties {
+            override val streamMediaMinValue: Int = 0
+            override val streamMediaMaxValue: Int = 15
+            override val streamRingMinValue: Int = 0
+            override val streamRingMaxValue: Int = 7
+            override val streamNotificationMinValue: Int = 0
+            override val streamNotificationMaxValue: Int = 7
+            override val streamAlarmMinValue: Int = 1
+            override val streamAlarmMaxValue: Int = 7
+        } ,
     )
 }
 
@@ -57,14 +60,7 @@ fun ProfileScreen(
         profile = profileViewModel.profile,
         onOverrideChange = profileViewModel::onOverrideChange,
         onValueChange = profileViewModel::onValueChange,
-        minMediaVolume = profileViewModel.minMediaVolume,
-        maxMediaVolume = profileViewModel.maxMediaVolume,
-        minRingVolume = profileViewModel.minRingVolume,
-        maxRingVolume = profileViewModel.maxRingVolume,
-        minNotificationVolume = profileViewModel.minNotificationVolume,
-        maxNotificationVolume = profileViewModel.maxNotificationVolume,
-        minAlarmVolume = profileViewModel.minAlarmVolume,
-        maxAlarmVolume = profileViewModel.maxAlarmVolume,
+        profileViewModel.systemProperties,
     )
 }
 
@@ -73,14 +69,7 @@ private fun ProfileContent(
     profile: ProfileDetail,
     onOverrideChange: (SettingType, Boolean) -> Unit,
     onValueChange: (SettingType, Any) -> Unit,
-    minMediaVolume: Int,
-    maxMediaVolume: Int,
-    minRingVolume: Int,
-    maxRingVolume: Int,
-    minNotificationVolume: Int,
-    maxNotificationVolume: Int,
-    minAlarmVolume: Int,
-    maxAlarmVolume: Int,
+    systemProperties: SystemProperties
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
         ProfileName(
@@ -94,8 +83,8 @@ private fun ProfileContent(
                     label = stringResource(id = R.string.profile_screen_setting_volume_media_label),
                     override = override,
                     initialValue = value,
-                    min = minMediaVolume,
-                    max = maxMediaVolume,
+                    min = systemProperties.streamMediaMinValue,
+                    max = systemProperties.streamMediaMaxValue,
                     onOverrideChange = { onOverrideChange(type, it) },
                     onSliderChange = { onValueChange(type, it.roundToInt()) }
                 )
@@ -105,8 +94,8 @@ private fun ProfileContent(
                     label = stringResource(id = R.string.profile_screen_setting_volume_ring_label),
                     override = override,
                     initialValue = value,
-                    min = minRingVolume,
-                    max = maxRingVolume,
+                    min = systemProperties.streamRingMinValue,
+                    max = systemProperties.streamRingMaxValue,
                     onOverrideChange = { onOverrideChange(type, it) },
                     onSliderChange = { onValueChange(type, it.roundToInt()) }
                 )
@@ -116,8 +105,8 @@ private fun ProfileContent(
                     label = stringResource(id = R.string.profile_screen_setting_volume_notification_label),
                     override = override,
                     initialValue = value,
-                    min = minNotificationVolume,
-                    max = maxNotificationVolume,
+                    min = systemProperties.streamNotificationMinValue,
+                    max = systemProperties.streamNotificationMaxValue,
                     onOverrideChange = { onOverrideChange(type, it) },
                     onSliderChange = { onValueChange(type, it.roundToInt()) }
                 )
@@ -127,8 +116,8 @@ private fun ProfileContent(
                     label = stringResource(id = R.string.profile_screen_setting_volume_alarm_label),
                     override = override,
                     initialValue = value,
-                    min = minAlarmVolume,
-                    max = maxAlarmVolume,
+                    min = systemProperties.streamAlarmMinValue,
+                    max = systemProperties.streamAlarmMaxValue,
                     onOverrideChange = { onOverrideChange(type, it) },
                     onSliderChange = { onValueChange(type, it.roundToInt()) }
                 )

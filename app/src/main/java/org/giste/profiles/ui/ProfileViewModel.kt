@@ -23,21 +23,12 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     findProfileByIdUseCase: FindProfileByIdUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase,
-    systemProperties: SystemProperties,
+    val systemProperties: SystemProperties,
     state: SavedStateHandle
 ) : ViewModel() {
     var profile by mutableStateOf(ProfileDetail())
         private set
     private var id: Long = ProfileScreenDestination.argsFrom(state).id
-
-    val minMediaVolume = systemProperties.streamMediaMinValue
-    val maxMediaVolume = systemProperties.streamMediaMaxValue
-    val minRingVolume = systemProperties.streamRingMinValue
-    val maxRingVolume = systemProperties.streamRingMaxValue
-    val minNotificationVolume = systemProperties.streamNotificationMinValue
-    val maxNotificationVolume = systemProperties.streamNotificationMaxValue
-    val minAlarmVolume = systemProperties.streamAlarmMinValue
-    val maxAlarmVolume = systemProperties.streamAlarmMaxValue
 
     init {
         viewModelScope.launch {
