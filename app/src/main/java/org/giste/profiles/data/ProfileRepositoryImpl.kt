@@ -62,7 +62,8 @@ class ProfileRepositoryImpl(
                 SettingType.VOLUME_MEDIA to mediaVolume,
                 SettingType.VOLUME_RING to ringVolume,
                 SettingType.VOLUME_NOTIFICATION to notificationVolume,
-                SettingType.VOLUME_ALARM to alarmVolume
+                SettingType.VOLUME_ALARM to alarmVolume,
+                SettingType.RING_MODE to ringMode
             )
         }
     }

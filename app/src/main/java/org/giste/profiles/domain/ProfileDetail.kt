@@ -6,5 +6,6 @@ data class ProfileDetail(
     val mediaVolume: IntSetting = IntSetting(profileId = id, type = SettingType.VOLUME_MEDIA),
     val ringVolume: IntSetting = IntSetting(profileId = id, type = SettingType.VOLUME_RING),
     val notificationVolume: IntSetting = IntSetting(profileId = id, type = SettingType.VOLUME_NOTIFICATION),
-    val alarmVolume: IntSetting = IntSetting(profileId = id, type = SettingType.VOLUME_ALARM)
+    val alarmVolume: IntSetting = IntSetting(profileId = id, type = SettingType.VOLUME_ALARM),
+    val ringMode: RingModeSetting = RingModeSetting(profileId = id, type = SettingType.RING_MODE)
 )

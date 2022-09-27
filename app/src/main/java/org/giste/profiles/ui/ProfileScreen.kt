@@ -3,8 +3,13 @@ package org.giste.profiles.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DoNotDisturbOnTotalSilence
+import androidx.compose.material.icons.filled.RingVolume
+import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import org.giste.profiles.R
 import org.giste.profiles.domain.ProfileDetail
+import org.giste.profiles.domain.RingMode
 import org.giste.profiles.domain.SettingType
 import org.giste.profiles.domain.SystemProperties
 import org.giste.profiles.ui.components.FabSettings
@@ -122,6 +128,15 @@ private fun ProfileContent(
                     onSliderChange = { onValueChange(type, it) }
                 )
             }
+            with(profile.ringMode) {
+                RingModeSetting(
+                    label = stringResource(id = R.string.profile_screen_setting_volume_ring_mode_label),
+                    override = override,
+                    value = value,
+                    onOverrideChange = { onOverrideChange(type, it) },
+                    onSelectionChange = { onValueChange(type, it.ringMode) }
+                )
+            }
         }
     }
 
@@ -211,5 +226,44 @@ fun SliderSetting(
             valueRange = min.toFloat().rangeTo(max.toFloat()),
             onValueChangeFinished = { onSliderChange(selection) }
         )
+    }
+}
+
+@Composable
+private fun RingModeSetting(
+    label: String,
+    override: Boolean,
+    value: RingMode,
+    onOverrideChange: (Boolean) -> Unit,
+    onSelectionChange: (RingMode) -> Unit
+) {
+    Setting(
+        override = override,
+        label = label,
+        onOverrideChange = onOverrideChange
+    ) {
+        Row(
+            modifier = Modifier.selectableGroup(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            RadioButton(
+                selected = value == RingMode.NORMAL,
+                onClick = { onSelectionChange(RingMode.NORMAL) },
+                enabled = override
+            )
+            Icon(imageVector = Icons.Default.RingVolume, contentDescription = "")
+            RadioButton(
+                selected = value == RingMode.VIBRATE,
+                onClick = { onSelectionChange(RingMode.VIBRATE) },
+                enabled = override
+            )
+            Icon(imageVector = Icons.Default.Vibration, contentDescription = "")
+            RadioButton(
+                selected = value == RingMode.SILENT,
+                onClick = { onSelectionChange(RingMode.SILENT) },
+                enabled = override
+            )
+            Icon(imageVector = Icons.Default.DoNotDisturbOnTotalSilence, contentDescription = "")
+        }
     }
 }

@@ -13,6 +13,7 @@
     <string name="profile_screen_setting_volume_ring_label">Ring</string>
     <string name="profile_screen_setting_volume_notification_label">Notification</string>
     <string name="profile_screen_setting_volume_alarm_label">Alarm</string>
+    <string name="profile_screen_setting_volume_ring_mode_label">Ring mode</string>
 
     <string name="dialog_cancel_label">Cancel</string>
     <string name="dialog_accept_label">Accept</string>

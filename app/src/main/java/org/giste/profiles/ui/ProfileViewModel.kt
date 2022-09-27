@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.giste.profiles.domain.ProfileDetail
+import org.giste.profiles.domain.RingMode
 import org.giste.profiles.domain.SettingType
 import org.giste.profiles.domain.SystemProperties
 import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
@@ -38,6 +39,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun onOverrideChange(type: SettingType, value: Boolean) {
+        Log.d("ProfileViewModel","onOverrideChange($type, $value)")
         viewModelScope.launch {
             val updatedProfile = when (type) {
                 SettingType.VOLUME_MEDIA ->
@@ -56,7 +58,13 @@ class ProfileViewModel @Inject constructor(
                     profile.copy(
                         alarmVolume = profile.alarmVolume.copy(override = value)
                     )
+                SettingType.RING_MODE ->
+                    profile.copy(
+                        ringMode = profile.ringMode.copy(override = value)
+                    )
             }
+
+            Log.d("onOverrideChange", "updatedProfile: $updatedProfile")
 
             updateProfileUseCase.invoke(updatedProfile)
         }
@@ -81,6 +89,10 @@ class ProfileViewModel @Inject constructor(
                 SettingType.VOLUME_ALARM ->
                     profile.copy(
                         alarmVolume = profile.alarmVolume.copy(value = value as Int)
+                    )
+                SettingType.RING_MODE ->
+                    profile.copy(
+                        ringMode = profile.ringMode.copy(value = RingMode.getRingMode(value as Int))
                     )
             }
 

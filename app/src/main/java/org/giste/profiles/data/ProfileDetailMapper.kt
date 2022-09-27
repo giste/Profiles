@@ -1,9 +1,6 @@
 package org.giste.profiles.data
 
-import org.giste.profiles.domain.IntSetting
-import org.giste.profiles.domain.ProfileDetail
-import org.giste.profiles.domain.Setting
-import org.giste.profiles.domain.SettingType
+import org.giste.profiles.domain.*
 import javax.inject.Inject
 
 class ProfileDetailMapper @Inject constructor(
@@ -24,7 +21,8 @@ class ProfileDetailMapper @Inject constructor(
             mediaVolume = settingMap[SettingType.VOLUME_MEDIA] as IntSetting,
             ringVolume = settingMap[SettingType.VOLUME_RING] as IntSetting,
             notificationVolume = settingMap[SettingType.VOLUME_NOTIFICATION] as IntSetting,
-            alarmVolume = settingMap[SettingType.VOLUME_ALARM] as IntSetting
+            alarmVolume = settingMap[SettingType.VOLUME_ALARM] as IntSetting,
+            ringMode = settingMap[SettingType.RING_MODE] as RingModeSetting
         )
     }
 }
