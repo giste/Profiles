@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import org.giste.profiles.domain.RingMode
 import org.giste.profiles.domain.SettingType
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -129,5 +130,23 @@ class ProfileDetailDaoTests {
         val readProfile = profileDetailDao.findById(id).first().keys.first()
 
         assertThat(readProfile.name, equalTo(newProfile.name))
+    }
+
+    @Test
+    fun update_someSettingDoesNotExist_addsSettings() = runBlocking {
+        val ringMode = SettingEntity(
+            profileId = profile1.id,
+            type = SettingType.RING_MODE,
+            override = true,
+            value = RingMode.VIBRATE.ringMode
+        )
+
+        val settings = listOf(mediaVolume, ringVolume, notificationVolume, alarmVolume, ringMode)
+
+        val updated = profileDetailDao.update(profile1, settings)
+        val updatedSettings = settingDao.findByProfileId(profile1.id).first()
+
+        assertThat(updated, equalTo(4))
+        assertThat(updatedSettings.count(), equalTo(5))
     }
 }

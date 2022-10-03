@@ -1,5 +1,6 @@
 package org.giste.profiles.data
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
@@ -22,7 +23,12 @@ abstract class ProfileDetailDao(db: ProfilesDb) {
 
     @Transaction
     open suspend fun update(profile: ProfileEntity, settings: List<SettingEntity>): Int {
-        return settingDao.update(settings)
+        val newSettings = settings.filter { it.id == 0L }
+        Log.d("ProfileDetailDao", "update($newSettings)")
+
+        settingDao.add(newSettings)
+
+        return settingDao.update(settings.filter { it.id != 0L })
     }
 
     @Query(
