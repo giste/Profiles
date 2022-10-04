@@ -22,7 +22,10 @@ abstract class ProfileDetailDao(db: ProfilesDb) {
 
     @Transaction
     open suspend fun update(profile: ProfileEntity, settings: List<SettingEntity>): Int {
-        return settingDao.update(settings)
+        // Add new settings
+        settingDao.add(settings.filter { it.id == 0L })
+        // Update the rest
+        return settingDao.update(settings.filter { it.id != 0L })
     }
 
     @Query(
