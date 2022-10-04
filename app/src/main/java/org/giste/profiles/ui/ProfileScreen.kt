@@ -89,6 +89,39 @@ private fun ProfileContent(
                     onSliderChange = { value -> onValueChange(it.type, value) }
                 )
             }
+            profile.settings[SettingType.VOLUME_RING]?.let {
+                SliderPreference(
+                    label = stringResource(id = R.string.profile_screen_setting_volume_ring_label),
+                    override = it.override,
+                    value = it.value as Int,
+                    min = systemProperties.streamRingMinValue,
+                    max = systemProperties.streamRingMaxValue,
+                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
+                    onSliderChange = { value -> onValueChange(it.type, value) }
+                )
+            }
+            profile.settings[SettingType.VOLUME_NOTIFICATION]?.let {
+                SliderPreference(
+                    label = stringResource(id = R.string.profile_screen_setting_volume_notification_label),
+                    override = it.override,
+                    value = it.value as Int,
+                    min = systemProperties.streamNotificationMinValue,
+                    max = systemProperties.streamNotificationMaxValue,
+                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
+                    onSliderChange = { value -> onValueChange(it.type, value) }
+                )
+            }
+            profile.settings[SettingType.VOLUME_ALARM]?.let {
+                SliderPreference(
+                    label = stringResource(id = R.string.profile_screen_setting_volume_alarm_label),
+                    override = it.override,
+                    value = it.value as Int,
+                    min = systemProperties.streamAlarmMinValue,
+                    max = systemProperties.streamAlarmMaxValue,
+                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
+                    onSliderChange = { value -> onValueChange(it.type, value) }
+                )
+            }
         }
     }
 
