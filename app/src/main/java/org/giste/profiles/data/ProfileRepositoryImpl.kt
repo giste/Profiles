@@ -20,10 +20,10 @@ class ProfileRepositoryImpl(
 
     override fun findById(id: Long): Flow<ProfileDetail> {
         return profileDetailDao.findById(id).map { map ->
-                profileDetailMapper.toModel(
-                    profileEntity = map.keys.first(),
-                    settingList = map.values.first()
-                )
+            profileDetailMapper.toModel(
+                profileEntity = map.keys.first(),
+                settingList = map.values.first()
+            )
         }
     }
 

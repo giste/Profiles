@@ -55,27 +55,4 @@ class ProfileViewModelTests {
             findProfileByIdUseCase.invoke(1)
         }
     }
-
-    @Test
-    fun onNameChange_updatesProfile() = runTest {
-        every { state.get<Long>("id") } returns 1
-        coEvery { findProfileByIdUseCase.invoke(1) } returns flow {
-            emit(ProfileDetail(1,"Profile 1"))
-            emit(ProfileDetail(1,"Updated name"))
-        }
-        coEvery { updateProfileUseCase.invoke(ProfileDetail(1,"Updated name")) } returns 1
-
-        val profileViewModel = ProfileViewModel(
-            findProfileByIdUseCase,
-            updateProfileUseCase,
-            state
-        )
-        profileViewModel.onNameChange("Updated name")
-
-        assertThat(profileViewModel.profile, equalTo(Profile(1,"Updated name")))
-        coVerify(exactly = 1) {
-            findProfileByIdUseCase.invoke(1)
-            updateProfileUseCase.invoke(ProfileDetail(1,"Updated name"))
-        }
-    }
 }
