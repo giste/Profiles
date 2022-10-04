@@ -25,28 +25,24 @@ class ProfileDetailDaoTests {
 
     private val profile1 = ProfileEntity(id = 1, name = "Profile 1")
     private val mediaVolume = SettingEntity(
-        id = 1,
         profileId = 1,
         type = SettingType.VOLUME_MEDIA,
         override = false,
         value = 0
     )
     private val ringVolume = SettingEntity(
-        id = 2,
         profileId = 1,
         type = SettingType.VOLUME_RING,
         override = false,
         value = 0
     )
     private val notificationVolume = SettingEntity(
-        id = 3,
         profileId = 1,
         type = SettingType.VOLUME_NOTIFICATION,
         override = false,
         value = 0
     )
     private val alarmVolume = SettingEntity(
-        id = 4,
         profileId = 1,
         type = SettingType.VOLUME_ALARM,
         override = false,
@@ -102,35 +98,6 @@ class ProfileDetailDaoTests {
     }
 
     @Test
-    fun update_someSettingDoesNotExist_addSettings() = runBlocking {
-        db.clearAllTables()
-        profileDao.add(profile1)
-        settingDao.add(listOf(ringVolume, alarmVolume))
-
-        val mediaVolume = SettingEntity(
-            profileId = profile1.id,
-            type = SettingType.VOLUME_MEDIA,
-            override = true,
-            value = 5
-        )
-
-        val notificationVolume = SettingEntity(
-            profileId = profile1.id,
-            type = SettingType.VOLUME_ALARM,
-            override = true,
-            value = 5
-        )
-
-        val settings = listOf(mediaVolume, ringVolume, notificationVolume, alarmVolume)
-
-        val updated = profileDetailDao.update(profile1, settings)
-        val updatedSettings = settingDao.findByProfileId(profile1.id).first()
-
-        assertThat(updated, equalTo(2))
-        assertThat(updatedSettings.count(), equalTo(4))
-    }
-
-    @Test
     fun deleteProfile_settingsAreDeleted() = runBlocking {
         profileDao.delete(profile1)
 
@@ -151,7 +118,7 @@ class ProfileDetailDaoTests {
     }
 
     @Test
-    fun findById_settingsDoNotExist_returnsProfile() = runBlocking {
+    fun findById_settingsDoNotExist_returnsAllSettings() = runBlocking {
         val newProfile = ProfileEntity(name = "New Profile")
         val id = profileDao.add(newProfile)
 

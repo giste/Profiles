@@ -1,10 +1,14 @@
 package org.giste.profiles.data
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import org.giste.profiles.domain.SettingType
 
 @Entity(
     tableName = "settings",
+    primaryKeys = ["profile_id", "type"],
     foreignKeys = [ForeignKey(
         entity = ProfileEntity::class,
         parentColumns = ["profile_id"],
@@ -14,10 +18,6 @@ import org.giste.profiles.domain.SettingType
     indices = [Index(value = ["profile_id"])]
 )
 data class SettingEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "setting_id")
-    val id: Long = 0,
-
     @ColumnInfo(name = "profile_id")
     val profileId: Long,
 

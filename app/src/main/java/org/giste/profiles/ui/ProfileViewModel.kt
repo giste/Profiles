@@ -47,7 +47,6 @@ class ProfileViewModel @Inject constructor(
                     SettingType.VOLUME_RING,
                     SettingType.VOLUME_NOTIFICATION,
                     SettingType.VOLUME_ALARM -> IntSetting(
-                        id = id,
                         profileId = profile.id,
                         type = type,
                         override = override,

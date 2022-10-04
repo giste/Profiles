@@ -8,17 +8,16 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 
 class ProfileDetailMapperTests {
-    private val volumeMediaSetting = IntSetting(1, 1, SettingType.VOLUME_MEDIA, true, 10)
-    private val volumeRingSetting = IntSetting(2, 1, SettingType.VOLUME_RING, true, 10)
-    private val volumeNotificationSetting =
-        IntSetting(3, 1, SettingType.VOLUME_NOTIFICATION, true, 10)
-    private val volumeAlarmSetting = IntSetting(4, 1, SettingType.VOLUME_ALARM, true, 10)
+    private val volumeMediaSetting = IntSetting(1, SettingType.VOLUME_MEDIA, true, 10)
+    private val volumeRingSetting = IntSetting(1, SettingType.VOLUME_RING, true, 10)
+    private val volumeNotificationSetting = IntSetting(1, SettingType.VOLUME_NOTIFICATION, true, 10)
+    private val volumeAlarmSetting = IntSetting(1, SettingType.VOLUME_ALARM, true, 10)
 
-    private val volumeMediaSettingEntity = SettingEntity(1, 1, SettingType.VOLUME_MEDIA, true, 10)
-    private val volumeRingSettingEntity = SettingEntity(2, 1, SettingType.VOLUME_RING, true, 10)
+    private val volumeMediaSettingEntity = SettingEntity(1, SettingType.VOLUME_MEDIA, true, 10)
+    private val volumeRingSettingEntity = SettingEntity(1, SettingType.VOLUME_RING, true, 10)
     private val volumeNotificationSettingEntity =
-        SettingEntity(3, 1, SettingType.VOLUME_NOTIFICATION, true, 10)
-    private val volumeAlarmSettingEntity = SettingEntity(4, 1, SettingType.VOLUME_ALARM, true, 10)
+        SettingEntity(1, SettingType.VOLUME_NOTIFICATION, true, 10)
+    private val volumeAlarmSettingEntity = SettingEntity(1, SettingType.VOLUME_ALARM, true, 10)
 
     private val settingEntityList = listOf(
         volumeMediaSettingEntity,
@@ -73,33 +72,4 @@ class ProfileDetailMapperTests {
         assertThat(mapper.toEntity(profileDetail), equalTo(Pair(profileEntity, settingEntityList)))
     }
 
-    @Test
-    fun toEntity_someSettingsDoNotExist_returnAllSettings() {
-        val mapper = ProfileDetailMapper(SettingMapper())
-
-        val entity = mapper.toEntity(
-            ProfileDetail(
-                id = profileDetail.id,
-                name = profileDetail.name,
-                settings = mapOf(
-                    SettingType.VOLUME_RING to volumeRingSetting,
-                    SettingType.VOLUME_ALARM to volumeAlarmSetting
-                )
-            )
-        )
-
-        assertThat(
-            entity.second, equalTo(
-                listOf(
-                    SettingEntity(profileId = profileDetail.id, type = SettingType.VOLUME_MEDIA),
-                    volumeRingSettingEntity,
-                    SettingEntity(
-                        profileId = profileDetail.id,
-                        type = SettingType.VOLUME_NOTIFICATION
-                    ),
-                    volumeAlarmSettingEntity
-                )
-            )
-        )
-    }
 }

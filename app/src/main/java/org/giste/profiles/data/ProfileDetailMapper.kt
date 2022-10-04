@@ -1,7 +1,6 @@
 package org.giste.profiles.data
 
 import android.util.Log
-import org.giste.profiles.domain.IntSetting
 import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.Setting
 import org.giste.profiles.domain.SettingType
@@ -28,20 +27,22 @@ class ProfileDetailMapper @Inject constructor(
 
     fun toEntity(profileDetail: ProfileDetail): Pair<ProfileEntity, List<SettingEntity>> {
         val profileEntity = ProfileEntity(id = profileDetail.id, name = profileDetail.name)
-        val settingEntityList = SettingType.values().map {
-            profileDetail.settings[it]?.let { setting -> settingMapper.toEntity(setting) }
-                ?: settingMapper.toEntity(
-                    when (it) {
-                        SettingType.VOLUME_MEDIA,
-                        SettingType.VOLUME_RING,
-                        SettingType.VOLUME_NOTIFICATION,
-                        SettingType.VOLUME_ALARM -> IntSetting(
-                            profileId = profileDetail.id,
-                            type = it
-                        )
-                    }
-                )
-        }
+//        val settingEntityList = SettingType.values().map {
+//            profileDetail.settings[it]?.let { setting -> settingMapper.toEntity(setting) }
+//                ?: settingMapper.toEntity(
+//                    when (it) {
+//                        SettingType.VOLUME_MEDIA,
+//                        SettingType.VOLUME_RING,
+//                        SettingType.VOLUME_NOTIFICATION,
+//                        SettingType.VOLUME_ALARM -> IntSetting(
+//                            profileId = profileDetail.id,
+//                            type = it
+//                        )
+//                    }
+//                )
+//        }
+
+        val settingEntityList = profileDetail.settings.values.map { settingMapper.toEntity(it) }
 
         Log.d("ProfileDetailMapper", "profile: $profileEntity, settings: $settingEntityList")
 
