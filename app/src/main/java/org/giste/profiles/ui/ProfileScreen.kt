@@ -17,6 +17,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import org.giste.profiles.R
 import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.SettingType
+import org.giste.profiles.domain.SystemProperties
 import org.giste.profiles.ui.components.FabSettings
 import org.giste.profiles.ui.components.TopBarSettings
 import kotlin.math.roundToInt
@@ -27,7 +28,17 @@ fun ProfilePreview() {
     ProfileContent(
         profile = ProfileDetail(name = "Profile Name"),
         onOverrideClick = { _, _ -> },
-        onValueChange = { _, _ -> }
+        onValueChange = { _, _ -> },
+        systemProperties = object : SystemProperties {
+            override val streamMediaMinValue: Int = 0
+            override val streamMediaMaxValue: Int = 15
+            override val streamRingMinValue: Int = 0
+            override val streamRingMaxValue: Int = 7
+            override val streamNotificationMinValue: Int = 0
+            override val streamNotificationMaxValue: Int = 7
+            override val streamAlarmMinValue: Int = 1
+            override val streamAlarmMaxValue: Int = 7
+        }
     )
 }
 
@@ -48,7 +59,8 @@ fun ProfileScreen(
     ProfileContent(
         profileViewModel.profile,
         profileViewModel::onOverrideChange,
-        profileViewModel::onValueChange
+        profileViewModel::onValueChange,
+        profileViewModel.systemProperties
     )
 }
 
@@ -56,7 +68,8 @@ fun ProfileScreen(
 private fun ProfileContent(
     profile: ProfileDetail,
     onOverrideClick: (SettingType, Boolean) -> Unit,
-    onValueChange: (SettingType, Any) -> Unit
+    onValueChange: (SettingType, Any) -> Unit,
+    systemProperties: SystemProperties
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
         ProfileName(
@@ -70,8 +83,8 @@ private fun ProfileContent(
                     label = stringResource(id = R.string.profile_screen_setting_volume_media_label),
                     override = it.override,
                     value = it.value as Int,
-                    min = 0,
-                    max = 15,
+                    min = systemProperties.streamMediaMinValue,
+                    max = systemProperties.streamMediaMaxValue,
                     onOverrideClick = { override -> onOverrideClick(it.type, override) },
                     onSliderChange = { value -> onValueChange(it.type, value) }
                 )

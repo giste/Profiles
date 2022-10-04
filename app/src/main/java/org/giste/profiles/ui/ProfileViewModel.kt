@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import org.giste.profiles.domain.IntSetting
 import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.SettingType
+import org.giste.profiles.domain.SystemProperties
 import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
 import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.giste.profiles.ui.destinations.ProfileScreenDestination
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     findProfileByIdUseCase: FindProfileByIdUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase,
+    val systemProperties: SystemProperties,
     state: SavedStateHandle
 ) : ViewModel() {
     var profile by mutableStateOf(ProfileDetail())
