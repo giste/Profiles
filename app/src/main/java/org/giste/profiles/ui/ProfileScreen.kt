@@ -25,7 +25,8 @@ import org.giste.profiles.ui.components.TopBarSettings
 @Composable
 fun ProfilePreview() {
     ProfileContent(
-        ProfileDetail(name = "Profile Name")
+        profile = ProfileDetail(name = "Profile Name"),
+        onOverrideClick = { _, _ -> }
     )
 }
 
@@ -45,12 +46,14 @@ fun ProfileScreen(
 
     ProfileContent(
         profileViewModel.profile,
+        profileViewModel::onOverrideChange
     )
 }
 
 @Composable
 private fun ProfileContent(
     profile: ProfileDetail,
+    onOverrideClick: (SettingType, Boolean) -> Unit
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
         ProfileName(
@@ -66,7 +69,7 @@ private fun ProfileContent(
                     value = it.value as Int,
                     min = 0,
                     max = 15,
-                    onOverrideClick = {  },
+                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
                     onSliderChange = {}
                 )
             }

@@ -35,10 +35,8 @@ class ProfileRepositoryImpl(
     }
 
     override suspend fun update(profileDetail: ProfileDetail): Int {
-        return profileDetailDao.update(
-            profileMapper.toEntity(profileDetail),
-            settingMapper.toEntity(profileDetail.settings)
-        )
+        val entity = profileDetailMapper.toEntity(profileDetail)
+        return profileDetailDao.update(entity.first, entity.second)
     }
 
     override suspend fun delete(profile: Profile) {

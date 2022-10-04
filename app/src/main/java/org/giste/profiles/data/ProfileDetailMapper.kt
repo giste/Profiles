@@ -1,5 +1,6 @@
 package org.giste.profiles.data
 
+import android.util.Log
 import org.giste.profiles.domain.IntSetting
 import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.Setting
@@ -41,6 +42,8 @@ class ProfileDetailMapper @Inject constructor(
                     }
                 )
         }
+
+        Log.d("ProfileDetailMapper", "profile: $profileEntity, settings: $settingEntityList")
 
         return Pair(profileEntity, settingEntityList)
     }

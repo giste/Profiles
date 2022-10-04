@@ -8,13 +8,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
-import org.giste.profiles.domain.Profile
+import org.giste.profiles.domain.IntSetting
 import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.SettingType
+import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
 import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.giste.profiles.ui.destinations.ProfileScreenDestination
 import javax.inject.Inject
@@ -30,12 +30,35 @@ class ProfileViewModel @Inject constructor(
     private var id: Long = ProfileScreenDestination.argsFrom(state).id
 
     init {
-        viewModelScope.launch {
-            findProfileByIdUseCase.invoke(id).onEach { profile = it }.collect()
-        }
+        findProfileByIdUseCase.invoke(id).onEach {
+            Log.d("ProfileViewModel", "Profile found: $it")
+            profile = it
+        }.launchIn(viewModelScope)
     }
 
-    fun onOverrideChange(type: SettingType, value: Boolean) {
+    fun onOverrideChange(type: SettingType, override: Boolean) {
+        Log.d("ProfileViewModel", "onOverrideChange($type, $override)")
 
+        viewModelScope.launch {
+            val newSettings = profile.settings.toMutableMap()
+            with(profile.settings[type]) {
+                newSettings[type] = when (type) {
+                    SettingType.VOLUME_MEDIA,
+                    SettingType.VOLUME_RING,
+                    SettingType.VOLUME_NOTIFICATION,
+                    SettingType.VOLUME_ALARM -> IntSetting(
+                        id = id,
+                        profileId = profile.id,
+                        type = type,
+                        override = override,
+                        value = this?.value as Int
+                    )
+                }
+            }
+
+            Log.d("ProfileViewModel", "newSettings = $newSettings")
+
+            updateProfileUseCase.invoke(profile.copy(settings = newSettings))
+        }
     }
 }
