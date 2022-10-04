@@ -60,4 +60,24 @@ class ProfileViewModel @Inject constructor(
             updateProfileUseCase.invoke(profile.copy(settings = newSettings))
         }
     }
+
+    fun onValueChange(type: SettingType, value: Any) {
+        Log.d("ProfileViewModel", "onOverrideChange($type, $value)")
+
+        viewModelScope.launch {
+            val newSettings = profile.settings.toMutableMap()
+            with(profile.settings[type]) {
+                newSettings[type] = when (type) {
+                    SettingType.VOLUME_MEDIA,
+                    SettingType.VOLUME_RING,
+                    SettingType.VOLUME_NOTIFICATION,
+                    SettingType.VOLUME_ALARM -> (this as IntSetting).copy(value = value as Int)
+                }
+            }
+
+            Log.d("ProfileViewModel", "newSettings = $newSettings")
+
+            updateProfileUseCase.invoke(profile.copy(settings = newSettings))
+        }
+    }
 }

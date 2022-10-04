@@ -5,8 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,13 +19,15 @@ import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.SettingType
 import org.giste.profiles.ui.components.FabSettings
 import org.giste.profiles.ui.components.TopBarSettings
+import kotlin.math.roundToInt
 
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
     ProfileContent(
         profile = ProfileDetail(name = "Profile Name"),
-        onOverrideClick = { _, _ -> }
+        onOverrideClick = { _, _ -> },
+        onValueChange = { _, _ -> }
     )
 }
 
@@ -46,14 +47,16 @@ fun ProfileScreen(
 
     ProfileContent(
         profileViewModel.profile,
-        profileViewModel::onOverrideChange
+        profileViewModel::onOverrideChange,
+        profileViewModel::onValueChange
     )
 }
 
 @Composable
 private fun ProfileContent(
     profile: ProfileDetail,
-    onOverrideClick: (SettingType, Boolean) -> Unit
+    onOverrideClick: (SettingType, Boolean) -> Unit,
+    onValueChange: (SettingType, Any) -> Unit
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
         ProfileName(
@@ -70,7 +73,7 @@ private fun ProfileContent(
                     min = 0,
                     max = 15,
                     onOverrideClick = { override -> onOverrideClick(it.type, override) },
-                    onSliderChange = {}
+                    onSliderChange = { value -> onValueChange(it.type, value) }
                 )
             }
         }
@@ -140,19 +143,27 @@ fun SliderPreference(
     min: Int,
     max: Int,
     onOverrideClick: (Boolean) -> Unit,
-    onSliderChange: (Float) -> Unit
+    onSliderChange: (Int) -> Unit
 ) {
+    var lastValue by remember { mutableStateOf(value) }
+    var selection by remember { mutableStateOf(0) }
+
+    if (value != lastValue) {
+        lastValue = value
+        selection = lastValue
+    }
+
     Preference(
         override = override,
         label = label,
         onOverrideClick = onOverrideClick,
         valueSetting = {
             Slider(
-                value = value.toFloat(),
-                onValueChange = onSliderChange,
+                value = selection.toFloat(),
+                onValueChange = { selection = it.roundToInt() },
                 enabled = override,
                 valueRange = min.toFloat().rangeTo(max.toFloat()),
-                //steps = max - min
+                onValueChangeFinished = { onSliderChange(selection) }
             )
         }
     )
