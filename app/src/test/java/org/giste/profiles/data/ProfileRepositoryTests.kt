@@ -33,10 +33,10 @@ class ProfileRepositoryTests {
         private val PROFILE_ENTITY_2 = ProfileEntity(2, "Profile 2")
 
         private val SETTING_ENTITY_LIST = listOf(
-            SettingEntity(0, 1, SettingType.VOLUME_MEDIA, false, 0),
-            SettingEntity(0, 1, SettingType.VOLUME_RING, false, 0),
-            SettingEntity(0, 1, SettingType.VOLUME_NOTIFICATION, false, 0),
-            SettingEntity(0, 1, SettingType.VOLUME_ALARM, false, 0)
+            SettingEntity(1, SettingType.VOLUME_MEDIA, false, 0),
+            SettingEntity(1, SettingType.VOLUME_RING, false, 0),
+            SettingEntity(1, SettingType.VOLUME_NOTIFICATION, false, 0),
+            SettingEntity(1, SettingType.VOLUME_ALARM, false, 0)
         )
     }
 
@@ -54,7 +54,6 @@ class ProfileRepositoryTests {
 
     private val profileMapper = ProfileMapper()
     private val profileDetailMapper = ProfileDetailMapper(SettingMapper())
-    private val settingMapper = SettingMapper()
 
     private lateinit var repository: ProfileRepository
 
@@ -122,10 +121,10 @@ class ProfileRepositoryTests {
         coEvery {
             profileDetailDao.add(
                 newProfileEntity, listOf(
-                    SettingEntity(0, 0, SettingType.VOLUME_MEDIA, false, 0),
-                    SettingEntity(0, 0, SettingType.VOLUME_RING, false, 0),
-                    SettingEntity(0, 0, SettingType.VOLUME_NOTIFICATION, false, 0),
-                    SettingEntity(0, 0, SettingType.VOLUME_ALARM, false, 0)
+                    SettingEntity(0, SettingType.VOLUME_MEDIA, false, 0),
+                    SettingEntity(0, SettingType.VOLUME_RING, false, 0),
+                    SettingEntity(0, SettingType.VOLUME_NOTIFICATION, false, 0),
+                    SettingEntity(0, SettingType.VOLUME_ALARM, false, 0)
                 )
             )
         } returns 1
@@ -136,10 +135,10 @@ class ProfileRepositoryTests {
         coVerify(exactly = 1) {
             profileDetailDao.add(
                 newProfileEntity, listOf(
-                    SettingEntity(0, 0, SettingType.VOLUME_MEDIA, false, 0),
-                    SettingEntity(0, 0, SettingType.VOLUME_RING, false, 0),
-                    SettingEntity(0, 0, SettingType.VOLUME_NOTIFICATION, false, 0),
-                    SettingEntity(0, 0, SettingType.VOLUME_ALARM, false, 0)
+                    SettingEntity(0, SettingType.VOLUME_MEDIA, false, 0),
+                    SettingEntity(0, SettingType.VOLUME_RING, false, 0),
+                    SettingEntity(0, SettingType.VOLUME_NOTIFICATION, false, 0),
+                    SettingEntity(0, SettingType.VOLUME_ALARM, false, 0)
                 )
             )
         }

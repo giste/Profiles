@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import org.giste.profiles.domain.IntSetting
 import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.SettingType
+import org.giste.profiles.domain.SystemProperties
 import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
 import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.giste.profiles.ui.destinations.ProfileScreenDestination
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     findProfileByIdUseCase: FindProfileByIdUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase,
+    val systemProperties: SystemProperties,
     state: SavedStateHandle
 ) : ViewModel() {
     var profile by mutableStateOf(ProfileDetail())
@@ -47,7 +49,6 @@ class ProfileViewModel @Inject constructor(
                     SettingType.VOLUME_RING,
                     SettingType.VOLUME_NOTIFICATION,
                     SettingType.VOLUME_ALARM -> IntSetting(
-                        id = id,
                         profileId = profile.id,
                         type = type,
                         override = override,
@@ -56,7 +57,23 @@ class ProfileViewModel @Inject constructor(
                 }
             }
 
-            Log.d("ProfileViewModel", "newSettings = $newSettings")
+            updateProfileUseCase.invoke(profile.copy(settings = newSettings))
+        }
+    }
+
+    fun onValueChange(type: SettingType, value: Any) {
+        Log.d("ProfileViewModel", "onValueChange($type, $value)")
+
+        viewModelScope.launch {
+            val newSettings = profile.settings.toMutableMap()
+            with(profile.settings[type]) {
+                newSettings[type] = when (type) {
+                    SettingType.VOLUME_MEDIA,
+                    SettingType.VOLUME_RING,
+                    SettingType.VOLUME_NOTIFICATION,
+                    SettingType.VOLUME_ALARM -> (this as IntSetting).copy(value = value as Int)
+                }
+            }
 
             updateProfileUseCase.invoke(profile.copy(settings = newSettings))
         }
