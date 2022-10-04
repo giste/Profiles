@@ -20,10 +20,6 @@ class SettingMapper @Inject constructor() {
         }
     }
 
-    fun toEntity(settingList: Map<SettingType, Setting<Any>>): List<SettingEntity> {
-        return settingList.values.map { toEntity(it) }
-    }
-
     fun toModel(settingEntity: SettingEntity): Setting<Any> {
         with(settingEntity) {
             return when (type) {

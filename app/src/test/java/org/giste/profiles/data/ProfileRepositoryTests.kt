@@ -65,8 +65,7 @@ class ProfileRepositoryTests {
             profileMapper = profileMapper,
             selectedProfileDao = selectedProfileDao,
             profileDetailDao = profileDetailDao,
-            profileDetailMapper = profileDetailMapper,
-            settingMapper = settingMapper
+            profileDetailMapper = profileDetailMapper
         )
     }
 

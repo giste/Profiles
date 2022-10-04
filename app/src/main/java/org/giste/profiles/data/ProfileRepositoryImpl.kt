@@ -11,8 +11,7 @@ class ProfileRepositoryImpl(
     private val profileMapper: ProfileMapper,
     private val selectedProfileDao: SelectedProfileDao,
     private val profileDetailDao: ProfileDetailDao,
-    private val profileDetailMapper: ProfileDetailMapper,
-    private val settingMapper: SettingMapper
+    private val profileDetailMapper: ProfileDetailMapper
 ) : ProfileRepository {
     override fun findAll(): Flow<List<Profile>> {
         return profileDao.findAll().map { list -> list.map { profileMapper.toModel(it) } }
@@ -28,10 +27,8 @@ class ProfileRepositoryImpl(
     }
 
     override suspend fun add(profileDetail: ProfileDetail): Long {
-        return profileDetailDao.add(
-            profileMapper.toEntity(profileDetail),
-            settingMapper.toEntity(profileDetail.settings)
-        )
+        val entity = profileDetailMapper.toEntity(profileDetail)
+        return profileDetailDao.add(entity.first, entity.second)
     }
 
     override suspend fun update(profileDetail: ProfileDetail): Int {
