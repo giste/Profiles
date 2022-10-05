@@ -57,14 +57,18 @@ class DataModule {
         profileDetailDao: ProfileDetailDao,
         profileMapper: ProfileMapper,
         profileDetailMapper: ProfileDetailMapper,
-        selectedProfileDao: SelectedProfileDao
+        selectedProfileDao: SelectedProfileDao,
+        settingDao: SettingDao,
+        settingMapper: SettingMapper
     ): ProfileRepository {
         return ProfileRepositoryImpl(
             profileDao = profileDao,
             profileMapper = profileMapper,
             selectedProfileDao = selectedProfileDao,
             profileDetailDao = profileDetailDao,
-            profileDetailMapper = profileDetailMapper
+            profileDetailMapper = profileDetailMapper,
+            settingDao = settingDao,
+            settingMapper = settingMapper
         )
     }
 
