@@ -246,27 +246,54 @@ private fun RingModePreference(
         onOverrideClick = onOverrideClick
     ) {
         Row(
-            modifier = Modifier.selectableGroup(),
+            modifier = Modifier
+                .selectableGroup()
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            val tint = if (override) {
+                MaterialTheme.colors.primary
+            } else {
+                LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+            }
+
             RadioButton(
                 selected = value == RingModeSetting.Companion.RingMode.NORMAL,
                 onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.NORMAL) },
                 enabled = override
             )
-            Icon(imageVector = Icons.Default.RingVolume, contentDescription = "")
+            Icon(
+                imageVector = Icons.Default.RingVolume,
+                contentDescription = "",
+                tint = tint
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
             RadioButton(
                 selected = value == RingModeSetting.Companion.RingMode.VIBRATE,
                 onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.VIBRATE) },
                 enabled = override
             )
-            Icon(imageVector = Icons.Default.Vibration, contentDescription = "")
+            Icon(
+                imageVector = Icons.Default.Vibration,
+                contentDescription = "",
+                tint = tint
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
             RadioButton(
                 selected = value == RingModeSetting.Companion.RingMode.SILENT,
                 onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.SILENT) },
                 enabled = override
             )
-            Icon(imageVector = Icons.Default.DoNotDisturbOnTotalSilence, contentDescription = "")
+            Icon(
+                imageVector = Icons.Default.DoNotDisturbOnTotalSilence,
+                contentDescription = "",
+                tint = tint
+            )
+
         }
     }
 }
