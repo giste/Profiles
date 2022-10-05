@@ -3,8 +3,13 @@ package org.giste.profiles.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DoNotDisturbOnTotalSilence
+import androidx.compose.material.icons.filled.RingVolume
+import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import org.giste.profiles.R
 import org.giste.profiles.domain.ProfileDetail
+import org.giste.profiles.domain.RingModeSetting
 import org.giste.profiles.domain.SettingType
 import org.giste.profiles.domain.SystemProperties
 import org.giste.profiles.ui.components.FabSettings
@@ -122,6 +128,17 @@ private fun ProfileContent(
                     onSliderChange = { value -> onValueChange(it.type, value) }
                 )
             }
+            profile.settings[SettingType.RING_MODE]?.let {
+                RingModePreference(
+                    label = stringResource(id = R.string.profile_screen_setting_volume_ring_mode_label),
+                    override = it.override,
+                    value = it.value as RingModeSetting.Companion.RingMode,
+                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
+                    onSelectionChange = { value -> onValueChange(it.type, value) }
+                )
+            }
+
+
         }
     }
 
@@ -156,8 +173,8 @@ private fun Category(category: String) {
 fun Preference(
     override: Boolean,
     label: String,
+    onOverrideClick: (Boolean) -> Unit,
     valueSetting: (@Composable () -> Unit),
-    onOverrideClick: (Boolean) -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
@@ -213,4 +230,43 @@ fun SliderPreference(
             )
         }
     )
+}
+
+@Composable
+private fun RingModePreference(
+    label: String,
+    override: Boolean,
+    value: RingModeSetting.Companion.RingMode,
+    onOverrideClick: (Boolean) -> Unit,
+    onSelectionChange: (RingModeSetting.Companion.RingMode) -> Unit
+) {
+    Preference(
+        override = override,
+        label = label,
+        onOverrideClick = onOverrideClick
+    ) {
+        Row(
+            modifier = Modifier.selectableGroup(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            RadioButton(
+                selected = value == RingModeSetting.Companion.RingMode.NORMAL,
+                onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.NORMAL) },
+                enabled = override
+            )
+            Icon(imageVector = Icons.Default.RingVolume, contentDescription = "")
+            RadioButton(
+                selected = value == RingModeSetting.Companion.RingMode.VIBRATE,
+                onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.VIBRATE) },
+                enabled = override
+            )
+            Icon(imageVector = Icons.Default.Vibration, contentDescription = "")
+            RadioButton(
+                selected = value == RingModeSetting.Companion.RingMode.SILENT,
+                onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.SILENT) },
+                enabled = override
+            )
+            Icon(imageVector = Icons.Default.DoNotDisturbOnTotalSilence, contentDescription = "")
+        }
+    }
 }

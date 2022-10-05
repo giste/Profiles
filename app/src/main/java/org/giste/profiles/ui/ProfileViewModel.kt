@@ -11,10 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.giste.profiles.domain.IntSetting
-import org.giste.profiles.domain.ProfileDetail
-import org.giste.profiles.domain.SettingType
-import org.giste.profiles.domain.SystemProperties
+import org.giste.profiles.domain.*
 import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
 import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 import org.giste.profiles.ui.destinations.ProfileScreenDestination
@@ -48,12 +45,8 @@ class ProfileViewModel @Inject constructor(
                     SettingType.VOLUME_MEDIA,
                     SettingType.VOLUME_RING,
                     SettingType.VOLUME_NOTIFICATION,
-                    SettingType.VOLUME_ALARM -> IntSetting(
-                        profileId = profile.id,
-                        type = type,
-                        override = override,
-                        value = this?.value as Int
-                    )
+                    SettingType.VOLUME_ALARM -> (this as IntSetting).copy(override = override)
+                    SettingType.RING_MODE -> (this as RingModeSetting).copy(override = override)
                 }
             }
 
@@ -72,6 +65,7 @@ class ProfileViewModel @Inject constructor(
                     SettingType.VOLUME_RING,
                     SettingType.VOLUME_NOTIFICATION,
                     SettingType.VOLUME_ALARM -> (this as IntSetting).copy(value = value as Int)
+                    SettingType.RING_MODE -> (this as RingModeSetting).copy(value = value as RingModeSetting.Companion.RingMode)
                 }
             }
 

@@ -9,6 +9,7 @@ data class ProfileDetail(
             SettingType.VOLUME_RING,
             SettingType.VOLUME_NOTIFICATION,
             SettingType.VOLUME_ALARM -> Pair(it, IntSetting(profileId = id, type = it))
+            SettingType.RING_MODE -> Pair(it, RingModeSetting(profileId = id, type = it))
         }
     }
 )
