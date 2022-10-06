@@ -47,6 +47,11 @@ class ProfileViewModel @Inject constructor(
                     SettingType.VOLUME_NOTIFICATION,
                     SettingType.VOLUME_ALARM -> (this as IntSetting).copy(override = override)
                     SettingType.RING_MODE -> (this as RingModeSetting).copy(override = override)
+                    SettingType.CONNECTION_WIFI,
+                    SettingType.CONNECTION_DATA,
+                    SettingType.CONNECTION_BLUETOOTH,
+                    SettingType.CONNECTION_NFC,
+                    SettingType.CONNECTION_AIRPLANE -> (this as BooleanSetting).copy(override = override)
                 }
             }
 
@@ -66,6 +71,11 @@ class ProfileViewModel @Inject constructor(
                     SettingType.VOLUME_NOTIFICATION,
                     SettingType.VOLUME_ALARM -> (this as IntSetting).copy(value = value as Int)
                     SettingType.RING_MODE -> (this as RingModeSetting).copy(value = value as RingModeSetting.Companion.RingMode)
+                    SettingType.CONNECTION_WIFI,
+                    SettingType.CONNECTION_DATA,
+                    SettingType.CONNECTION_BLUETOOTH,
+                    SettingType.CONNECTION_NFC,
+                    SettingType.CONNECTION_AIRPLANE -> (this as BooleanSetting).copy(value = value as Boolean)
                 }
             }
 
