@@ -14,7 +14,6 @@ import kotlinx.coroutines.test.runTest
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.ProfileDetail
 import org.giste.profiles.domain.ProfileRepository
-import org.giste.profiles.domain.SettingType
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
