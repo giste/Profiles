@@ -7,7 +7,7 @@ import org.giste.profiles.domain.SettingType
 import javax.inject.Inject
 
 class SettingMapper @Inject constructor() {
-    fun toEntity(setting: Setting<Any>): SettingEntity {
+    fun toEntity(setting: Setting): SettingEntity {
         with(setting) {
             return SettingEntity(
                 profileId = profileId,
@@ -21,7 +21,7 @@ class SettingMapper @Inject constructor() {
         }
     }
 
-    fun toModel(settingEntity: SettingEntity): Setting<Any> {
+    fun toModel(settingEntity: SettingEntity): Setting {
         with(settingEntity) {
             return when (type) {
                 SettingType.VOLUME_MEDIA,

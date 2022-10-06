@@ -1,8 +1,8 @@
 package org.giste.profiles.domain
 
-sealed interface Setting<out T> {
-    val profileId: Long
-    val type: SettingType
-    val override: Boolean
-    val value: T
-}
+sealed class Setting(
+    open val profileId: Long,
+    open val type: SettingType,
+    open val override: Boolean = false,
+    open val value: Any,
+)

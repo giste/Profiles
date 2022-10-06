@@ -3,7 +3,7 @@ package org.giste.profiles.domain
 data class ProfileDetail(
     val id: Long = 0,
     val name: String = "",
-    val settings: Map<SettingType, Setting<Any>> = SettingType.values().associate {
+    val settings: Map<SettingType, Setting> = SettingType.values().associate {
         when (it) {
             SettingType.VOLUME_MEDIA,
             SettingType.VOLUME_RING,
