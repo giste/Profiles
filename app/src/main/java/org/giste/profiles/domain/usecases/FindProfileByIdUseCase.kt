@@ -8,6 +8,7 @@ import javax.inject.Inject
 class FindProfileByIdUseCase @Inject constructor(private val profileRepository: ProfileRepository) {
     operator fun invoke(id: Long) = profileRepository.findById(id).onEach { profile ->
         if (profile.settings.size != SettingType.values().size) {
+            Log.d("FindProfileByIdUseCase", "Missing settings for $profile")
             // Missing settings, add them
             SettingType.values().forEach {
                 if (!profile.settings.containsKey(it)) {
