@@ -56,7 +56,7 @@ class ProfileRepositoryImpl(
         return profileDao.findByName(name) != null
     }
 
-    override suspend fun addSetting(setting: Setting<Any>) {
+    override suspend fun addSetting(setting: Setting) {
         settingDao.add(settingMapper.toEntity(setting))
     }
 
