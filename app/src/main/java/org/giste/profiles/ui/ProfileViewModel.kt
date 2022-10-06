@@ -50,7 +50,7 @@ class ProfileViewModel @Inject constructor(
                 }
             }
 
-            updateProfileUseCase.invoke(profile.copy(settings = newSettings))
+            updateProfileUseCase.invoke(profile.copy(settings = newSettings.toMap()))
         }
     }
 
@@ -69,7 +69,7 @@ class ProfileViewModel @Inject constructor(
                 }
             }
 
-            updateProfileUseCase.invoke(profile.copy(settings = newSettings))
+            updateProfileUseCase.invoke(profile.copy(settings = newSettings.toMap()))
         }
     }
 }
