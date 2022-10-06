@@ -10,10 +10,12 @@ class FindProfileByIdUseCase @Inject constructor(private val profileRepository: 
         if (profile.settings.size != SettingType.values().size) {
             Log.d("FindProfileByIdUseCase", "Missing settings for $profile")
             // Missing settings, add them
+            val settings = mutableListOf<Setting>()
+
             SettingType.values().forEach {
                 if (!profile.settings.containsKey(it)) {
                     Log.d("FindProfileByIdUseCase", "Adding setting: $it")
-                    profileRepository.addSetting(
+                    settings.add(
                         when (it) {
                             SettingType.VOLUME_MEDIA,
                             SettingType.VOLUME_RING,
@@ -38,6 +40,8 @@ class FindProfileByIdUseCase @Inject constructor(private val profileRepository: 
                     )
                 }
             }
+
+            profileRepository.addSettings(settings)
         }
     }
 }

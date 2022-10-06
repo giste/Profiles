@@ -60,4 +60,8 @@ class ProfileRepositoryImpl(
         settingDao.add(settingMapper.toEntity(setting))
     }
 
+    override suspend fun addSettings(settings: List<Setting>) {
+        settingDao.add(settings.map(settingMapper::toEntity))
+    }
+
 }

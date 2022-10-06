@@ -20,4 +20,6 @@ interface ProfileRepository {
     suspend fun checkIfExists(name: String): Boolean
 
     suspend fun addSetting(setting: Setting)
+
+    suspend fun addSettings(settings: List<Setting>)
 }
