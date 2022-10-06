@@ -32,12 +32,9 @@ class ProfileRepositoryTests {
         private val PROFILE_ENTITY_1 = ProfileEntity(1, "Profile 1")
         private val PROFILE_ENTITY_2 = ProfileEntity(2, "Profile 2")
 
-        private val SETTING_ENTITY_LIST = listOf(
-            SettingEntity(1, SettingType.VOLUME_MEDIA, false, 0),
-            SettingEntity(1, SettingType.VOLUME_RING, false, 0),
-            SettingEntity(1, SettingType.VOLUME_NOTIFICATION, false, 0),
-            SettingEntity(1, SettingType.VOLUME_ALARM, false, 0)
-        )
+        private val SETTING_ENTITY_LIST = PROFILE_DETAIL_1.settings.values
+            .map(SettingMapper()::toEntity)
+            .toList()
     }
 
     @get:Rule
@@ -52,8 +49,12 @@ class ProfileRepositoryTests {
     @MockK
     private lateinit var profileDetailDao: ProfileDetailDao
 
+    @MockK
+    private lateinit var settingDao: SettingDao
+
     private val profileMapper = ProfileMapper()
     private val profileDetailMapper = ProfileDetailMapper(SettingMapper())
+    private val settingMapper = SettingMapper()
 
     private lateinit var repository: ProfileRepository
 
@@ -64,7 +65,9 @@ class ProfileRepositoryTests {
             profileMapper = profileMapper,
             selectedProfileDao = selectedProfileDao,
             profileDetailDao = profileDetailDao,
-            profileDetailMapper = profileDetailMapper
+            profileDetailMapper = profileDetailMapper,
+            settingDao = settingDao,
+            settingMapper = settingMapper
         )
     }
 
@@ -118,29 +121,19 @@ class ProfileRepositoryTests {
     fun add_profileIdDoesNotExist_returnsId() = runTest {
         val newProfile = ProfileDetail(name = "New profile")
         val newProfileEntity = ProfileEntity(name = "New profile")
+        val settingEntityList = newProfile.settings.values
+            .map(settingMapper::toEntity)
+            .toList()
+
         coEvery {
-            profileDetailDao.add(
-                newProfileEntity, listOf(
-                    SettingEntity(0, SettingType.VOLUME_MEDIA, false, 0),
-                    SettingEntity(0, SettingType.VOLUME_RING, false, 0),
-                    SettingEntity(0, SettingType.VOLUME_NOTIFICATION, false, 0),
-                    SettingEntity(0, SettingType.VOLUME_ALARM, false, 0)
-                )
-            )
+            profileDetailDao.add(newProfileEntity, settingEntityList)
         } returns 1
 
         val id = repository.add(newProfile)
 
         assertThat(id, equalTo(1))
         coVerify(exactly = 1) {
-            profileDetailDao.add(
-                newProfileEntity, listOf(
-                    SettingEntity(0, SettingType.VOLUME_MEDIA, false, 0),
-                    SettingEntity(0, SettingType.VOLUME_RING, false, 0),
-                    SettingEntity(0, SettingType.VOLUME_NOTIFICATION, false, 0),
-                    SettingEntity(0, SettingType.VOLUME_ALARM, false, 0)
-                )
-            )
+            profileDetailDao.add(newProfileEntity, settingEntityList)
         }
     }
 

@@ -38,35 +38,13 @@ class ProfileDetailMapperTests {
     private val profileEntity = ProfileEntity(1, "Profile 1")
 
     @Test
-    fun toModel_allSettingsExist_returnsProfileDetail() {
+    fun toModel_returnsProfileDetail() {
         val mapper = ProfileDetailMapper(SettingMapper())
         assertThat(mapper.toModel(profileEntity, settingEntityList), equalTo(profileDetail))
     }
 
     @Test
-    fun toModel_someSettingsDoNotExist_returnsAllSettings() {
-        val mapper = ProfileDetailMapper(SettingMapper())
-
-        val detail =
-            mapper.toModel(profileEntity, listOf(volumeRingSettingEntity, volumeAlarmSettingEntity))
-
-        assertThat(
-            detail.settings.values.toList(), equalTo(
-                listOf(
-                    IntSetting(profileId = profileEntity.id, type = SettingType.VOLUME_MEDIA),
-                    volumeRingSetting,
-                    IntSetting(
-                        profileId = profileEntity.id,
-                        type = SettingType.VOLUME_NOTIFICATION
-                    ),
-                    volumeAlarmSetting
-                )
-            )
-        )
-    }
-
-    @Test
-    fun toEntity_allSettingsExist_returnEntities() {
+    fun toEntity_returnEntities() {
         val mapper = ProfileDetailMapper(SettingMapper())
 
         assertThat(mapper.toEntity(profileDetail), equalTo(Pair(profileEntity, settingEntityList)))
