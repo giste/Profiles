@@ -17,7 +17,7 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-class FindProfileByIdUseCaseTests {
+class FindProfileByIdUseCaseIntegrationTests {
     private lateinit var db: ProfilesDb
     private lateinit var profileDao: ProfileDao
     private lateinit var settingDao: SettingDao
