@@ -261,10 +261,7 @@ fun Preference(
                 .clickable { onOverrideClick(!override) }
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Switch(
-                    checked = override,
-                    onCheckedChange = { onOverrideClick(it) }
-                )
+                Checkbox(checked = override, onCheckedChange = { onOverrideClick(it) })
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = label)
                 Spacer(modifier = Modifier.width(16.dp))
