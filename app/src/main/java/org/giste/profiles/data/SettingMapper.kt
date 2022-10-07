@@ -37,7 +37,8 @@ class SettingMapper @Inject constructor() {
                 SettingType.CONNECTION_DATA,
                 SettingType.CONNECTION_BLUETOOTH,
                 SettingType.CONNECTION_NFC,
-                SettingType.CONNECTION_AIRPLANE ->
+                SettingType.CONNECTION_AIRPLANE,
+                SettingType.LOCATION ->
                     BooleanSetting(profileId, type, override, value == 1)
             }
         }

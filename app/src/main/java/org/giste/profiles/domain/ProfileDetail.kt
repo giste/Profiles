@@ -14,7 +14,8 @@ data class ProfileDetail(
             SettingType.CONNECTION_DATA,
             SettingType.CONNECTION_BLUETOOTH,
             SettingType.CONNECTION_NFC,
-            SettingType.CONNECTION_AIRPLANE -> Pair(it, BooleanSetting(profileId = id, type = it))
+            SettingType.CONNECTION_AIRPLANE,
+            SettingType.LOCATION -> Pair(it, BooleanSetting(profileId = id, type = it))
         }
     }
 )

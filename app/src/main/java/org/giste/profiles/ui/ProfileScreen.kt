@@ -184,6 +184,17 @@ private fun ProfileContent(
                     onSelectionChange = { value -> onValueChange(it.type, value) }
                 )
             }
+
+            Category(category = stringResource(id = R.string.profile_screen_category_location_label))
+            profile.settings[SettingType.LOCATION]?.let {
+                BooleanPreference(
+                    label = stringResource(id = R.string.profile_screen_setting_location_location_label),
+                    override = it.override,
+                    value = it.value as Boolean,
+                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
+                    onSelectionChange = { value -> onValueChange(it.type, value) }
+                )
+            }
         }
     }
 

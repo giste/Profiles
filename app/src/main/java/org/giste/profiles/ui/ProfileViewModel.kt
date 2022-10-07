@@ -51,7 +51,8 @@ class ProfileViewModel @Inject constructor(
                     SettingType.CONNECTION_DATA,
                     SettingType.CONNECTION_BLUETOOTH,
                     SettingType.CONNECTION_NFC,
-                    SettingType.CONNECTION_AIRPLANE -> (this as BooleanSetting).copy(override = override)
+                    SettingType.CONNECTION_AIRPLANE,
+                    SettingType.LOCATION -> (this as BooleanSetting).copy(override = override)
                 }
             }
 
@@ -75,7 +76,8 @@ class ProfileViewModel @Inject constructor(
                     SettingType.CONNECTION_DATA,
                     SettingType.CONNECTION_BLUETOOTH,
                     SettingType.CONNECTION_NFC,
-                    SettingType.CONNECTION_AIRPLANE -> (this as BooleanSetting).copy(value = value as Boolean)
+                    SettingType.CONNECTION_AIRPLANE,
+                    SettingType.LOCATION -> (this as BooleanSetting).copy(value = value as Boolean)
                 }
             }
 

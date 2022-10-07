@@ -20,6 +20,8 @@
     <string name="profile_screen_setting_connection_bluetooth_label">Bluetooth</string>
     <string name="profile_screen_setting_connection_nfc_label">NFC</string>
     <string name="profile_screen_setting_connection_airplane_label">Airplane mode</string>
+    <string name="profile_screen_category_location_label">Location</string>
+    <string name="profile_screen_setting_location_location_label">Location</string>
 
     <string name="dialog_cancel_label">Cancel</string>
     <string name="dialog_accept_label">Accept</string>
