@@ -59,7 +59,8 @@ class DataModule {
         profileDetailMapper: ProfileDetailMapper,
         selectedProfileDao: SelectedProfileDao,
         settingDao: SettingDao,
-        settingMapper: SettingMapper
+        settingMapper: SettingMapper,
+        systemSettingsDataSource: SystemSettingsDataSource
     ): ProfileRepository {
         return ProfileRepositoryImpl(
             profileDao = profileDao,
@@ -68,7 +69,8 @@ class DataModule {
             profileDetailDao = profileDetailDao,
             profileDetailMapper = profileDetailMapper,
             settingDao = settingDao,
-            settingMapper = settingMapper
+            settingMapper = settingMapper,
+            systemSettingsDataSource = systemSettingsDataSource
         )
     }
 
@@ -76,5 +78,11 @@ class DataModule {
     @Singleton
     fun provideSystemProperties(@ApplicationContext appContext: Context): SystemProperties {
         return SystemPropertiesDataSource(appContext)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSystemSettings(@ApplicationContext appContext: Context): SystemSettingsDataSource {
+        return SystemSettingsDataSource(appContext)
     }
 }

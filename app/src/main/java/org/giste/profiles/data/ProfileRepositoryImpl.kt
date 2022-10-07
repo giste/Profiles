@@ -1,6 +1,7 @@
 package org.giste.profiles.data
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.ProfileDetail
@@ -14,7 +15,8 @@ class ProfileRepositoryImpl(
     private val profileDetailDao: ProfileDetailDao,
     private val profileDetailMapper: ProfileDetailMapper,
     private val settingDao: SettingDao,
-    private val settingMapper: SettingMapper
+    private val settingMapper: SettingMapper,
+    private val systemSettingsDataSource: SystemSettingsDataSource
 ) : ProfileRepository {
     override fun findAll(): Flow<List<Profile>> {
         return profileDao.findAll().map { list -> list.map { profileMapper.toModel(it) } }
@@ -50,6 +52,10 @@ class ProfileRepositoryImpl(
 
     override suspend fun selectProfile(profile: Profile) {
         selectedProfileDao.selectProfile(SelectedProfileEntity(profile.id))
+        systemSettingsDataSource.applySettings(
+            settingDao.findByProfileId(profile.id).first()
+                .map(settingMapper::toModel)
+        )
     }
 
     override suspend fun checkIfExists(name: String): Boolean {
