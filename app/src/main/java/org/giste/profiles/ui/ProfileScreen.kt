@@ -297,7 +297,7 @@ private fun RingModePreference(
             verticalAlignment = Alignment.CenterVertically
         ) {
             val tint = if (override) {
-                MaterialTheme.colors.primary
+                LocalContentColor.current
             } else {
                 LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
             }
