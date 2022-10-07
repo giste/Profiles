@@ -22,6 +22,9 @@
     <string name="profile_screen_setting_connection_airplane_label">Airplane mode</string>
     <string name="profile_screen_category_location_label">Location</string>
     <string name="profile_screen_setting_location_location_label">Location</string>
+    <string name="profile_screen_category_brightness_label">Brightness</string>
+    <string name="profile_screen_setting_brightness_auto_label">Auto</string>
+    <string name="profile_screen_setting_brightness_level_label">Level</string>
 
     <string name="dialog_cancel_label">Cancel</string>
     <string name="dialog_accept_label">Accept</string>

@@ -20,7 +20,8 @@ class FindProfileByIdUseCase @Inject constructor(private val profileRepository: 
                             SettingType.VOLUME_MEDIA,
                             SettingType.VOLUME_RING,
                             SettingType.VOLUME_NOTIFICATION,
-                            SettingType.VOLUME_ALARM -> IntSetting(
+                            SettingType.VOLUME_ALARM,
+                            SettingType.BRIGHTNESS -> IntSetting(
                                 profileId = profile.id,
                                 type = it
                             )
@@ -33,7 +34,8 @@ class FindProfileByIdUseCase @Inject constructor(private val profileRepository: 
                             SettingType.CONNECTION_BLUETOOTH,
                             SettingType.CONNECTION_NFC,
                             SettingType.CONNECTION_AIRPLANE,
-                            SettingType.LOCATION -> BooleanSetting(
+                            SettingType.LOCATION,
+                            SettingType.BRIGHTNESS_AUTO -> BooleanSetting(
                                 profileId = profile.id,
                                 type = it
                             )

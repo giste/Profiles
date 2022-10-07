@@ -25,7 +25,8 @@ class SettingMapper @Inject constructor() {
                 SettingType.VOLUME_MEDIA,
                 SettingType.VOLUME_RING,
                 SettingType.VOLUME_NOTIFICATION,
-                SettingType.VOLUME_ALARM -> IntSetting(profileId, type, override, value)
+                SettingType.VOLUME_ALARM,
+                SettingType.BRIGHTNESS -> IntSetting(profileId, type, override, value)
                 SettingType.RING_MODE ->
                     RingModeSetting(
                         profileId,
@@ -38,7 +39,8 @@ class SettingMapper @Inject constructor() {
                 SettingType.CONNECTION_BLUETOOTH,
                 SettingType.CONNECTION_NFC,
                 SettingType.CONNECTION_AIRPLANE,
-                SettingType.LOCATION ->
+                SettingType.LOCATION,
+                SettingType.BRIGHTNESS_AUTO ->
                     BooleanSetting(profileId, type, override, value == 1)
             }
         }

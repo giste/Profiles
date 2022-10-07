@@ -195,6 +195,28 @@ private fun ProfileContent(
                     onSelectionChange = { value -> onValueChange(it.type, value) }
                 )
             }
+
+            Category(category = stringResource(id = R.string.profile_screen_category_brightness_label))
+            profile.settings[SettingType.BRIGHTNESS_AUTO]?.let {
+                BooleanPreference(
+                    label = stringResource(id = R.string.profile_screen_setting_brightness_auto_label),
+                    override = it.override,
+                    value = it.value as Boolean,
+                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
+                    onSelectionChange = { value -> onValueChange(it.type, value) }
+                )
+            }
+            profile.settings[SettingType.BRIGHTNESS]?.let {
+                SliderPreference(
+                    label = stringResource(id = R.string.profile_screen_setting_brightness_level_label),
+                    override = it.override,
+                    value = it.value as Int,
+                    min = 0,
+                    max = 100,
+                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
+                    onSliderChange = { value -> onValueChange(it.type, value) }
+                )
+            }
         }
     }
 
