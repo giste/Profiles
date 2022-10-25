@@ -3,19 +3,24 @@ package org.giste.profiles.data
 import android.content.Context
 import android.media.AudioManager
 import android.net.wifi.WifiManager
+import android.telephony.TelephonyManager
+import android.telephony.TelephonyManager.DATA_ENABLED_REASON_USER
 import android.util.Log
 import org.giste.profiles.domain.RingModeSetting
 import org.giste.profiles.domain.Setting
 import org.giste.profiles.domain.SettingType
 import javax.inject.Inject
 
+
 class SystemSettingsDataSource @Inject constructor(context: Context) {
     private val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    private var tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
     fun applySettings(settings: List<Setting>) {
         settings.filter { it.override }
             .forEach {
+                Log.d("SystemSettingsDataSource", "Processing = $it")
                 when (it.type) {
                     SettingType.VOLUME_MEDIA ->
                         setVolume(AudioManager.STREAM_MUSIC, it.value as Int)
@@ -28,7 +33,7 @@ class SystemSettingsDataSource @Inject constructor(context: Context) {
                     SettingType.RING_MODE ->
                         setRingerMode(it.value as RingModeSetting.Companion.RingMode)
                     SettingType.CONNECTION_WIFI -> applyWiFi(it.value as Boolean)
-                    SettingType.CONNECTION_DATA -> {}
+                    SettingType.CONNECTION_DATA -> applyData(it.value as Boolean)
                     SettingType.CONNECTION_BLUETOOTH -> {}
                     SettingType.CONNECTION_NFC -> {}
                     SettingType.CONNECTION_AIRPLANE -> {}
@@ -61,4 +66,10 @@ class SystemSettingsDataSource @Inject constructor(context: Context) {
         }
     }
 
+    private fun applyData(value: Boolean) {
+        if (tm.isDataEnabled != value) {
+            Log.d("SystemSettingsDataSource", "Setting Data = $value")
+            tm.setDataEnabledForReason(DATA_ENABLED_REASON_USER, value)
+        }
+    }
 }
