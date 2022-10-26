@@ -1,5 +1,6 @@
 package org.giste.profiles.data
 
+import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.media.AudioManager
 import android.net.wifi.WifiManager
@@ -13,9 +14,12 @@ import javax.inject.Inject
 
 
 class SystemSettingsDataSource @Inject constructor(context: Context) {
-    private val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    private val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-    private var tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    private val telephonyManager =
+        context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    private val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+    private val bluetoothAdapter = bluetoothManager.adapter
 
     fun applySettings(settings: List<Setting>) {
         settings.filter { it.override }
@@ -34,7 +38,7 @@ class SystemSettingsDataSource @Inject constructor(context: Context) {
                         setRingerMode(it.value as RingModeSetting.Companion.RingMode)
                     SettingType.CONNECTION_WIFI -> applyWiFi(it.value as Boolean)
                     SettingType.CONNECTION_DATA -> applyData(it.value as Boolean)
-                    SettingType.CONNECTION_BLUETOOTH -> {}
+                    SettingType.CONNECTION_BLUETOOTH -> applyBluetooth(it.value as Boolean)
                     SettingType.CONNECTION_NFC -> {}
                     SettingType.CONNECTION_AIRPLANE -> {}
                     SettingType.LOCATION -> {}
@@ -46,12 +50,12 @@ class SystemSettingsDataSource @Inject constructor(context: Context) {
 
     private fun setVolume(stream: Int, value: Int) {
         Log.d("SystemSettingsDataSource", "Setting volume($stream) = $value")
-        am.setStreamVolume(stream, value, 0)
+        audioManager.setStreamVolume(stream, value, 0)
     }
 
     private fun setRingerMode(mode: RingModeSetting.Companion.RingMode) {
         Log.d("SystemSettingsDataSource", "Setting ringer mode = $mode")
-        am.ringerMode = when (mode) {
+        audioManager.ringerMode = when (mode) {
             RingModeSetting.Companion.RingMode.NORMAL -> AudioManager.RINGER_MODE_NORMAL
             RingModeSetting.Companion.RingMode.VIBRATE -> AudioManager.RINGER_MODE_VIBRATE
             RingModeSetting.Companion.RingMode.SILENT -> AudioManager.RINGER_MODE_SILENT
@@ -59,17 +63,30 @@ class SystemSettingsDataSource @Inject constructor(context: Context) {
     }
 
     private fun applyWiFi(value: Boolean) {
-        if (wm.isWifiEnabled != value) {
+        if (wifiManager.isWifiEnabled != value) {
             Log.d("SystemSettingsDataSource", "Setting WiFi = $value")
             @Suppress("DEPRECATION")
-            wm.isWifiEnabled = value
+            wifiManager.isWifiEnabled = value
         }
     }
 
     private fun applyData(value: Boolean) {
-        if (tm.isDataEnabled != value) {
+        if (telephonyManager.isDataEnabled != value) {
             Log.d("SystemSettingsDataSource", "Setting Data = $value")
-            tm.setDataEnabledForReason(DATA_ENABLED_REASON_USER, value)
+            telephonyManager.setDataEnabledForReason(DATA_ENABLED_REASON_USER, value)
+        }
+    }
+
+    private fun applyBluetooth(value: Boolean) {
+        if (bluetoothAdapter.isEnabled != value) {
+            Log.d("SystemSettingsDataSource", "Setting Bluetooth = $value")
+            if (value) {
+                @Suppress("DEPRECATION")
+                bluetoothAdapter.enable()
+            } else {
+                @Suppress("DEPRECATION")
+                bluetoothAdapter.disable()
+            }
         }
     }
 }
