@@ -14,6 +14,7 @@ import org.giste.profiles.domain.Setting
 import org.giste.profiles.domain.SettingType
 import javax.inject.Inject
 
+
 class SystemSettingsDataSource @Inject constructor(private val context: Context) {
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -49,7 +50,7 @@ class SystemSettingsDataSource @Inject constructor(private val context: Context)
                     SettingType.CONNECTION_NFC -> {}
                     SettingType.CONNECTION_AIRPLANE -> applyAirplaneMode(it.value as Boolean)
                     SettingType.LOCATION -> {}
-                    SettingType.BRIGHTNESS_AUTO -> {}
+                    SettingType.BRIGHTNESS_AUTO -> applyBrightnessAuto(it.value as Boolean)
                     SettingType.BRIGHTNESS -> {}
                 }
             }
@@ -110,6 +111,7 @@ class SystemSettingsDataSource @Inject constructor(private val context: Context)
         val current =
             Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0)
         if (current != newValue) {
+            Log.d("SystemSettingsDataSource", "Setting Airplane Mode = $value")
             Settings.Global.putInt(
                 context.contentResolver,
                 Settings.Global.AIRPLANE_MODE_ON,
@@ -118,6 +120,30 @@ class SystemSettingsDataSource @Inject constructor(private val context: Context)
             val intent = Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED)
             intent.putExtra("state", newValue == 1)
             context.sendBroadcast(intent)
+        }
+    }
+
+//    private fun applyLocation(value: Boolean) {
+//        val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//        if (lm.isLocationEnabled != value) {
+//
+//        }
+//    }
+
+    private fun applyBrightnessAuto(value: Boolean) {
+        val newValue = if (value) 1 else 0
+        val current = Settings.System.getInt(
+            context.contentResolver,
+            Settings.System.SCREEN_BRIGHTNESS_MODE,
+            Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL
+        )
+        if (current != newValue) {
+            Log.d("SystemSettingsDataSource", "Setting Brightness Auto = $value")
+            Settings.System.putInt(
+                context.contentResolver,
+                Settings.System.SCREEN_BRIGHTNESS_MODE,
+                newValue
+            )
         }
     }
 }
