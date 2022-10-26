@@ -13,6 +13,8 @@ import org.giste.profiles.domain.RingModeSetting
 import org.giste.profiles.domain.Setting
 import org.giste.profiles.domain.SettingType
 import javax.inject.Inject
+import kotlin.math.exp
+import kotlin.math.roundToInt
 
 
 class SystemSettingsDataSource @Inject constructor(private val context: Context) {
@@ -51,7 +53,7 @@ class SystemSettingsDataSource @Inject constructor(private val context: Context)
                     SettingType.CONNECTION_AIRPLANE -> applyAirplaneMode(it.value as Boolean)
                     SettingType.LOCATION -> {}
                     SettingType.BRIGHTNESS_AUTO -> applyBrightnessAuto(it.value as Boolean)
-                    SettingType.BRIGHTNESS -> {}
+                    SettingType.BRIGHTNESS -> applyBrightness(it.value as Int)
                 }
             }
     }
@@ -146,4 +148,41 @@ class SystemSettingsDataSource @Inject constructor(private val context: Context)
             )
         }
     }
+
+    private fun applyBrightness(value: Int) {
+        val manual = (Settings.System.getInt(
+            context.contentResolver,
+            Settings.System.SCREEN_BRIGHTNESS_MODE,
+            Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL
+        ) == Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL)
+
+        val newValue = mapBrightness(value)
+
+        if (manual) {
+            val current = Settings.System.getInt(
+                context.contentResolver,
+                Settings.System.SCREEN_BRIGHTNESS, 0
+            )
+
+            if (current != newValue) {
+                Log.d("SystemSettingsDataSource", "Setting Brightness = $value -> $newValue")
+                Settings.System.putInt(
+                    context.contentResolver,
+                    Settings.System.SCREEN_BRIGHTNESS,
+                    newValue
+                )
+            }
+        } else {
+            Log.d("SystemSettingsDataSource", "Not setting brightness, it's auto")
+        }
+    }
+
+    private fun mapBrightness(percentage: Int) =
+        if (percentage <= 1) {
+            1
+        } else if (percentage >= 100) {
+            255
+        } else {
+            exp((percentage + 9.411) / 19.811).roundToInt()
+        }
 }
