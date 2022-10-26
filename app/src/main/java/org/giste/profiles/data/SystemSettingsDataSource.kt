@@ -2,8 +2,10 @@ package org.giste.profiles.data
 
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
 import android.net.wifi.WifiManager
+import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.telephony.TelephonyManager.DATA_ENABLED_REASON_USER
 import android.util.Log
@@ -12,14 +14,19 @@ import org.giste.profiles.domain.Setting
 import org.giste.profiles.domain.SettingType
 import javax.inject.Inject
 
-
-class SystemSettingsDataSource @Inject constructor(context: Context) {
+class SystemSettingsDataSource @Inject constructor(private val context: Context) {
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
     private val telephonyManager =
         context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-    private val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+    private val bluetoothManager =
+        context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
     private val bluetoothAdapter = bluetoothManager.adapter
+//    private val nfcAdapter: NfcAdapter? = try {
+//        NfcAdapter.getDefaultAdapter(context)
+//    } catch (e: UnsupportedOperationException) {
+//        null
+//    }
 
     fun applySettings(settings: List<Setting>) {
         settings.filter { it.override }
@@ -40,7 +47,7 @@ class SystemSettingsDataSource @Inject constructor(context: Context) {
                     SettingType.CONNECTION_DATA -> applyData(it.value as Boolean)
                     SettingType.CONNECTION_BLUETOOTH -> applyBluetooth(it.value as Boolean)
                     SettingType.CONNECTION_NFC -> {}
-                    SettingType.CONNECTION_AIRPLANE -> {}
+                    SettingType.CONNECTION_AIRPLANE -> applyAirplaneMode(it.value as Boolean)
                     SettingType.LOCATION -> {}
                     SettingType.BRIGHTNESS_AUTO -> {}
                     SettingType.BRIGHTNESS -> {}
@@ -87,6 +94,30 @@ class SystemSettingsDataSource @Inject constructor(context: Context) {
                 @Suppress("DEPRECATION")
                 bluetoothAdapter.disable()
             }
+        }
+    }
+
+//    private fun applyNfc(value: Boolean) {
+//        if (nfcAdapter?.isEnabled != value) {
+//            if (value) {
+//                //nfcAdapter.enable()
+//            }
+//        }
+//    }
+
+    private fun applyAirplaneMode(value: Boolean) {
+        val newValue = if (value) 1 else 0
+        val current =
+            Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0)
+        if (current != newValue) {
+            Settings.Global.putInt(
+                context.contentResolver,
+                Settings.Global.AIRPLANE_MODE_ON,
+                newValue
+            )
+            val intent = Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+            intent.putExtra("state", newValue == 1)
+            context.sendBroadcast(intent)
         }
     }
 }
