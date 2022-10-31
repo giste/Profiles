@@ -1,20 +1,12 @@
 package org.giste.profiles.data
 
-import android.bluetooth.BluetoothManager
 import android.content.Context
-import android.content.Intent
 import android.media.AudioManager
-import android.net.wifi.WifiManager
-import android.provider.Settings
-import android.telephony.TelephonyManager
-import android.telephony.TelephonyManager.DATA_ENABLED_REASON_USER
 import android.util.Log
 import org.giste.profiles.domain.RingModeSetting
 import org.giste.profiles.domain.Setting
 import org.giste.profiles.domain.SettingType
 import javax.inject.Inject
-import kotlin.math.exp
-import kotlin.math.roundToInt
 
 
 class SystemSettingsDataSource @Inject constructor(private val context: Context) {
@@ -32,8 +24,15 @@ class SystemSettingsDataSource @Inject constructor(private val context: Context)
                         ProfilesLib.setVolume(context, AudioManager.STREAM_NOTIFICATION, it.value as Int)
                     SettingType.VOLUME_ALARM ->
                         ProfilesLib.setVolume(context, AudioManager.STREAM_ALARM, it.value as Int)
-                    SettingType.RING_MODE ->
-                        ProfilesLib.setRingerMode(context, it.value as RingModeSetting.Companion.RingMode)
+                    SettingType.RING_MODE -> {
+                        val value = when(it.value as RingModeSetting.Companion.RingMode) {
+                            RingModeSetting.Companion.RingMode.NORMAL -> AudioManager.RINGER_MODE_NORMAL
+                            RingModeSetting.Companion.RingMode.VIBRATE -> AudioManager.RINGER_MODE_VIBRATE
+                            RingModeSetting.Companion.RingMode.SILENT -> AudioManager.RINGER_MODE_SILENT
+                        }
+
+                        ProfilesLib.setRingerMode(context, value)
+                    }
                     SettingType.CONNECTION_WIFI ->
                         ProfilesLib.setWiFi(context, it.value as Boolean)
                     SettingType.CONNECTION_DATA ->

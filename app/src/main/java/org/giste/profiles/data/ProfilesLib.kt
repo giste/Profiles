@@ -11,7 +11,6 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.telephony.TelephonyManager.DATA_ENABLED_REASON_USER
 import android.util.Log
-import org.giste.profiles.domain.RingModeSetting
 import kotlin.math.exp
 import kotlin.math.roundToInt
 
@@ -24,14 +23,18 @@ class ProfilesLib {
             audioManager.setStreamVolume(stream, value, 0)
         }
 
-        fun setRingerMode(context: Context, mode: RingModeSetting.Companion.RingMode) {
+        fun setRingerMode(context: Context, mode: Int) {
             val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            val current = audioManager.ringerMode
 
             Log.d("ProfilesLib", "Setting ringer mode = $mode")
             audioManager.ringerMode = when (mode) {
-                RingModeSetting.Companion.RingMode.NORMAL -> AudioManager.RINGER_MODE_NORMAL
-                RingModeSetting.Companion.RingMode.VIBRATE -> AudioManager.RINGER_MODE_VIBRATE
-                RingModeSetting.Companion.RingMode.SILENT -> AudioManager.RINGER_MODE_SILENT
+                AudioManager.RINGER_MODE_NORMAL -> AudioManager.RINGER_MODE_NORMAL
+                AudioManager.RINGER_MODE_VIBRATE -> AudioManager.RINGER_MODE_VIBRATE
+                AudioManager.RINGER_MODE_SILENT -> AudioManager.RINGER_MODE_SILENT
+                else -> {
+                    current
+                }
             }
         }
 
