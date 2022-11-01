@@ -14,7 +14,7 @@ import android.util.Log
 import kotlin.math.exp
 import kotlin.math.roundToInt
 
-class ProfilesLib {
+class ProfilesInternal {
     companion object {
         fun setVolume(context: Context, stream: Int, value: Int) {
             val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
