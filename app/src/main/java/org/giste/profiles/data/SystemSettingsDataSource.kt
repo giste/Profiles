@@ -6,8 +6,8 @@ import android.util.Log
 import org.giste.profiles.domain.RingModeSetting
 import org.giste.profiles.domain.Setting
 import org.giste.profiles.domain.SettingType
+import org.giste.profiles.lib.ProfilesLib
 import javax.inject.Inject
-
 
 class SystemSettingsDataSource @Inject constructor(private val context: Context) {
 
@@ -17,13 +17,13 @@ class SystemSettingsDataSource @Inject constructor(private val context: Context)
                 Log.d("SystemSettingsDataSource", "Processing = $it")
                 when (it.type) {
                     SettingType.VOLUME_MEDIA ->
-                        ProfilesInternal.setVolume(context, AudioManager.STREAM_MUSIC, it.value as Int)
+                        ProfilesLib.setVolume(context, AudioManager.STREAM_MUSIC, it.value as Int)
                     SettingType.VOLUME_RING ->
-                        ProfilesInternal.setVolume(context, AudioManager.STREAM_RING, it.value as Int)
+                        ProfilesLib.setVolume(context, AudioManager.STREAM_RING, it.value as Int)
                     SettingType.VOLUME_NOTIFICATION ->
-                        ProfilesInternal.setVolume(context, AudioManager.STREAM_NOTIFICATION, it.value as Int)
+                        ProfilesLib.setVolume(context, AudioManager.STREAM_NOTIFICATION, it.value as Int)
                     SettingType.VOLUME_ALARM ->
-                        ProfilesInternal.setVolume(context, AudioManager.STREAM_ALARM, it.value as Int)
+                        ProfilesLib.setVolume(context, AudioManager.STREAM_ALARM, it.value as Int)
                     SettingType.RING_MODE -> {
                         val value = when(it.value as RingModeSetting.Companion.RingMode) {
                             RingModeSetting.Companion.RingMode.NORMAL -> AudioManager.RINGER_MODE_NORMAL
@@ -31,24 +31,24 @@ class SystemSettingsDataSource @Inject constructor(private val context: Context)
                             RingModeSetting.Companion.RingMode.SILENT -> AudioManager.RINGER_MODE_SILENT
                         }
 
-                        ProfilesInternal.setRingerMode(context, value)
+                        ProfilesLib.setRingerMode(context, value)
                     }
                     SettingType.CONNECTION_WIFI ->
-                        ProfilesInternal.setWiFi(context, it.value as Boolean)
+                        ProfilesLib.setWiFi(context, it.value as Boolean)
                     SettingType.CONNECTION_DATA ->
-                        ProfilesInternal.setData(context, it.value as Boolean)
+                        ProfilesLib.setData(context, it.value as Boolean)
                     SettingType.CONNECTION_BLUETOOTH ->
-                        ProfilesInternal.setBluetooth(context, it.value as Boolean)
+                        ProfilesLib.setBluetooth(context, it.value as Boolean)
                     SettingType.CONNECTION_NFC ->
-                        ProfilesInternal.setNfc(context, it.value as Boolean)
+                        ProfilesLib.setNfc(context, it.value as Boolean)
                     SettingType.CONNECTION_AIRPLANE ->
-                        ProfilesInternal.setAirplaneMode(context, it.value as Boolean)
+                        ProfilesLib.setAirplaneMode(context, it.value as Boolean)
                     SettingType.LOCATION ->
-                        ProfilesInternal.setLocation(context, it.value as Boolean)
+                        ProfilesLib.setLocation(context, it.value as Boolean)
                     SettingType.BRIGHTNESS_AUTO ->
-                        ProfilesInternal.setBrightnessAuto(context, it.value as Boolean)
+                        ProfilesLib.setBrightnessAuto(context, it.value as Boolean)
                     SettingType.BRIGHTNESS ->
-                        ProfilesInternal.setBrightness(context, it.value as Int)
+                        ProfilesLib.setBrightness(context, it.value as Int)
                 }
             }
     }
