@@ -29,12 +29,6 @@ class FindProfileByIdUseCase @Inject constructor(private val profileRepository: 
                                 profileId = profile.id,
                                 type = it
                             )
-                            SettingType.CONNECTION_WIFI,
-                            SettingType.CONNECTION_DATA,
-                            SettingType.CONNECTION_BLUETOOTH,
-                            SettingType.CONNECTION_NFC,
-                            SettingType.CONNECTION_AIRPLANE,
-                            SettingType.LOCATION,
                             SettingType.BRIGHTNESS_AUTO -> BooleanSetting(
                                 profileId = profile.id,
                                 type = it

@@ -21,6 +21,7 @@ class FindProfileByIdUseCaseIntegrationTests {
     private lateinit var db: ProfilesDb
     private lateinit var profileDao: ProfileDao
     private lateinit var settingDao: SettingDao
+    private lateinit var systemSettings: SystemSettingsDataSource
 
     private var id = 0L
 
@@ -28,6 +29,7 @@ class FindProfileByIdUseCaseIntegrationTests {
     @Before
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<Context>()
+        systemSettings = SystemSettingsDataSource(context)
         db = Room.inMemoryDatabaseBuilder(context, ProfilesDb::class.java).build()
         profileDao = db.profileDao()
         settingDao = db.settingDao()
@@ -53,7 +55,8 @@ class FindProfileByIdUseCaseIntegrationTests {
             profileDetailDao = db.profileDetailDao(),
             profileDetailMapper = ProfileDetailMapper(SettingMapper()),
             settingDao = settingDao,
-            settingMapper = SettingMapper()
+            settingMapper = SettingMapper(),
+            systemSettingsDataSource = systemSettings
         )
 
         val flow = FindProfileByIdUseCase(repository).invoke(id)

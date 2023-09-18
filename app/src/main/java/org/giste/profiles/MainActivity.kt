@@ -1,6 +1,10 @@
 package org.giste.profiles
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
@@ -25,12 +29,24 @@ import org.giste.profiles.ui.components.FabSettings
 import org.giste.profiles.ui.components.TopBarSettings
 import org.giste.profiles.ui.theme.ProfilesTheme
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        checkWriteSettingsPermission()
+
         setContent {
             ProfileApp()
+        }
+    }
+
+    private fun checkWriteSettingsPermission() {
+        if (!Settings.System.canWrite(this)) {
+            val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+            intent.data = Uri.parse("package:$packageName")
+            startActivity(intent)
         }
     }
 }

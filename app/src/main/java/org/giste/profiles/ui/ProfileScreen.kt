@@ -138,64 +138,6 @@ private fun ProfileContent(
                 )
             }
 
-            Category(category = stringResource(id = R.string.profile_screen_category_connection_label))
-            profile.settings[SettingType.CONNECTION_WIFI]?.let {
-                BooleanPreference(
-                    label = stringResource(id = R.string.profile_screen_setting_connection_wifi_label),
-                    override = it.override,
-                    value = it.value as Boolean,
-                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
-                    onSelectionChange = { value -> onValueChange(it.type, value) }
-                )
-            }
-            profile.settings[SettingType.CONNECTION_DATA]?.let {
-                BooleanPreference(
-                    label = stringResource(id = R.string.profile_screen_setting_connection_data_label),
-                    override = it.override,
-                    value = it.value as Boolean,
-                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
-                    onSelectionChange = { value -> onValueChange(it.type, value) }
-                )
-            }
-            profile.settings[SettingType.CONNECTION_BLUETOOTH]?.let {
-                BooleanPreference(
-                    label = stringResource(id = R.string.profile_screen_setting_connection_bluetooth_label),
-                    override = it.override,
-                    value = it.value as Boolean,
-                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
-                    onSelectionChange = { value -> onValueChange(it.type, value) }
-                )
-            }
-            profile.settings[SettingType.CONNECTION_NFC]?.let {
-                BooleanPreference(
-                    label = stringResource(id = R.string.profile_screen_setting_connection_nfc_label),
-                    override = it.override,
-                    value = it.value as Boolean,
-                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
-                    onSelectionChange = { value -> onValueChange(it.type, value) }
-                )
-            }
-            profile.settings[SettingType.CONNECTION_AIRPLANE]?.let {
-                BooleanPreference(
-                    label = stringResource(id = R.string.profile_screen_setting_connection_airplane_label),
-                    override = it.override,
-                    value = it.value as Boolean,
-                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
-                    onSelectionChange = { value -> onValueChange(it.type, value) }
-                )
-            }
-
-            Category(category = stringResource(id = R.string.profile_screen_category_location_label))
-            profile.settings[SettingType.LOCATION]?.let {
-                BooleanPreference(
-                    label = stringResource(id = R.string.profile_screen_setting_location_location_label),
-                    override = it.override,
-                    value = it.value as Boolean,
-                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
-                    onSelectionChange = { value -> onValueChange(it.type, value) }
-                )
-            }
-
             Category(category = stringResource(id = R.string.profile_screen_category_brightness_label))
             profile.settings[SettingType.BRIGHTNESS_AUTO]?.let {
                 BooleanPreference(
@@ -283,8 +225,8 @@ fun SliderPreference(
     onOverrideClick: (Boolean) -> Unit,
     onSliderChange: (Int) -> Unit
 ) {
-    var lastValue by remember { mutableStateOf(value) }
-    var selection by remember { mutableStateOf(0) }
+    var lastValue by remember { mutableIntStateOf(value) }
+    var selection by remember { mutableIntStateOf(0) }
 
     if (value != lastValue) {
         lastValue = value
