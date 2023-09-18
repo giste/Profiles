@@ -205,17 +205,17 @@ fun Preference(
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
             modifier = Modifier
-                .weight(2f)
-                .clickable { onOverrideClick(!override) }
+                .weight(4f)
+                .clickable { onOverrideClick(!override) },
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(checked = override, onCheckedChange = { onOverrideClick(it) })
-                Spacer(modifier = Modifier.width(2.dp))
+                //Spacer(modifier = Modifier.width(2.dp))
                 Text(text = label)
-                Spacer(modifier = Modifier.width(16.dp))
+                //Spacer(modifier = Modifier.width(8.dp))
             }
         }
-        Column(modifier = Modifier.weight(4f)) {
+        Column(modifier = Modifier.weight(7f)) {
             valueSetting()
         }
     }

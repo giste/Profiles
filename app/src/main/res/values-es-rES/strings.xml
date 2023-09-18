@@ -9,7 +9,7 @@
     <string name="profile_screen_name_label">Nombre del perfil</string>
     <string name="profile_screen_category_volume_label">Volumen</string>
     <string name="profile_screen_setting_volume_media_label">Media</string>
-    <string name="profile_screen_setting_volume_ring_label">Teléfono</string>
+    <string name="profile_screen_setting_volume_ring_label">Llamada</string>
     <string name="profile_screen_setting_volume_notification_label">Notificación</string>
     <string name="profile_screen_setting_volume_alarm_label">Alarma</string>
     <string name="profile_screen_setting_volume_ring_mode_label">Modo de llamada</string>
