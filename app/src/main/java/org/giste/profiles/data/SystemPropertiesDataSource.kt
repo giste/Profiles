@@ -23,6 +23,8 @@ class SystemPropertiesDataSource @Inject constructor(context: Context) : SystemP
     override val streamAlarmMinValue = am.getStreamMinVolume(STREAM_ALARM)
     override val streamAlarmMaxValue = am.getStreamMaxVolume(STREAM_ALARM)
 
+    override val ringAndNotificationLinked = checkLinkedRingAndNotification()
+
     init {
         Log.d("SystemPropertiesDataSource", "minMedia: $streamMediaMinValue")
         Log.d("SystemPropertiesDataSource", "maxMedia: $streamMediaMaxValue")
@@ -32,5 +34,27 @@ class SystemPropertiesDataSource @Inject constructor(context: Context) : SystemP
         Log.d("SystemPropertiesDataSource", "maxNotification: $streamNotificationMaxValue")
         Log.d("SystemPropertiesDataSource", "minAlarm: $streamAlarmMinValue")
         Log.d("SystemPropertiesDataSource", "maxAlarm: $streamAlarmMaxValue")
+    }
+
+    private fun checkLinkedRingAndNotification(): Boolean {
+        val currentRing = am.getStreamVolume(STREAM_RING)
+        val currentNotification = am.getStreamVolume(STREAM_NOTIFICATION)
+
+        am.setStreamVolume(STREAM_RING, 0, 0)
+        am.setStreamVolume(STREAM_NOTIFICATION, 1, 0)
+
+        val newRing = am.getStreamVolume(STREAM_RING)
+        val newNotification = am.getStreamVolume(STREAM_NOTIFICATION)
+
+        am.setStreamVolume(STREAM_RING, currentRing, 0)
+        am.setStreamVolume(STREAM_NOTIFICATION, currentNotification, 0)
+
+        if (newRing == newNotification) {
+            Log.d("SystemPropertiesDataSource", "ringAndNotificationLinked: true")
+            return true
+        }
+
+        Log.d("SystemPropertiesDataSource", "ringAndNotificationLinked: false")
+        return false
     }
 }

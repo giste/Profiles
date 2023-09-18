@@ -82,7 +82,10 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideSystemSettings(@ApplicationContext appContext: Context): SystemSettingsDataSource {
-        return SystemSettingsDataSource(appContext)
+    fun provideSystemSettings(
+        @ApplicationContext appContext: Context,
+        systemProperties: SystemProperties,
+    ): SystemSettingsDataSource {
+        return SystemSettingsDataSource(appContext, systemProperties)
     }
 }

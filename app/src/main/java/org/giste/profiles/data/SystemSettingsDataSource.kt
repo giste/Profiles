@@ -6,9 +6,13 @@ import android.util.Log
 import org.giste.profiles.domain.RingModeSetting
 import org.giste.profiles.domain.Setting
 import org.giste.profiles.domain.SettingType
+import org.giste.profiles.domain.SystemProperties
 import javax.inject.Inject
 
-class SystemSettingsDataSource @Inject constructor(private val context: Context) {
+class SystemSettingsDataSource @Inject constructor(
+    private val context: Context,
+    private val systemProperties: SystemProperties,
+) {
 
     fun applySettings(settings: List<Setting>) {
         settings.filter { it.override }
@@ -19,8 +23,15 @@ class SystemSettingsDataSource @Inject constructor(private val context: Context)
                         ProfilesInternal.setVolume(context, AudioManager.STREAM_MUSIC, it.value as Int)
                     SettingType.VOLUME_RING ->
                         ProfilesInternal.setVolume(context, AudioManager.STREAM_RING, it.value as Int)
-                    SettingType.VOLUME_NOTIFICATION ->
-                        ProfilesInternal.setVolume(context, AudioManager.STREAM_NOTIFICATION, it.value as Int)
+                    SettingType.VOLUME_NOTIFICATION -> {
+                        if (!systemProperties.ringAndNotificationLinked) {
+                            ProfilesInternal.setVolume(
+                                context,
+                                AudioManager.STREAM_NOTIFICATION,
+                                it.value as Int
+                            )
+                        }
+                    }
                     SettingType.VOLUME_ALARM ->
                         ProfilesInternal.setVolume(context, AudioManager.STREAM_ALARM, it.value as Int)
                     SettingType.RING_MODE -> {

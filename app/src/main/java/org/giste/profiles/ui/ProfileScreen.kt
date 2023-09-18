@@ -44,6 +44,7 @@ fun ProfilePreview() {
             override val streamNotificationMaxValue: Int = 7
             override val streamAlarmMinValue: Int = 1
             override val streamAlarmMaxValue: Int = 7
+            override val ringAndNotificationLinked = false
         }
     )
 }
@@ -106,16 +107,18 @@ private fun ProfileContent(
                     onSliderChange = { value -> onValueChange(it.type, value) }
                 )
             }
-            profile.settings[SettingType.VOLUME_NOTIFICATION]?.let {
-                SliderPreference(
-                    label = stringResource(id = R.string.profile_screen_setting_volume_notification_label),
-                    override = it.override,
-                    value = it.value as Int,
-                    min = systemProperties.streamNotificationMinValue,
-                    max = systemProperties.streamNotificationMaxValue,
-                    onOverrideClick = { override -> onOverrideClick(it.type, override) },
-                    onSliderChange = { value -> onValueChange(it.type, value) }
-                )
+            if (!systemProperties.ringAndNotificationLinked) {
+                profile.settings[SettingType.VOLUME_NOTIFICATION]?.let {
+                    SliderPreference(
+                        label = stringResource(id = R.string.profile_screen_setting_volume_notification_label),
+                        override = it.override,
+                        value = it.value as Int,
+                        min = systemProperties.streamNotificationMinValue,
+                        max = systemProperties.streamNotificationMaxValue,
+                        onOverrideClick = { override -> onOverrideClick(it.type, override) },
+                        onSliderChange = { value -> onValueChange(it.type, value) }
+                    )
+                }
             }
             profile.settings[SettingType.VOLUME_ALARM]?.let {
                 SliderPreference(

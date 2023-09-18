@@ -12,4 +12,6 @@ interface SystemProperties {
 
     val streamAlarmMinValue: Int
     val streamAlarmMaxValue: Int
+
+    val ringAndNotificationLinked: Boolean
 }
