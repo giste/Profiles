@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Perfiles</string>
+    <string name="app_back_content_description">Ir atrás</string>
+    <string name="manager_screen_title">Perfiles</string>
+    <string name="manager_screen_add_profile_content_description">Añadir perfil</string>
+    <string name="manager_screen_delete_profile_content_description">Borrar perfil</string>
+    <string name="profile_screen_title">Perfil</string>
+    <string name="profile_screen_name_label">Nombre del perfil</string>
+    <string name="profile_screen_category_volume_label">Volumen</string>
+    <string name="profile_screen_setting_volume_media_label">Media</string>
+    <string name="profile_screen_setting_volume_ring_label">Teléfono</string>
+    <string name="profile_screen_setting_volume_notification_label">Notificación</string>
+    <string name="profile_screen_setting_volume_alarm_label">Alarma</string>
+    <string name="profile_screen_setting_volume_ring_mode_label">Modo de llamada</string>
+    <string name="profile_screen_category_brightness_label">Brillo</string>
+    <string name="profile_screen_setting_brightness_auto_label">Auto</string>
+    <string name="profile_screen_setting_brightness_level_label">Nivel</string>
+    <string name="dialog_cancel_label">Cancelar</string>
+    <string name="dialog_accept_label">Aceptar</string>
+    <string name="dialog_title_content_description">Título</string>
+    <string name="dialog_cancel_button_content_description">Botón cancelar</string>
+    <string name="dialog_accept_button_content_description">Botón aceptar</string>
+    <string name="dialog_text_field_content_description">Introduzca %1$s</string>
+    <string name="profile_name_dialog_title">Nuevo perfil</string>
+    <string name="profile_name_dialog_label">Nombre</string>
+    <string name="profile_name_dialog_profile_exists">Existe un perfil con ese nombre</string>
+    <string name="validation_string_not_blank">No puede estar vacío</string>
+</resources>
