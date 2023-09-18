@@ -22,6 +22,7 @@ class FindProfileByIdUseCaseIntegrationTests {
     private lateinit var profileDao: ProfileDao
     private lateinit var settingDao: SettingDao
     private lateinit var systemSettings: SystemSettingsDataSource
+    private lateinit var systemProperties: SystemProperties
 
     private var id = 0L
 
@@ -29,7 +30,8 @@ class FindProfileByIdUseCaseIntegrationTests {
     @Before
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        systemSettings = SystemSettingsDataSource(context)
+        systemProperties = SystemPropertiesDataSource(context)
+        systemSettings = SystemSettingsDataSource(context, systemProperties)
         db = Room.inMemoryDatabaseBuilder(context, ProfilesDb::class.java).build()
         profileDao = db.profileDao()
         settingDao = db.settingDao()

@@ -174,17 +174,20 @@ private fun ProfileName(
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = name,
-            style = MaterialTheme.typography.h6
+            style = MaterialTheme.typography.h5
         )
     }
 }
 
 @Composable
 private fun Category(category: String) {
-    Row {
+    Row(
+        modifier = Modifier.padding(top = 8.dp )
+    ) {
         Text(
             text = category,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.h6
         )
     }
     Row {
@@ -207,7 +210,7 @@ fun Preference(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(checked = override, onCheckedChange = { onOverrideClick(it) })
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(2.dp))
                 Text(text = label)
                 Spacer(modifier = Modifier.width(16.dp))
             }
