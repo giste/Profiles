@@ -16,3 +16,5 @@ local.properties
 /app/libs/.directory
 /gradle/wrapper/.directory
 /gradle/.directory
+
+.directory

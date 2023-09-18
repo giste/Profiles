@@ -48,23 +48,23 @@ android {
     }
     namespace 'org.giste.profiles'
 
-    applicationVariants.all { variant ->
+    applicationVariants.configureEach { variant ->
         kotlin.sourceSets {
-            getByName(variant.name) {
+            named(variant.name) {
                 kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
             }
         }
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.all {
+    applicationVariants.configureEach { variant ->
+        variant.outputs.configureEach {
             outputFileName = "Profiles.apk"
         }
     }
 }
 
 dependencies {
-    kapt "androidx.room:room-compiler:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-ktx:$room_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
