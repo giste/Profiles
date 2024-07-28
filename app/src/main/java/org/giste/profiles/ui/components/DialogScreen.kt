@@ -1,7 +1,11 @@
 package org.giste.profiles.ui.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -68,7 +72,7 @@ private fun DialogContent(
                     .semantics { testTag = "Root" }
             ) {
                 DialogTitle(title = title)
-                Divider(thickness = 1.dp)
+                HorizontalDivider(thickness = 1.dp)
                 Spacer(modifier = Modifier.height(8.dp))
                 DialogContent(content)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -91,7 +95,7 @@ private fun DialogTitle(title: String) {
     Row {
         Text(
             text = title,
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.semantics {
                 contentDescription = titleContentDescription
                 testTag = "Title"

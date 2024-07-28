@@ -51,6 +51,9 @@ class ProfileRepositoryTests {
     @MockK
     private lateinit var settingDao: SettingDao
 
+    @MockK
+    private lateinit var systemSettingsDataSource: SystemSettingsDataSource
+
     private val profileMapper = ProfileMapper()
     private val profileDetailMapper = ProfileDetailMapper(SettingMapper())
     private val settingMapper = SettingMapper()
@@ -66,7 +69,8 @@ class ProfileRepositoryTests {
             profileDetailDao = profileDetailDao,
             profileDetailMapper = profileDetailMapper,
             settingDao = settingDao,
-            settingMapper = settingMapper
+            settingMapper = settingMapper,
+            systemSettingsDataSource = systemSettingsDataSource,
         )
     }
 
@@ -185,6 +189,8 @@ class ProfileRepositoryTests {
     @Test
     fun selectProfile_daoIsInvoked() = runTest {
         coEvery { selectedProfileDao.selectProfile(SelectedProfileEntity(1L)) } returns Unit
+        coEvery { systemSettingsDataSource.applySettings(any()) } returns Unit
+        every { settingDao.findByProfileId(1L) } returns flow { emit(SETTING_ENTITY_LIST) }
 
         repository.selectProfile(PROFILE_1)
 

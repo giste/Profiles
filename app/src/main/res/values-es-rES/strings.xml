@@ -25,5 +25,6 @@
     <string name="profile_name_dialog_title">Nuevo perfil</string>
     <string name="profile_name_dialog_label">Nombre</string>
     <string name="profile_name_dialog_profile_exists">Existe un perfil con ese nombre</string>
+    <string name="validation_no_error"></string>
     <string name="validation_string_not_blank">No puede estar vacío</string>
 </resources>
