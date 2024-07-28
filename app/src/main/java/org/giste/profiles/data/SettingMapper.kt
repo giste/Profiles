@@ -32,7 +32,7 @@ class SettingMapper @Inject constructor() {
                         profileId,
                         type,
                         override,
-                        RingModeSetting.Companion.RingMode.values()[value]
+                        RingModeSetting.Companion.RingMode.entries[value]
                     )
                 SettingType.BRIGHTNESS_AUTO ->
                     BooleanSetting(profileId, type, override, value == 1)

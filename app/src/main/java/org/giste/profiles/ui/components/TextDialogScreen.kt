@@ -87,7 +87,6 @@ fun TextDialogScreen(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TextDialogContent(
     label: String,

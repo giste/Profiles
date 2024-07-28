@@ -64,6 +64,6 @@ class FindProfileByIdUseCaseIntegrationTests {
         val flow = FindProfileByIdUseCase(repository).invoke(id)
 
         assertThat(flow.first().settings.size, equalTo(1))
-        assertThat(flow.first().settings.size, equalTo(SettingType.values().size))
+        assertThat(flow.first().settings.size, equalTo(SettingType.entries.size))
     }
 }

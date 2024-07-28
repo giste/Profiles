@@ -15,7 +15,7 @@ hiltNavigationCompose = "1.2.0"
 materialIconsExtended = "1.6.8"
 composeDestinations = "1.10.2"
 mockk = "1.13.12"
-kotlinxCoroutinesTest = "1.7.1"
+kotlinxCoroutinesTest = "1.7.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
