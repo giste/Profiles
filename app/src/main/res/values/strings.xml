@@ -1,0 +1,40 @@
+<!--
+  ~ Copyright 2025 Giste Trappiste
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it under the
+  ~ terms of the GNU Lesser General Public License as published by the Free Software
+  ~ Foundation, either version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT ANY
+  ~ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+  ~ PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License along with
+  ~ this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">Profiles</string>
+
+    <string name="manager_screen_title">Profiles</string>
+    <string name="manager_screen_add_profile_content_description">Add profile</string>
+    <string name="manager_screen_delete_profile_content_description">Delete profile</string>
+
+    <string name="profile_name_dialog_title">New Profile</string>
+    <string name="profile_name_dialog_label">Name</string>
+    <string name="profile_name_dialog_profile_exists">There is a profile with this name</string>
+    <string name="profile_name_dialog_error_content_description">Error</string>
+
+    <string name="validation_name_blank">Name can not be blank</string>
+    <string name="validation_name_exists">Name already exists</string>
+
+    <string name="profile_screen_category_volume_label">Volume</string>
+    <string name="profile_screen_setting_volume_media_label">Media</string>
+    <string name="profile_screen_setting_volume_ring_label">Ring</string>
+    <string name="profile_screen_setting_volume_notification_label">Notification</string>
+    <string name="profile_screen_setting_volume_alarm_label">Alarm</string>
+    <string name="profile_screen_setting_volume_ring_mode_label">Ring mode</string>
+    <string name="profile_screen_category_brightness_label">Brightness</string>
+    <string name="profile_screen_setting_brightness_auto_label">Auto</string>
+    <string name="profile_screen_setting_brightness_level_label">Level</string>
+</resources>
