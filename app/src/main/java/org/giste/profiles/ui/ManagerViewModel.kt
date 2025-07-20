@@ -25,20 +25,24 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.ProfileRepository
-import org.giste.profiles.domain.SelectedProfileRepository
+import org.giste.profiles.domain.usecases.DeleteProfileUseCase
+import org.giste.profiles.domain.usecases.FindAllProfilesUseCase
+import org.giste.profiles.domain.usecases.FindSelectedProfileUseCase
+import org.giste.profiles.domain.usecases.SelectProfileUseCase
 import javax.inject.Inject
 
 private const val TAG = "ManagerViewModel"
 
 @HiltViewModel
 class ManagerViewModel @Inject constructor(
-    private val profileRepository: ProfileRepository,
-    private val selectedProfileRepository: SelectedProfileRepository,
+    findAllProfilesUseCase: FindAllProfilesUseCase,
+    private val deleteProfileUseCase: DeleteProfileUseCase,
+    findSelectedProfileUseCase: FindSelectedProfileUseCase,
+    private val selectProfileUseCase: SelectProfileUseCase,
 ) : ViewModel() {
     val uiState: StateFlow<UiState> = combine(
-        profileRepository.findAll(),
-        selectedProfileRepository.findSelectedProfile(),
+        findAllProfilesUseCase(),
+        findSelectedProfileUseCase(),
     ) { profiles, selected ->
         val newUiState = UiState(profiles, selected)
         Log.d(TAG, "New state: $newUiState")
@@ -67,10 +71,10 @@ class ManagerViewModel @Inject constructor(
     }
 
     private fun selectProfile(profile: Profile) = viewModelScope.launch {
-        selectedProfileRepository.selectProfile(profile.id)
+        selectProfileUseCase(profile.id)
     }
 
     private fun deleteProfile(profile: Profile) = viewModelScope.launch {
-        profileRepository.delete(profile)
+        deleteProfileUseCase(profile)
     }
 }

@@ -28,8 +28,10 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.ProfileRepository
-import org.giste.profiles.domain.SelectedProfileRepository
+import org.giste.profiles.domain.usecases.DeleteProfileUseCase
+import org.giste.profiles.domain.usecases.FindAllProfilesUseCase
+import org.giste.profiles.domain.usecases.FindSelectedProfileUseCase
+import org.giste.profiles.domain.usecases.SelectProfileUseCase
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -41,8 +43,10 @@ class ManagerViewModelTests {
     @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = UnconfinedTestDispatcher()
 
-    private val profileRepository = mockk<ProfileRepository>()
-    private val selectedProfileRepository = mockk<SelectedProfileRepository>()
+    private val findAllProfilesUseCase = mockk<FindAllProfilesUseCase>()
+    private val deleteProfileUseCase = mockk<DeleteProfileUseCase>()
+    private val findSelectedProfileUseCase = mockk<FindSelectedProfileUseCase>()
+    private val selectedProfileUseCase = mockk<SelectProfileUseCase>()
     private val profilesFlow = MutableSharedFlow<List<Profile>>()
     private val selectedProfileFlow = MutableSharedFlow<Long>()
     private lateinit var managerViewModel: ManagerViewModel
@@ -52,11 +56,13 @@ class ManagerViewModelTests {
     fun beforeEach() {
         Dispatchers.setMain(dispatcher)
         clearAllMocks()
-        coEvery { profileRepository.findAll() } returns profilesFlow
-        coEvery { selectedProfileRepository.findSelectedProfile() } returns selectedProfileFlow
+        coEvery { findAllProfilesUseCase() } returns profilesFlow
+        coEvery { findSelectedProfileUseCase() } returns selectedProfileFlow
         managerViewModel = ManagerViewModel(
-            profileRepository = profileRepository,
-            selectedProfileRepository = selectedProfileRepository,
+            findAllProfilesUseCase = findAllProfilesUseCase,
+            deleteProfileUseCase = deleteProfileUseCase,
+            findSelectedProfileUseCase = findSelectedProfileUseCase,
+            selectProfileUseCase = selectedProfileUseCase,
         )
     }
 
@@ -93,20 +99,20 @@ class ManagerViewModelTests {
     @Test
     fun repository_is_invoked_when_selecting_profile() = runTest {
         val profile = Profile(1L, "Profile 1")
-        coEvery { selectedProfileRepository.selectProfile(1L) } returns Unit
+        coEvery { selectedProfileUseCase(1L) } returns Unit
 
         managerViewModel.onUiAction(ManagerViewModel.UiAction.SelectProfile(profile))
 
-        coVerify { selectedProfileRepository.selectProfile(profile.id) }
+        coVerify { selectedProfileUseCase(profile.id) }
     }
 
     @Test
     fun repository_is_invoked_when_deleting_profile() = runTest {
         val profile = Profile(1L, "Profile 1")
-        coEvery { profileRepository.delete(profile) } returns Unit
+        coEvery { deleteProfileUseCase(profile) } returns Unit
 
         managerViewModel.onUiAction(ManagerViewModel.UiAction.DeleteProfile(profile))
 
-        coVerify { profileRepository.delete(profile) }
+        coVerify { deleteProfileUseCase(profile) }
     }
 }
