@@ -158,7 +158,7 @@ fun ProfileScreen(
         with (profile.ringMode) {
             RingModePreference(
                 label = stringResource(id = R.string.profile_screen_setting_volume_ring_mode_label),
-                iconResource = ImageVector.vectorResource(R.drawable.volume_alarm),
+                iconResource = ImageVector.vectorResource(R.drawable.ring_mode),
                 apply = apply,
                 value = value,
                 onApplyClick = { apply ->
@@ -318,7 +318,7 @@ private fun RingModePreference(
                             enabled = apply
                         )
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.mode_normal),
+                            imageVector = ImageVector.vectorResource(R.drawable.ring_mode_normal),
                             contentDescription = "",
                             tint = tint
                         )
@@ -333,7 +333,7 @@ private fun RingModePreference(
                             enabled = apply
                         )
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.mode_vibrate),
+                            imageVector = ImageVector.vectorResource(R.drawable.ring_mode_vibrate),
                             contentDescription = "",
                             tint = tint
                         )
@@ -348,7 +348,7 @@ private fun RingModePreference(
                             enabled = apply
                         )
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.mode_silence),
+                            imageVector = ImageVector.vectorResource(R.drawable.ring_mode_silence),
                             contentDescription = "",
                             tint = tint
                         )
