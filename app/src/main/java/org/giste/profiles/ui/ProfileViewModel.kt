@@ -27,16 +27,17 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.ProfileRepository
+import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
+import org.giste.profiles.domain.usecases.UpdateProfileUseCase
 
 @HiltViewModel(assistedFactory = ProfileViewModel.Factory::class)
 class ProfileViewModel @AssistedInject constructor(
     @Assisted profileId: Long,
-    private val profileRepository: ProfileRepository,
+    private val updateProfileUseCase: UpdateProfileUseCase,
+    findProfileByIdUseCase: FindProfileByIdUseCase,
 ) : ViewModel() {
 
-    val uiState: StateFlow<UiState> = profileRepository
-        .findById(profileId)
+    val uiState: StateFlow<UiState> = findProfileByIdUseCase(profileId)
         .map { UiState(profile = it) }
         .stateIn(
             scope = viewModelScope,
@@ -51,9 +52,7 @@ class ProfileViewModel @AssistedInject constructor(
     }
 
     private fun onValueChange(profile: Profile) {
-        viewModelScope.launch {
-            profileRepository.update(profile)
-        }
+        viewModelScope.launch { updateProfileUseCase(profile) }
     }
 
     data class UiState(
