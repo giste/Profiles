@@ -42,12 +42,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import org.giste.profiles.R
+import org.giste.profiles.domain.IntSetting
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.RingModeSetting
 import org.giste.profiles.ui.theme.ProfilesTheme
@@ -62,6 +65,8 @@ fun ProfilePreview() {
                 uiState = ProfileViewModel.UiState(
                     profile = Profile(
                         name = "Profile name",
+                        mediaVolume = IntSetting(true, 15),
+                        ringVolume = IntSetting(false, 7),
                     ),
                 ),
                 onValueChange = {}
@@ -234,7 +239,7 @@ fun SliderPreference(
     onApplyClick: (Boolean) -> Unit,
     onSliderChange: (Int) -> Unit
 ) {
-    var lastValue by remember { mutableIntStateOf(value) }
+    var lastValue by remember { mutableIntStateOf(0) }
     var selection by remember { mutableIntStateOf(0) }
 
     if (value != lastValue) {
@@ -247,16 +252,33 @@ fun SliderPreference(
         label = label,
         apply = apply,
         onApplyChange = onApplyClick,
-        {
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Slider(
                 value = selection.toFloat(),
                 onValueChange = { selection = it.roundToInt() },
+                modifier = Modifier.weight(8f),
                 enabled = apply,
                 valueRange = min.toFloat().rangeTo(max.toFloat()),
                 onValueChangeFinished = { onSliderChange(selection) }
             )
-        },
-    )
+            Spacer(Modifier.width(ProfilesTheme.dimensions.spacing))
+            Text(
+                text = "$value/$max",
+                modifier = Modifier
+                    .alpha(if (apply) 1f else ProfilesTheme.ALPHA_DISABLED)
+                    .weight(2f),
+//                color = if (apply) {
+//                    Color.Unspecified
+//                } else {
+//                    Color.Unspecified.copy(alpha = ContentAlpha.disabled)
+//                },
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
 }
 
 @Composable
@@ -307,7 +329,7 @@ private fun RingModePreference(
                 val tint = if (apply) {
                     LocalContentColor.current
                 } else {
-                    LocalContentColor.current.copy(alpha = 0.38f)
+                    LocalContentColor.current.copy(alpha = ProfilesTheme.ALPHA_DISABLED)
                 }
 
                 Column(horizontalAlignment = Alignment.Start) {

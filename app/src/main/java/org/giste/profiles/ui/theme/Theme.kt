@@ -53,6 +53,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 object ProfilesTheme {
+    const val ALPHA_DISABLED = 0.38f
     val dimensions: Dimensions
     @Composable
     @ReadOnlyComposable
