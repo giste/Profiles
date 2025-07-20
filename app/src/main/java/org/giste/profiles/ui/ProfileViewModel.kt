@@ -15,6 +15,7 @@
 
 package org.giste.profiles.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
@@ -23,27 +24,47 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.giste.profiles.domain.Profile
+import org.giste.profiles.domain.SystemProperties
 import org.giste.profiles.domain.usecases.FindProfileByIdUseCase
+import org.giste.profiles.domain.usecases.FindSystemPropertiesUseCase
 import org.giste.profiles.domain.usecases.UpdateProfileUseCase
+
+private const val TAG = "ProfileViewModel"
 
 @HiltViewModel(assistedFactory = ProfileViewModel.Factory::class)
 class ProfileViewModel @AssistedInject constructor(
     @Assisted profileId: Long,
     private val updateProfileUseCase: UpdateProfileUseCase,
     findProfileByIdUseCase: FindProfileByIdUseCase,
+    findSystemPropertiesUseCase: FindSystemPropertiesUseCase,
 ) : ViewModel() {
 
-    val uiState: StateFlow<UiState> = findProfileByIdUseCase(profileId)
-        .map { UiState(profile = it) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = UiState(),
+    val uiState: StateFlow<UiState> = combine(
+        findProfileByIdUseCase(profileId),
+        findSystemPropertiesUseCase()
+    ) { profile, systemProperties ->
+        Log.d(TAG, "New state: ($profile, $systemProperties)")
+        UiState(
+            profile = if (profile.alarmVolume.value < systemProperties.streamAlarmMinValue) {
+                profile.copy(
+                    alarmVolume = profile.alarmVolume.copy(
+                        value = systemProperties.streamAlarmMinValue
+                    )
+                )
+            } else {
+                profile
+            },
+            systemProperties = systemProperties,
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = UiState(),
+    )
 
     fun onUiAction(uiAction: UiAction) {
         when (uiAction) {
@@ -57,6 +78,7 @@ class ProfileViewModel @AssistedInject constructor(
 
     data class UiState(
         val profile: Profile = Profile(),
+        val systemProperties: SystemProperties = SystemProperties(),
     )
 
     sealed class UiAction {

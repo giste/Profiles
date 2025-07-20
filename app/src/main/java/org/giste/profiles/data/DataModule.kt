@@ -26,6 +26,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.giste.profiles.domain.ProfileRepository
 import org.giste.profiles.domain.SelectedProfileRepository
+import org.giste.profiles.domain.SystemRepository
 import javax.inject.Singleton
 
 private const val DB_NAME = "profiles.db"
@@ -53,5 +54,11 @@ class DataModule {
     @Provides
     fun provideSelectedProfileRepository(dataStore: DataStore<Preferences>): SelectedProfileRepository {
         return DataStoreSelectedProfileRepository(dataStore)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSystemRepository(@ApplicationContext context: Context): SystemRepository {
+        return AudioManagerSystemRepository(context)
     }
 }

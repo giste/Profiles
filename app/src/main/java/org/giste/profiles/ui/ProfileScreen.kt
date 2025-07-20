@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -66,7 +67,8 @@ fun ProfilePreview() {
                     profile = Profile(
                         name = "Profile name",
                         mediaVolume = IntSetting(true, 15),
-                        ringVolume = IntSetting(false, 7),
+                        ringVolume = IntSetting(false, 5),
+                        brightness = IntSetting(false, 100),
                     ),
                 ),
                 onValueChange = {}
@@ -81,6 +83,7 @@ fun ProfileScreen(
     onValueChange: (profile: Profile) -> Unit,
 ) {
     val profile = uiState.profile
+    val systemProperties = uiState.systemProperties
 
     ProvideTopBarTitle {
         Text(profile.name)
@@ -98,8 +101,8 @@ fun ProfileScreen(
                 iconResource = ImageVector.vectorResource(R.drawable.volume_media),
                 apply = apply,
                 value = value,
-                min = 0, //systemProperties.streamMediaMinValue,
-                max = 15, // systemProperties.streamMediaMaxValue,
+                min = systemProperties.streamMediaMinValue,
+                max = systemProperties.streamMediaMaxValue,
                 onApplyClick = { apply ->
                     onValueChange(profile.copy(mediaVolume = copy(apply = apply)))
                 },
@@ -115,8 +118,8 @@ fun ProfileScreen(
                 iconResource = ImageVector.vectorResource(R.drawable.volume_ring),
                 apply = apply,
                 value = value,
-                min = 0, //systemProperties.streamMediaMinValue,
-                max = 15, // systemProperties.streamMediaMaxValue,
+                min = systemProperties.streamRingMinValue,
+                max = systemProperties.streamRingMaxValue,
                 onApplyClick = { apply ->
                     onValueChange(profile.copy(ringVolume = copy(apply = apply)))
                 },
@@ -132,8 +135,8 @@ fun ProfileScreen(
                 iconResource = ImageVector.vectorResource(R.drawable.volume_notification),
                 apply = apply,
                 value = value,
-                min = 0, //systemProperties.streamMediaMinValue,
-                max = 15, // systemProperties.streamMediaMaxValue,
+                min = systemProperties.streamNotificationMinValue,
+                max = systemProperties.streamNotificationMaxValue,
                 onApplyClick = { apply ->
                     onValueChange(profile.copy(notificationVolume = copy(apply = apply)))
                 },
@@ -149,8 +152,8 @@ fun ProfileScreen(
                 iconResource = ImageVector.vectorResource(R.drawable.volume_alarm),
                 apply = apply,
                 value = value,
-                min = 0, //systemProperties.streamMediaMinValue,
-                max = 15, // systemProperties.streamMediaMaxValue,
+                min = systemProperties.streamAlarmMinValue,
+                max = systemProperties.streamAlarmMaxValue,
                 onApplyClick = { apply ->
                     onValueChange(profile.copy(alarmVolume = copy(apply = apply)))
                 },
@@ -199,8 +202,8 @@ fun ProfileScreen(
                 iconResource = ImageVector.vectorResource(R.drawable.brightness_level),
                 apply = apply,
                 value = value,
-                min = 0, //systemProperties.streamMediaMinValue,
-                max = 15, // systemProperties.streamMediaMaxValue,
+                min = 0,
+                max = 100,
                 onApplyClick = { apply ->
                     onValueChange(profile.copy(brightness = copy(apply = apply)))
                 },
@@ -270,12 +273,8 @@ fun SliderPreference(
                 modifier = Modifier
                     .alpha(if (apply) 1f else ProfilesTheme.ALPHA_DISABLED)
                     .weight(2f),
-//                color = if (apply) {
-//                    Color.Unspecified
-//                } else {
-//                    Color.Unspecified.copy(alpha = ContentAlpha.disabled)
-//                },
                 textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.labelMedium
             )
         }
     }
