@@ -24,7 +24,8 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.ProfileRepository
+import org.giste.profiles.domain.usecases.AddProfileUseCase
+import org.giste.profiles.domain.usecases.NameExistsUseCase
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -36,9 +37,11 @@ class NewProfileViewModelTests {
     @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = UnconfinedTestDispatcher()
 
-    private val profileRepository = mockk<ProfileRepository>()
+    private val addProfileUseCase = mockk<AddProfileUseCase>()
+    private val nameExistsUseCase = mockk<NameExistsUseCase>()
     private val viewModel = NewProfileViewModel(
-        profileRepository = profileRepository,
+        addProfileUseCase = addProfileUseCase,
+        nameExistsUseCase = nameExistsUseCase,
     )
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -56,7 +59,7 @@ class NewProfileViewModelTests {
 
     @Test
     fun state_changes_when_name_changes() {
-        coEvery { profileRepository.nameExists("New name") } returns false
+        coEvery { nameExistsUseCase("New name") } returns false
 
         viewModel.onUiAction(NewProfileViewModel.UiAction.OnNameChange("New name"))
 
@@ -70,7 +73,7 @@ class NewProfileViewModelTests {
 
     @Test
     fun state_has_blank_error_when_name_is_blank() {
-        coEvery { profileRepository.nameExists("Name") } returns false
+        coEvery { nameExistsUseCase("Name") } returns false
         // Set valid name
         viewModel.onUiAction(NewProfileViewModel.UiAction.OnNameChange("Name"))
 
@@ -86,7 +89,7 @@ class NewProfileViewModelTests {
 
     @Test
     fun state_clears_blank_error_when_name_is_valid() {
-        coEvery { profileRepository.nameExists("Valid name") } returns false
+        coEvery { nameExistsUseCase("Valid name") } returns false
         // Set blank name
         viewModel.onUiAction(NewProfileViewModel.UiAction.OnNameChange(""))
         // Check blank error
@@ -109,7 +112,7 @@ class NewProfileViewModelTests {
 
     @Test
     fun state_has_name_exists_error_when_repository_finds_it() {
-        coEvery { profileRepository.nameExists("Existing name") } returns true
+        coEvery { nameExistsUseCase("Existing name") } returns true
 
         viewModel.onUiAction(NewProfileViewModel.UiAction.OnNameChange("Existing name"))
 
@@ -123,8 +126,8 @@ class NewProfileViewModelTests {
 
     @Test
     fun state_clears_name_exists_error_when_repository_does_not_find_it() {
-        coEvery { profileRepository.nameExists("Existing name") } returns true
-        coEvery { profileRepository.nameExists("Non existing name") } returns false
+        coEvery { nameExistsUseCase("Existing name") } returns true
+        coEvery { nameExistsUseCase("Non existing name") } returns false
         val expectedErrorState = NewProfileViewModel.UiState(
             name = "Existing name",
             error = NewProfileViewModel.NameError.NameExistsError,
@@ -146,8 +149,8 @@ class NewProfileViewModelTests {
 
     @Test
     fun state_has_new_id_when_repository_adds_it() {
-        coEvery { profileRepository.nameExists("Name") } returns false
-        coEvery { profileRepository.add(Profile(name = "Name")) } returns 1L
+        coEvery { nameExistsUseCase("Name") } returns false
+        coEvery { addProfileUseCase(Profile(name = "Name")) } returns 1L
         // Set valid name
         viewModel.onUiAction(NewProfileViewModel.UiAction.OnNameChange("Name"))
 

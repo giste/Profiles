@@ -24,12 +24,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.ProfileRepository
+import org.giste.profiles.domain.usecases.AddProfileUseCase
+import org.giste.profiles.domain.usecases.NameExistsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class NewProfileViewModel @Inject constructor(
-    private val profileRepository: ProfileRepository,
+    private val addProfileUseCase: AddProfileUseCase,
+    private val nameExistsUseCase: NameExistsUseCase,
 ) : ViewModel() {
     private val state: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = state.asStateFlow()
@@ -54,7 +56,7 @@ class NewProfileViewModel @Inject constructor(
             }
         } else {
             viewModelScope.launch {
-                if (profileRepository.nameExists(name)) {
+                if (nameExistsUseCase(name)) {
                     state.update { UiState(name, NameError.NameExistsError) }
                 } else {
                     state.update { UiState(name, NameError.NoError) }
@@ -65,7 +67,7 @@ class NewProfileViewModel @Inject constructor(
 
     private fun onAccept() {
         viewModelScope.launch {
-            val id = profileRepository.add(Profile(name = uiState.value.name))
+            val id = addProfileUseCase(Profile(name = uiState.value.name))
             state.update { it.copy(id = id) }
         }
     }
