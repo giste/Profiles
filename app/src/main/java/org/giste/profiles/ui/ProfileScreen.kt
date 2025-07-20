@@ -220,7 +220,7 @@ private fun Category(category: String) {
         Text(
             text = category,
             fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineSmall
         )
     }
     Row {
