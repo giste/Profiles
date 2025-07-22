@@ -61,21 +61,20 @@ fun Profiles() {
         ) {
             managerDestination(
                 onNavigateToProfileDetails = { profileId ->
-                    Log.d("Profiles", "Details of profile id = $profileId")
                     navController.navigateToProfileDetails(profileId = profileId)
                 },
                 onNavigateToNewProfileDialog = {
                     navController.navigateToNewProfileDialog()
-                }
+                },
             )
             newProfileDestination(
                 onNewProfile = { profileId ->
-                    Log.d("Profiles", "New profile id = $profileId")
                     navController.navigateToProfileDetails(profileId = profileId)
-                }
+                },
+                onDismiss = { navController.popBackStack() },
             )
             profileDetailsDestination(
-                onBackNavigation = { navController.popBackStack() }
+                onBackNavigation = { navController.popBackStack() },
             )
         }
     }

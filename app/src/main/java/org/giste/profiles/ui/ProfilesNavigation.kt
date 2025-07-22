@@ -59,6 +59,7 @@ fun NavGraphBuilder.managerDestination(
 }
 
 fun NavGraphBuilder.newProfileDestination(
+    onDismiss: () -> Unit,
     onNewProfile: (profileId: Long) -> Unit,
 ) {
     dialog<ProfilesDestinations.NewProfile> {
@@ -67,7 +68,7 @@ fun NavGraphBuilder.newProfileDestination(
             uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
             onNameChange = { viewModel.onUiAction(NewProfileViewModel.UiAction.OnNameChange(it)) },
             onAccept = { viewModel.onUiAction(NewProfileViewModel.UiAction.OnAccept) },
-            onDismiss = { },
+            onDismiss = { onDismiss() },
             onNewProfile = { onNewProfile(it) },
         )
     }
