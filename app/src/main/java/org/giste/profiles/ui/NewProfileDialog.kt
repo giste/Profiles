@@ -28,12 +28,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.DialogProperties
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import org.giste.profiles.R
 
 private const val NAME_MAX_LENGTH = 20
@@ -65,6 +76,7 @@ fun NewProfileErrorPreview() {
     )
 }
 
+@OptIn(FlowPreview::class)
 @Composable
 fun NewProfileDialog(
     uiState: NewProfileViewModel.UiState,
@@ -87,24 +99,33 @@ fun NewProfileDialog(
             ) {
                 Icon(
                     imageVector = Icons.Default.Done,
-                    contentDescription = ""
+                    contentDescription = stringResource(R.string.profile_name_dialog_confirm_content_description)
                 )
             }
         },
         dismissButton = {
             IconButton(
-                onClick = { onDismiss() }
+                onClick = { onDismiss() },
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = ""
+                    contentDescription = stringResource(R.string.profile_name_dialog_dismiss_content_description)
                 )
             }
         },
         text = {
+            var name by rememberSaveable { mutableStateOf("") }
+            LaunchedEffect(name) {
+                snapshotFlow { name }
+                    .debounce(500L)
+                    .collectLatest { onNameChange(it) }
+            }
+
             TextField(
-                value = uiState.name,
-                onValueChange = { onNameChange(it.take(NAME_MAX_LENGTH)) },
+                value = name,
+                onValueChange = { name = it.take(NAME_MAX_LENGTH) },
+                modifier = Modifier
+                    .testTag("NAME_FIELD"),
                 label = { Text(text = stringResource(R.string.profile_name_dialog_label)) },
                 trailingIcon = {
                     if (uiState.error !is NewProfileViewModel.NameError.NoError) {
