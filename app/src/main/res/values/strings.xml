@@ -16,6 +16,8 @@
 <resources>
     <string name="app_name">Profiles</string>
 
+    <string name="scaffold_top_bar_back_content_description">Back</string>
+
     <string name="manager_screen_title">Profiles</string>
     <string name="manager_screen_add_profile_content_description">Add profile</string>
     <string name="manager_screen_delete_profile_content_description">Delete profile</string>
