@@ -76,6 +76,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.tooling)
+    // Accompanist permissions
+    implementation(libs.accompanist.permissions)
     // Androidx Adaptive & Window size
     implementation(libs.androidx.material3.window.size)
     implementation(libs.androidx.material3.adaptive)

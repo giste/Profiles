@@ -16,7 +16,13 @@
 <resources>
     <string name="app_name">Profiles</string>
 
+    <string name="permissions_title">Permissions</string>
+    <string name="permissions_request">This application needs some permissions to work. Please grant them.</string>
+
     <string name="scaffold_top_bar_back_content_description">Back</string>
+
+    <string name="dialog_confirm_content_description">Accept</string>
+    <string name="dialog_dismiss_content_description">Cancel</string>
 
     <string name="manager_screen_title">Profiles</string>
     <string name="manager_screen_add_profile_content_description">Add profile</string>

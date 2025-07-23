@@ -17,14 +17,13 @@ package org.giste.profiles.data
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.edit
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.giste.profiles.data.DataStoreSelectedProfileRepository.Companion.SELECTED_PROFILE
+import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.SelectedProfileRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -53,7 +52,7 @@ class DataStoreSelectedProfileRepositoryTests {
 
     @Test
     fun store_selected_profile_when_saved() = runTest {
-        selectedProfileRepository.selectProfile(1L)
+        selectedProfileRepository.selectProfile(Profile(id = 1L))
 
         val actual = testDataStore.data.map {
             it[SELECTED_PROFILE] ?: 0L
@@ -62,17 +61,16 @@ class DataStoreSelectedProfileRepositoryTests {
         assertEquals(1L, actual)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun return_new_selected_profile_when_changed() = runTest {
         val selectedProfiles = mutableListOf<Long>()
 
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+        backgroundScope.launch {
             selectedProfileRepository.findSelectedProfile().toList(selectedProfiles)
         }
 
-        selectedProfileRepository.selectProfile(1L)
-        selectedProfileRepository.selectProfile(2L)
+        selectedProfileRepository.selectProfile(Profile(id = 1L))
+        selectedProfileRepository.selectProfile(Profile(id = 2L))
         assertEquals(listOf(0L, 1L, 2L), selectedProfiles)
     }
 }

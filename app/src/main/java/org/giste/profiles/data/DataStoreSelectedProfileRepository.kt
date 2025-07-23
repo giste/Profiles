@@ -23,6 +23,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.SelectedProfileRepository
 import javax.inject.Inject
 
@@ -43,11 +44,11 @@ class DataStoreSelectedProfileRepository @Inject constructor(
         }.distinctUntilChanged()
     }
 
-    override suspend fun selectProfile(id: Long) {
-        Log.d(TAG, "Saving selected profile with id = $id")
+    override suspend fun selectProfile(profile: Profile) {
+        Log.d(TAG, "Saving selected profile with id = ${profile.id}")
 
         dataStore.edit {
-            it[SELECTED_PROFILE] = id
+            it[SELECTED_PROFILE] = profile.id
         }
     }
 }

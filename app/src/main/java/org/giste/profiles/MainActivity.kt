@@ -15,22 +15,38 @@
 
 package org.giste.profiles
 
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
+import org.giste.profiles.ui.PermissionsScreen
 import org.giste.profiles.ui.Profiles
 import org.giste.profiles.ui.theme.ProfilesTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ProfilesTheme {
-                Profiles()
+                val multiplePermissionState = rememberMultiplePermissionsState(
+                    permissions = listOf(
+                        Manifest.permission.ACCESS_NOTIFICATION_POLICY,
+                        //Manifest.permission.WRITE_SETTINGS,
+                    )
+                )
+
+                PermissionsScreen(multiplePermissionState)
+
+                if (multiplePermissionState.allPermissionsGranted) {
+                    Profiles()
+                }
             }
         }
     }

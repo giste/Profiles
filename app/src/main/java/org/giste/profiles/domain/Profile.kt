@@ -21,7 +21,7 @@ data class Profile(
     val mediaVolume: IntSetting = IntSetting(),
     val ringVolume: IntSetting = IntSetting(),
     val notificationVolume: IntSetting = IntSetting(),
-    val alarmVolume: IntSetting = IntSetting(),
+    val alarmVolume: IntSetting = IntSetting(value = 1),
     val autoBrightness: BooleanSetting = BooleanSetting(),
     val brightness: IntSetting = IntSetting(),
     val ringMode: RingModeSetting = RingModeSetting(),

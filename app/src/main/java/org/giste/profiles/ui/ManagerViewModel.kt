@@ -71,7 +71,7 @@ class ManagerViewModel @Inject constructor(
     }
 
     private fun selectProfile(profile: Profile) = viewModelScope.launch {
-        selectProfileUseCase(profile.id)
+        selectProfileUseCase(profile)
     }
 
     private fun deleteProfile(profile: Profile) = viewModelScope.launch {

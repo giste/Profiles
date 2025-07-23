@@ -46,7 +46,7 @@ class ManagerViewModelTests {
     private val findAllProfilesUseCase = mockk<FindAllProfilesUseCase>()
     private val deleteProfileUseCase = mockk<DeleteProfileUseCase>()
     private val findSelectedProfileUseCase = mockk<FindSelectedProfileUseCase>()
-    private val selectedProfileUseCase = mockk<SelectProfileUseCase>()
+    private val selectProfileUseCase = mockk<SelectProfileUseCase>()
     private val profilesFlow = MutableSharedFlow<List<Profile>>()
     private val selectedProfileFlow = MutableSharedFlow<Long>()
     private lateinit var managerViewModel: ManagerViewModel
@@ -62,7 +62,7 @@ class ManagerViewModelTests {
             findAllProfilesUseCase = findAllProfilesUseCase,
             deleteProfileUseCase = deleteProfileUseCase,
             findSelectedProfileUseCase = findSelectedProfileUseCase,
-            selectProfileUseCase = selectedProfileUseCase,
+            selectProfileUseCase = selectProfileUseCase,
         )
     }
 
@@ -99,11 +99,11 @@ class ManagerViewModelTests {
     @Test
     fun repository_is_invoked_when_selecting_profile() = runTest {
         val profile = Profile(1L, "Profile 1")
-        coEvery { selectedProfileUseCase(1L) } returns Unit
+        coEvery { selectProfileUseCase(profile) } returns Unit
 
         managerViewModel.onUiAction(ManagerViewModel.UiAction.SelectProfile(profile))
 
-        coVerify { selectedProfileUseCase(profile.id) }
+        coVerify { selectProfileUseCase(profile) }
     }
 
     @Test

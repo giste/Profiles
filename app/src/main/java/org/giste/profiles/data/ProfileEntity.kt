@@ -55,7 +55,7 @@ data class ProfileEntity(
     val applyAlarmVolume: Boolean = false,
 
     @ColumnInfo(name = "alarm_volume")
-    val alarmVolume: Int = 0,
+    val alarmVolume: Int = 1,
 
     @ColumnInfo(name = "apply_auto_brightness")
     val applyAutoBrightness: Boolean = false,
