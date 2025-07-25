@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.SelectedProfileRepository
+import org.giste.profiles.domain.repositories.SelectedProfileRepository
 import javax.inject.Inject
 
 private const val TAG = "DataStoreSelectedProfileRepository"

@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.ProfileNotFoundException
-import org.giste.profiles.domain.ProfileRepository
+import org.giste.profiles.domain.repositories.ProfileRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertThrows

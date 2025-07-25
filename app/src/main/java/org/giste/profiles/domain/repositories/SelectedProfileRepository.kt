@@ -13,15 +13,12 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.giste.profiles.domain
+package org.giste.profiles.domain.repositories
 
 import kotlinx.coroutines.flow.Flow
+import org.giste.profiles.domain.Profile
 
-interface ProfileRepository {
-    fun findAll(): Flow<List<Profile>>
-    fun findById(id: Long): Flow<Profile>
-    suspend fun add(profile: Profile): Long
-    suspend fun update(profile: Profile)
-    suspend fun delete(profile: Profile)
-    suspend fun nameExists(name: String): Boolean
+interface SelectedProfileRepository {
+    fun findSelectedProfile(): Flow<Long>
+    suspend fun selectProfile(profile: Profile)
 }

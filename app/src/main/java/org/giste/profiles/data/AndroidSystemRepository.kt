@@ -18,7 +18,7 @@ import org.giste.profiles.IoDispatcher
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.RingModeSetting
 import org.giste.profiles.domain.SystemProperties
-import org.giste.profiles.domain.SystemRepository
+import org.giste.profiles.domain.repositories.SystemRepository
 import javax.inject.Inject
 import kotlin.math.exp
 import kotlin.math.roundToInt

@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.giste.profiles.data.DataStoreSelectedProfileRepository.Companion.SELECTED_PROFILE
 import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.SelectedProfileRepository
+import org.giste.profiles.domain.repositories.SelectedProfileRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

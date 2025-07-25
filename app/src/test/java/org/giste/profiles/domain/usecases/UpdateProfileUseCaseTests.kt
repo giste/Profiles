@@ -8,7 +8,7 @@ import kotlinx.coroutines.test.runTest
 import org.giste.profiles.domain.BooleanSetting
 import org.giste.profiles.domain.IntSetting
 import org.giste.profiles.domain.Profile
-import org.giste.profiles.domain.ProfileRepository
+import org.giste.profiles.domain.repositories.ProfileRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

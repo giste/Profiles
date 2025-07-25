@@ -26,9 +26,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import org.giste.profiles.IoDispatcher
-import org.giste.profiles.domain.ProfileRepository
-import org.giste.profiles.domain.SelectedProfileRepository
-import org.giste.profiles.domain.SystemRepository
+import org.giste.profiles.domain.repositories.ProfileRepository
+import org.giste.profiles.domain.repositories.SelectedProfileRepository
+import org.giste.profiles.domain.repositories.SystemRepository
 import javax.inject.Singleton
 
 private const val DB_NAME = "profiles.db"

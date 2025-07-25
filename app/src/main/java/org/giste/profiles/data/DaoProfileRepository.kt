@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.giste.profiles.domain.Profile
 import org.giste.profiles.domain.ProfileNotFoundException
-import org.giste.profiles.domain.ProfileRepository
+import org.giste.profiles.domain.repositories.ProfileRepository
 import javax.inject.Inject
 
 private const val TAG = "DaoProfileRepository"
