@@ -24,6 +24,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import org.giste.profiles.IoDispatcher
 import org.giste.profiles.domain.ProfileRepository
 import org.giste.profiles.domain.SelectedProfileRepository
 import org.giste.profiles.domain.SystemRepository
@@ -58,7 +60,11 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideSystemRepository(@ApplicationContext context: Context): SystemRepository {
-        return AudioManagerSystemRepository(context)
+    fun provideSystemRepository(
+        @ApplicationContext context: Context,
+        @IoDispatcher dispatcher: CoroutineDispatcher,
+    ): SystemRepository {
+        return AndroidSystemRepository(context, dispatcher)
     }
+
 }

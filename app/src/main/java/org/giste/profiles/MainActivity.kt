@@ -16,16 +16,20 @@
 package org.giste.profiles
 
 import android.Manifest
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
-import org.giste.profiles.ui.PermissionsScreen
 import org.giste.profiles.ui.Profiles
+import org.giste.profiles.ui.ProfilesPermissions
 import org.giste.profiles.ui.theme.ProfilesTheme
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,21 +37,33 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        checkWriteSettingsPermission()
+
         setContent {
             ProfilesTheme {
-                val multiplePermissionState = rememberMultiplePermissionsState(
-                    permissions = listOf(
-                        Manifest.permission.ACCESS_NOTIFICATION_POLICY,
-                        //Manifest.permission.WRITE_SETTINGS,
-                    )
-                )
-
-                PermissionsScreen(multiplePermissionState)
-
-                if (multiplePermissionState.allPermissionsGranted) {
+//                val multiplePermissionState = rememberMultiplePermissionsState(
+//                    permissions = listOf(
+//                        //Manifest.permission.ACCESS_NOTIFICATION_POLICY,
+//                        Manifest.permission.WRITE_SETTINGS,
+//                        //Manifest.permission.MODIFY_AUDIO_SETTINGS,
+//                    )
+//                )
+//
+//                ProfilesPermissions(multiplePermissionState)
+//
+//                if (multiplePermissionState.allPermissionsGranted) {
                     Profiles()
-                }
+//                }
             }
+        }
+    }
+
+    private fun checkWriteSettingsPermission() {
+        if (!Settings.System.canWrite(this)) {
+            val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+            intent.data = "package:$packageName".toUri()
+            startActivity(intent)
         }
     }
 }

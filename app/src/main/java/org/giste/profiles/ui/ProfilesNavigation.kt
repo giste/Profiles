@@ -49,7 +49,9 @@ fun NavGraphBuilder.managerDestination(
         ManagerScreen(
             state = uiState,
             onProfileAdd = { onNavigateToNewProfileDialog() },
-            onProfileSelect = {},
+            onProfileSelect = {
+                viewModel.onUiAction(ManagerViewModel.UiAction.SelectProfile(it))
+            },
             onProfileClick = { onNavigateToProfileDetails(it.id) },
             onProfileDelete = {
                 viewModel.onUiAction(ManagerViewModel.UiAction.DeleteProfile(it))
