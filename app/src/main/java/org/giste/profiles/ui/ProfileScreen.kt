@@ -203,7 +203,7 @@ fun ProfileScreen(
                 apply = apply,
                 value = value,
                 min = 0,
-                max = 100,
+                max = 255,
                 onApplyClick = { apply ->
                     onValueChange(profile.copy(brightness = copy(apply = apply)))
                 },
@@ -269,7 +269,7 @@ fun SliderPreference(
             )
             Spacer(Modifier.width(ProfilesTheme.dimensions.spacing))
             Text(
-                text = "$value/$max",
+                text = "$selection/$max",
                 modifier = Modifier
                     .alpha(if (apply) 1f else ProfilesTheme.ALPHA_DISABLED)
                     .weight(2f),

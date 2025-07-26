@@ -140,13 +140,17 @@ internal class AndroidSystemRepository @Inject constructor(
         }
     }
 
-    private fun mapBrightness(percentage: Int) = if (percentage <= 1) {
+    private fun mapBrightness(value: Int): Int {
+        val percentage = value / 255f * 100f
+
+        return if (percentage <= 1) {
             1
         } else if (percentage >= 100) {
             255
         } else {
             exp((percentage + 9.411) / 19.811).roundToInt()
         }
+    }
 
     private fun checkLinkedRingAndNotification(): Boolean {
         val currentRing = audioManager.getStreamVolume(STREAM_RING)
