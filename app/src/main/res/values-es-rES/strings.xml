@@ -26,4 +26,14 @@
     <string name="profile_screen_category_brightness_label">Brillo</string>
     <string name="profile_screen_setting_brightness_auto_label">Automático</string>
     <string name="profile_screen_setting_brightness_level_label">Nivel</string>
+    <string name="profile_screen_volume_apply_content_description">Aplicar volumen %1$s</string>
+    <string name="profile_screen_volume_value_content_description">Valor de volumen %1$s</string>
+    <string name="profile_screen_ring_mode_apply_content_description">Aplicar modo de llamada</string>
+    <string name="profile_screen_ring_mode_normal_content_description">Modo de llamada normal</string>
+    <string name="profile_screen_ring_mode_vibration_content_description">Modo de llamada vibración</string>
+    <string name="profile_screen_ring_mode_silence_content_description">Modo de llamada silencio</string>
+    <string name="profile_screen_brightness_auto_apply_content_description">Aplicar brillo automático</string>
+    <string name="profile_screen_brightness_auto_value_content_description">Estado de brillo automático</string>
+    <string name="profile_screen_brightness_level_apply_content_description">Aplicar nivel de brillo</string>
+    <string name="profile_screen_brightness_level_value_content_description">Valor de nivel de brillo</string>
 </resources>

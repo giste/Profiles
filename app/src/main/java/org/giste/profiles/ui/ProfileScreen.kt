@@ -46,6 +46,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -97,8 +99,9 @@ fun ProfileScreen(
         Category(category = stringResource(id = R.string.profile_screen_category_volume_label))
         // Media
         with(profile.mediaVolume) {
+            val label = stringResource(id = R.string.profile_screen_setting_volume_media_label)
             SliderPreference(
-                label = stringResource(id = R.string.profile_screen_setting_volume_media_label),
+                label = label,
                 iconResource = ImageVector.vectorResource(R.drawable.volume_media),
                 apply = apply,
                 value = value,
@@ -109,13 +112,22 @@ fun ProfileScreen(
                 },
                 onSliderChange = { value ->
                     onValueChange(profile.copy(mediaVolume = copy(value = value)))
-                }
+                },
+                applyContentDescription = stringResource(
+                    id = R.string.profile_screen_volume_apply_content_description,
+                    formatArgs = arrayOf(label),
+                ),
+                valueContentDescription = stringResource(
+                    id = R.string.profile_screen_volume_value_content_description,
+                    formatArgs = arrayOf(label),
+                ),
             )
         }
         // Ring
         with(profile.ringVolume) {
+            val label = stringResource(id = R.string.profile_screen_setting_volume_ring_label)
             SliderPreference(
-                label = stringResource(id = R.string.profile_screen_setting_volume_ring_label),
+                label = label,
                 iconResource = ImageVector.vectorResource(R.drawable.volume_ring),
                 apply = apply,
                 value = value,
@@ -126,13 +138,23 @@ fun ProfileScreen(
                 },
                 onSliderChange = { value ->
                     onValueChange(profile.copy(ringVolume = copy(value = value)))
-                }
+                },
+                applyContentDescription = stringResource(
+                    id = R.string.profile_screen_volume_apply_content_description,
+                    formatArgs = arrayOf(label),
+                ),
+                valueContentDescription = stringResource(
+                    id = R.string.profile_screen_volume_value_content_description,
+                    formatArgs = arrayOf(label),
+                ),
             )
         }
         // Notification
         with(profile.notificationVolume) {
+            val label =
+                stringResource(id = R.string.profile_screen_setting_volume_notification_label)
             SliderPreference(
-                label = stringResource(id = R.string.profile_screen_setting_volume_notification_label),
+                label = label,
                 iconResource = ImageVector.vectorResource(R.drawable.volume_notification),
                 apply = apply,
                 value = value,
@@ -143,13 +165,22 @@ fun ProfileScreen(
                 },
                 onSliderChange = { value ->
                     onValueChange(profile.copy(notificationVolume = copy(value = value)))
-                }
+                },
+                applyContentDescription = stringResource(
+                    id = R.string.profile_screen_volume_apply_content_description,
+                    formatArgs = arrayOf(label),
+                ),
+                valueContentDescription = stringResource(
+                    id = R.string.profile_screen_volume_value_content_description,
+                    formatArgs = arrayOf(label),
+                ),
             )
         }
         // Alarm
         with(profile.alarmVolume) {
+            val label = stringResource(id = R.string.profile_screen_setting_volume_alarm_label)
             SliderPreference(
-                label = stringResource(id = R.string.profile_screen_setting_volume_alarm_label),
+                label = label,
                 iconResource = ImageVector.vectorResource(R.drawable.volume_alarm),
                 apply = apply,
                 value = value,
@@ -160,7 +191,15 @@ fun ProfileScreen(
                 },
                 onSliderChange = { value ->
                     onValueChange(profile.copy(alarmVolume = copy(value = value)))
-                }
+                },
+                applyContentDescription = stringResource(
+                    id = R.string.profile_screen_volume_apply_content_description,
+                    formatArgs = arrayOf(label),
+                ),
+                valueContentDescription = stringResource(
+                    id = R.string.profile_screen_volume_value_content_description,
+                    formatArgs = arrayOf(label),
+                ),
             )
         }
         // Ring Mode
@@ -175,7 +214,7 @@ fun ProfileScreen(
                 },
                 onSelectionChange = { value ->
                     onValueChange(profile.copy(ringMode = copy(value = value)))
-                }
+                },
             )
         }
 
@@ -193,7 +232,13 @@ fun ProfileScreen(
                 },
                 onSelectionChange = { value ->
                     onValueChange(profile.copy(autoBrightness = copy(value = value)))
-                }
+                },
+                applyContentDescription = stringResource(
+                    R.string.profile_screen_brightness_auto_apply_content_description
+                ),
+                valueContentDescription = stringResource(
+                    R.string.profile_screen_brightness_auto_value_content_description
+                ),
             )
         }
         // Brightness level
@@ -214,7 +259,13 @@ fun ProfileScreen(
                 onSliderChange = { value ->
                     onValueChange(profile.copy(brightness = copy(value = value)))
                 },
-                enabled = enabled
+                applyContentDescription = stringResource(
+                    R.string.profile_screen_brightness_level_apply_content_description
+                ),
+                valueContentDescription = stringResource(
+                    R.string.profile_screen_brightness_level_value_content_description
+                ),
+                enabled = enabled,
             )
         }
     }
@@ -246,6 +297,8 @@ fun SliderPreference(
     max: Int,
     onApplyClick: (Boolean) -> Unit,
     onSliderChange: (Int) -> Unit,
+    applyContentDescription: String,
+    valueContentDescription: String,
     enabled: Boolean = true,
 ) {
     var lastValue by remember { mutableIntStateOf(0) }
@@ -262,6 +315,7 @@ fun SliderPreference(
         apply = apply,
         onApplyChange = onApplyClick,
         enabled = enabled,
+        applyContentDescription = applyContentDescription,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -269,7 +323,9 @@ fun SliderPreference(
             Slider(
                 value = selection.toFloat(),
                 onValueChange = { selection = it.roundToInt() },
-                modifier = Modifier.weight(8f),
+                modifier = Modifier
+                    .weight(8f)
+                    .semantics { this.contentDescription = valueContentDescription },
                 enabled = apply,
                 valueRange = min.toFloat().rangeTo(max.toFloat()),
                 onValueChangeFinished = { onSliderChange(selection) }
@@ -294,17 +350,21 @@ private fun BooleanPreference(
     apply: Boolean,
     value: Boolean,
     onApplyClick: (Boolean) -> Unit,
-    onSelectionChange: (Boolean) -> Unit
+    onSelectionChange: (Boolean) -> Unit,
+    applyContentDescription: String,
+    valueContentDescription: String,
 ) {
     Preference(
         iconResource = iconResource,
         label = label,
         apply = apply,
         onApplyChange = onApplyClick,
+        applyContentDescription = applyContentDescription,
     ) {
         Switch(
             checked = value,
             onCheckedChange = { onSelectionChange(it) },
+            modifier = Modifier.semantics { this.contentDescription = valueContentDescription },
             enabled = apply
         )
     }
@@ -324,6 +384,9 @@ private fun RingModePreference(
         label = label,
         apply = apply,
         onApplyChange = onApplyClick,
+        applyContentDescription = stringResource(
+            R.string.profile_screen_ring_mode_apply_content_description
+        )
     ) {
         Row(
             modifier = Modifier
@@ -331,51 +394,64 @@ private fun RingModePreference(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            Column(horizontalAlignment = Alignment.Start) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(
-                        selected = value == RingModeSetting.Companion.RingMode.NORMAL,
-                        onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.NORMAL) },
-                        enabled = apply
-                    )
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ring_mode_normal),
-                        contentDescription = "",
-                        modifier = Modifier.alpha(if (apply) 1f else ProfilesTheme.ALPHA_DISABLED),
-                    )
-                }
-            }
+            RingMode(
+                imageVector = ImageVector.vectorResource(R.drawable.ring_mode_normal),
+                enabled = apply,
+                selected = value == RingModeSetting.Companion.RingMode.NORMAL,
+                contentDescription = stringResource(
+                    R.string.profile_screen_ring_mode_normal_content_description
+                ),
+                onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.NORMAL) },
+            )
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(
-                        selected = value == RingModeSetting.Companion.RingMode.VIBRATE,
-                        onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.VIBRATE) },
-                        enabled = apply
-                    )
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ring_mode_vibrate),
-                        contentDescription = "",
-                        modifier = Modifier.alpha(if (apply) 1f else ProfilesTheme.ALPHA_DISABLED),
-                    )
-                }
-            }
+            RingMode(
+                imageVector = ImageVector.vectorResource(R.drawable.ring_mode_vibrate),
+                enabled = apply,
+                selected = value == RingModeSetting.Companion.RingMode.VIBRATE,
+                contentDescription = stringResource(
+                    R.string.profile_screen_ring_mode_vibration_content_description
+                ),
+                onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.VIBRATE) },
+            )
 
-            Column {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(
-                        selected = value == RingModeSetting.Companion.RingMode.SILENT,
-                        onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.SILENT) },
-                        enabled = apply
-                    )
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ring_mode_silence),
-                        contentDescription = "",
-                        modifier = Modifier.alpha(if (apply) 1f else ProfilesTheme.ALPHA_DISABLED),
-                    )
-                }
-            }
+            RingMode(
+                imageVector = ImageVector.vectorResource(R.drawable.ring_mode_silence),
+                enabled = apply,
+                selected = value == RingModeSetting.Companion.RingMode.SILENT,
+                contentDescription = stringResource(
+                    R.string.profile_screen_ring_mode_silence_content_description
+                ),
+                onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.SILENT) },
+            )
         }
+    }
+}
+
+@Composable
+fun RingMode(
+    imageVector: ImageVector,
+    enabled: Boolean,
+    selected: Boolean,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.semantics(mergeDescendants = true) {
+            this.contentDescription = contentDescription
+        },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = { onClick() },
+            enabled = enabled,
+        )
+        Icon(
+            imageVector = imageVector,
+            contentDescription = "",
+            modifier = Modifier.alpha(if (enabled) 1f else ProfilesTheme.ALPHA_DISABLED),
+        )
     }
 }
 
@@ -386,6 +462,7 @@ fun Preference(
     apply: Boolean,
     onApplyChange: (Boolean) -> Unit,
     enabled: Boolean = true,
+    applyContentDescription: String,
     content: (@Composable () -> Unit),
 ) {
     Spacer(Modifier.height(ProfilesTheme.dimensions.spacing))
@@ -403,7 +480,8 @@ fun Preference(
             Spacer(Modifier.width(ProfilesTheme.dimensions.spacing))
             Text(
                 text = label,
-                modifier = Modifier.alpha(if (enabled) 1f else ProfilesTheme.ALPHA_DISABLED),
+                modifier = Modifier
+                    .alpha(if (enabled) 1f else ProfilesTheme.ALPHA_DISABLED),
             )
         }
         Row(
@@ -412,7 +490,9 @@ fun Preference(
             Checkbox(
                 checked = apply,
                 onCheckedChange = { onApplyChange(it) },
-                modifier = Modifier.alpha(if (enabled) 1f else ProfilesTheme.ALPHA_DISABLED),
+                modifier = Modifier
+                    .alpha(if (enabled) 1f else ProfilesTheme.ALPHA_DISABLED)
+                    .semantics { this.contentDescription = applyContentDescription },
                 enabled = enabled,
             )
             Spacer(Modifier.width(ProfilesTheme.dimensions.spacing))
