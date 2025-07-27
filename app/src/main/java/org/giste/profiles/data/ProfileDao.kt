@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProfileDao {
-    @Query("SELECT * FROM profiles")
+    @Query("SELECT * FROM profiles ORDER BY profiles.name")
     fun findAll(): Flow<List<ProfileEntity>>
 
     @Query("SELECT * FROM profiles WHERE profile_id = :id")
