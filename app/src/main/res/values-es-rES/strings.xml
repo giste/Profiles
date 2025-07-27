@@ -1,0 +1,32 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<resources>
+    <string name="app_name">Perfiles</string>
+    <string name="permissions_title">Permisos</string>
+    <string name="permissions_rationale">Esta aplicación necesita algunos permisos para funcionar. Por favor, concédalos.</string>
+    <string name="permissions_rationale_write_settings">Necesario para modificar el brillo. En la próxima pantalla conceda el permiso para la aplicación \'Perfiles\'.</string>
+    <string name="permissions_rationale_access_notification_policy">Necesario para modificar los modos de llamada.</string>
+    <string name="permissions_rationale_modify_audio_settings">Necesario para modificar los diferentes volúmenes del dispositivo.</string>
+    <string name="scaffold_top_bar_back_content_description">Atrás</string>
+    <string name="dialog_confirm_content_description">Aceptar</string>
+    <string name="dialog_dismiss_content_description">Cancelar</string>
+    <string name="manager_screen_title">Perfiles</string>
+    <string name="manager_screen_add_profile_content_description">Añadir perfil</string>
+    <string name="manager_screen_delete_profile_content_description">Borrar perfil</string>
+    <string name="profile_name_dialog_title">Nuevo Perfil</string>
+    <string name="profile_name_dialog_label">Nombre</string>
+    <string name="profile_name_dialog_profile_exists">Ya existe un perfil con este nombre</string>
+    <string name="profile_name_dialog_confirm_content_description">Aceptar</string>
+    <string name="profile_name_dialog_dismiss_content_description">Cancelar</string>
+    <string name="profile_name_dialog_error_content_description">Error</string>
+    <string name="validation_name_blank">El nombre no puede estar en blanco</string>
+    <string name="validation_name_exists">El nombre ya existe</string>
+    <string name="profile_screen_category_volume_label">Volumen</string>
+    <string name="profile_screen_setting_volume_media_label">Multimedia</string>
+    <string name="profile_screen_setting_volume_ring_label">Tono</string>
+    <string name="profile_screen_setting_volume_notification_label">Notificación</string>
+    <string name="profile_screen_setting_volume_alarm_label">Alarma</string>
+    <string name="profile_screen_setting_volume_ring_mode_label">Modo de llamada</string>
+    <string name="profile_screen_category_brightness_label">Brillo</string>
+    <string name="profile_screen_setting_brightness_auto_label">Automático</string>
+    <string name="profile_screen_setting_brightness_level_label">Nivel</string>
+</resources>

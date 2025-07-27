@@ -17,8 +17,8 @@
     <string name="app_name">Profiles</string>
 
     <string name="permissions_title">Permissions</string>
-    <string name="permissions_rationale">This application needs some permissions to work. Please grant them.</string>
-    <string name="permissions_rationale_write_settings">Needed to modify brightness.</string>
+    <string name="permissions_rationale">This application needs some permissions to work. Grant them, please.</string>
+    <string name="permissions_rationale_write_settings">Needed to modify brightness. In the next screen grant the permission for the \'Profiles\' app.</string>
     <string name="permissions_rationale_access_notification_policy">Needed to set different ringer modes.</string>
     <string name="permissions_rationale_modify_audio_settings">Needed to modify the different volumes of the device.</string>
 
