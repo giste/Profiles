@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -133,8 +132,7 @@ fun NewProfileDialog(
                 value = name,
                 onValueChange = { name = it.take(NAME_MAX_LENGTH) },
                 modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .testTag("NAME_FIELD"),
+                    .focusRequester(focusRequester),
                 label = { Text(text = stringResource(R.string.profile_name_dialog_label)) },
                 trailingIcon = {
                     if (uiState.error !is NewProfileViewModel.NameError.NoError) {

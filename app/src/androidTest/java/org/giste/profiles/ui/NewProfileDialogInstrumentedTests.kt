@@ -15,12 +15,12 @@
 
 package org.giste.profiles.ui
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import de.mannodermaus.junit5.compose.createComposeExtension
+import org.giste.profiles.R
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -36,9 +36,11 @@ class NewProfileDialogInstrumentedTests {
     @Test
     fun name_is_sent_to_view_model_after_debounce() {
         val namesChanged = mutableListOf<String>()
+        var nameText = ""
 
         extension.use {
             setContent {
+                nameText = stringResource(R.string.profile_name_dialog_label)
                 NewProfileDialog(
                     uiState = NewProfileViewModel.UiState(),
                     onNameChange = { namesChanged.add(it) },
@@ -48,13 +50,13 @@ class NewProfileDialogInstrumentedTests {
                 )
             }
 
-            onNodeWithTag("NAME_FIELD").performTextInput("P")
+            onNodeWithText(nameText).performTextInput("P")
             waitForIdle()
-            onNodeWithTag("NAME_FIELD").performTextInput("1")
+            onNodeWithText("P").performTextInput("1")
             waitForIdle()
 
             // Text field has the right text
-            onNodeWithTag("NAME_FIELD").assert(hasText("P1"))
+            onNodeWithText("P1").assertExists()
             mainClock.autoAdvance = false
             // No name change is invoked...
             assertEquals(emptyList<String>(), namesChanged)
