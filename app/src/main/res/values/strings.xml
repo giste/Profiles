@@ -17,7 +17,10 @@
     <string name="app_name">Profiles</string>
 
     <string name="permissions_title">Permissions</string>
-    <string name="permissions_request">This application needs some permissions to work. Please grant them.</string>
+    <string name="permissions_rationale">This application needs some permissions to work. Please grant them.</string>
+    <string name="permissions_rationale_write_settings">Needed to modify brightness.</string>
+    <string name="permissions_rationale_access_notification_policy">Needed to set different ringer modes.</string>
+    <string name="permissions_rationale_modify_audio_settings">Needed to modify the different volumes of the device.</string>
 
     <string name="scaffold_top_bar_back_content_description">Back</string>
 

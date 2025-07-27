@@ -1,98 +1,130 @@
 package org.giste.profiles.ui
 
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
-import android.util.Log
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.MultiplePermissionsState
-import com.google.accompanist.permissions.PermissionState
-import org.giste.profiles.MainActivity
 import org.giste.profiles.R
-import kotlin.system.exitProcess
+import org.giste.profiles.ui.theme.ProfilesTheme
 
-@OptIn(ExperimentalPermissionsApi::class)
+@Preview
+@Composable
+fun PermissionsScreenPreview() {
+    ProfilesTheme {
+        Surface {
+            PermissionsScreen(
+                permissions = listOf(
+                    Permission(
+                        name = "WRITE_SETTINGS",
+                        rationale = "Needed to modify brightness.",
+                        request = { }
+                    ),
+                    Permission(
+                        name = "ACCESS_NOTIFICATION_POLICY",
+                        rationale = "Needed to set different ringer modes.",
+                        request = { }
+                    ),
+                )
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PermissionsScreen(
-    multiplePermissionState: MultiplePermissionsState,
+    permissions: List<Permission>,
 ) {
-    val context = LocalContext.current
-    var showRationalDialog by remember { mutableStateOf(false) }
-
-    for (permission in multiplePermissionState.permissions) {
-        Log.d("PermissionsScreen", "${permission.permission}: ${permission.status}")
-    }
-
-
-    if (!multiplePermissionState.allPermissionsGranted) {
-        if (multiplePermissionState.shouldShowRationale) {
-            // Show a rationale if needed (optional)
-            showRationalDialog = true
-        } else {
-            LaunchedEffect(showRationalDialog) {
-                // Request the permission
-                multiplePermissionState.launchMultiplePermissionRequest()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(R.string.permissions_title)) },
+                colors = topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+            )
+        },
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding),
+        ) {
+            Column(modifier = Modifier.padding(ProfilesTheme.dimensions.padding)
+            ) {
+                Text(text = stringResource(R.string.permissions_rationale))
+                Spacer(modifier = Modifier.height(ProfilesTheme.dimensions.spacing))
+                permissions.forEach {
+                    Spacer(modifier = Modifier.height(ProfilesTheme.dimensions.spacing))
+                    PermissionRow(
+                        permission = it.name,
+                        rationale = it.rationale,
+                        request = it.request,
+                    )
+                }
             }
         }
     }
+}
 
-    Log.d("PermissionsScreen", "Show rationale: $showRationalDialog")
-
-    if (showRationalDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                showRationalDialog = false
-            },
-            title = { Text(text = stringResource(R.string.permissions_title)) },
-            text = { Text(text = stringResource(R.string.permissions_request)) },
-            confirmButton = {
-                IconButton(
-                    onClick = {
-                        showRationalDialog = false
-                        val intent = Intent(
-                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            Uri.fromParts("package", context.packageName, null)
-                        )
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        context.startActivity(intent, null)
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Done,
-                        contentDescription = stringResource(R.string.dialog_confirm_content_description),
-                    )
-                }
-            },
-            dismissButton = {
-                IconButton(
-                    onClick = {
-                        showRationalDialog = false
-                        // Permissions not granted, close application
-                        MainActivity().finish()
-                        exitProcess(0)
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.dialog_dismiss_content_description),
-                    )
-                }
-            },
-        )
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun PermissionRow(
+    permission: String,
+    rationale: String,
+    request: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(ProfilesTheme.dimensions.padding),
+        verticalAlignment = Alignment.Top,
+    ) {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = permission,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(text = rationale)
+        }
+        Spacer(modifier = Modifier.width(ProfilesTheme.dimensions.spacing))
+        Button(onClick = { request() }) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Default.ArrowForward,
+                contentDescription = "",
+            )
+        }
     }
 }
+
+data class Permission(
+    val name: String,
+    val rationale: String,
+    val request: () -> Unit,
+)
