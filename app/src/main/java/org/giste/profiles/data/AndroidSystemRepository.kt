@@ -155,17 +155,19 @@ internal class AndroidSystemRepository @Inject constructor(
     private fun checkLinkedRingAndNotification(): Boolean {
         val currentRing = audioManager.getStreamVolume(STREAM_RING)
         val currentNotification = audioManager.getStreamVolume(STREAM_NOTIFICATION)
+        Log.d(TAG, "Current ring: $currentRing, notification: $currentNotification")
 
         audioManager.setStreamVolume(STREAM_RING, 2, 0)
         audioManager.setStreamVolume(STREAM_NOTIFICATION, 1, 0)
 
         val newRing = audioManager.getStreamVolume(STREAM_RING)
         val newNotification = audioManager.getStreamVolume(STREAM_NOTIFICATION)
+        Log.d(TAG, "New ring: $newRing, notification: $newNotification")
 
         audioManager.setStreamVolume(STREAM_NOTIFICATION, currentNotification, 0)
         audioManager.setStreamVolume(STREAM_RING, currentRing, 0)
 
-        val areLinked = (newRing == 2) && (newNotification == 1)
+        val areLinked = !((newRing == 2) && (newNotification == 1))
 
         Log.d(TAG, "Ring & notification streams linked: $areLinked")
         return areLinked
