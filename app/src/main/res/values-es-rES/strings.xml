@@ -14,9 +14,6 @@
     <string name="manager_screen_delete_profile_content_description">Borrar perfil</string>
     <string name="profile_name_dialog_title">Nuevo Perfil</string>
     <string name="profile_name_dialog_label">Nombre</string>
-    <string name="profile_name_dialog_profile_exists">Ya existe un perfil con este nombre</string>
-    <string name="profile_name_dialog_confirm_content_description">Aceptar</string>
-    <string name="profile_name_dialog_dismiss_content_description">Cancelar</string>
     <string name="profile_name_dialog_error_content_description">Error</string>
     <string name="validation_name_blank">El nombre no puede estar en blanco</string>
     <string name="validation_name_exists">El nombre ya existe</string>

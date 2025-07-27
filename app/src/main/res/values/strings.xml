@@ -33,9 +33,6 @@
 
     <string name="profile_name_dialog_title">New Profile</string>
     <string name="profile_name_dialog_label">Name</string>
-    <string name="profile_name_dialog_profile_exists">There is a profile with this name</string>
-    <string name="profile_name_dialog_confirm_content_description">Accept</string>
-    <string name="profile_name_dialog_dismiss_content_description">Cancel</string>
     <string name="profile_name_dialog_error_content_description">Error</string>
 
     <string name="validation_name_blank">Name can not be blank</string>

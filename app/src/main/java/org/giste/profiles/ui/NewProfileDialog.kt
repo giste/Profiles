@@ -99,7 +99,7 @@ fun NewProfileDialog(
             ) {
                 Icon(
                     imageVector = Icons.Default.Done,
-                    contentDescription = stringResource(R.string.profile_name_dialog_confirm_content_description)
+                    contentDescription = stringResource(R.string.dialog_confirm_content_description)
                 )
             }
         },
@@ -109,7 +109,7 @@ fun NewProfileDialog(
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = stringResource(R.string.profile_name_dialog_dismiss_content_description)
+                    contentDescription = stringResource(R.string.dialog_dismiss_content_description)
                 )
             }
         },
