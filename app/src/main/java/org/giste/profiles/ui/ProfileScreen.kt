@@ -71,7 +71,7 @@ fun ProfilePreview() {
                         mediaVolume = IntSetting(true, 15),
                         ringVolume = IntSetting(false, 5),
                         autoBrightness = BooleanSetting(apply = true, value = true),
-                        brightness = IntSetting(true, 100),
+                        brightnessLevel = IntSetting(true, 100),
                     ),
                 ),
                 onValueChange = {},
@@ -242,7 +242,7 @@ fun ProfileScreen(
             )
         }
         // Brightness level
-        with(profile.brightness) {
+        with(profile.brightnessLevel) {
             val enabled by remember {
                 derivedStateOf { !(profile.autoBrightness.apply && profile.autoBrightness.value) }
             }
@@ -254,10 +254,10 @@ fun ProfileScreen(
                 min = 1,
                 max = 255,
                 onApplyClick = { apply ->
-                    onValueChange(profile.copy(brightness = copy(apply = apply)))
+                    onValueChange(profile.copy(brightnessLevel = copy(apply = apply)))
                 },
                 onSliderChange = { value ->
-                    onValueChange(profile.copy(brightness = copy(value = value)))
+                    onValueChange(profile.copy(brightnessLevel = copy(value = value)))
                 },
                 applyContentDescription = stringResource(
                     R.string.profile_screen_brightness_level_apply_content_description
@@ -405,23 +405,23 @@ private fun RingModePreference(
             )
 
             RingMode(
-                imageVector = ImageVector.vectorResource(R.drawable.ring_mode_vibrate),
+                imageVector = ImageVector.vectorResource(R.drawable.ring_mode_vibration),
                 enabled = apply,
-                selected = value == RingModeSetting.Companion.RingMode.VIBRATE,
+                selected = value == RingModeSetting.Companion.RingMode.VIBRATION,
                 contentDescription = stringResource(
                     R.string.profile_screen_ring_mode_vibration_content_description
                 ),
-                onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.VIBRATE) },
+                onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.VIBRATION) },
             )
 
             RingMode(
                 imageVector = ImageVector.vectorResource(R.drawable.ring_mode_silence),
                 enabled = apply,
-                selected = value == RingModeSetting.Companion.RingMode.SILENT,
+                selected = value == RingModeSetting.Companion.RingMode.SILENCE,
                 contentDescription = stringResource(
                     R.string.profile_screen_ring_mode_silence_content_description
                 ),
-                onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.SILENT) },
+                onClick = { onSelectionChange(RingModeSetting.Companion.RingMode.SILENCE) },
             )
         }
     }

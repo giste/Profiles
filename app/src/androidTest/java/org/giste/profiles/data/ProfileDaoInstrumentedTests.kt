@@ -85,10 +85,10 @@ class ProfileDaoInstrumentedTests {
             alarmVolume = 4,
             applyAutoBrightness = true,
             autoBrightness = true,
-            applyBrightness = true,
-            brightness = 5,
+            applyBrightnessLevel = true,
+            brightnessLevel = 5,
             applyRingMode = true,
-            ringMode = RingModeSetting.Companion.RingMode.VIBRATE,
+            ringMode = RingModeSetting.Companion.RingMode.VIBRATION,
         )
 
         val newId = profileDao.add(newProfile)
@@ -113,10 +113,10 @@ class ProfileDaoInstrumentedTests {
             alarmVolume = 4,
             applyAutoBrightness = true,
             autoBrightness = true,
-            applyBrightness = true,
-            brightness = 5,
+            applyBrightnessLevel = true,
+            brightnessLevel = 5,
             applyRingMode = true,
-            ringMode = RingModeSetting.Companion.RingMode.VIBRATE,
+            ringMode = RingModeSetting.Companion.RingMode.VIBRATION,
         )
 
         val newId = profileDao.add(expectedProfile)
@@ -151,10 +151,10 @@ class ProfileDaoInstrumentedTests {
             alarmVolume = 4,
             applyAutoBrightness = true,
             autoBrightness = true,
-            applyBrightness = true,
-            brightness = 5,
+            applyBrightnessLevel = true,
+            brightnessLevel = 5,
             applyRingMode = true,
-            ringMode = RingModeSetting.Companion.RingMode.VIBRATE,
+            ringMode = RingModeSetting.Companion.RingMode.VIBRATION,
         )
 
         val updated = profileDao.update(expectedProfile)

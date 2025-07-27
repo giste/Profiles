@@ -40,10 +40,10 @@ class ProfileMapperTests {
             alarmVolume = 4,
             applyAutoBrightness = true,
             autoBrightness = true,
-            applyBrightness = true,
-            brightness = 5,
+            applyBrightnessLevel = true,
+            brightnessLevel = 5,
             applyRingMode = true,
-            ringMode = RingModeSetting.Companion.RingMode.VIBRATE,
+            ringMode = RingModeSetting.Companion.RingMode.VIBRATION,
         )
         val profile = Profile(
             id = 1,
@@ -53,8 +53,8 @@ class ProfileMapperTests {
             notificationVolume = IntSetting(true, 3),
             alarmVolume = IntSetting(true, 4),
             autoBrightness = BooleanSetting(apply = true, value = true),
-            brightness = IntSetting(true, 5),
-            ringMode = RingModeSetting(true, RingModeSetting.Companion.RingMode.VIBRATE),
+            brightnessLevel = IntSetting(true, 5),
+            ringMode = RingModeSetting(true, RingModeSetting.Companion.RingMode.VIBRATION),
         )
 
         val actualEntity = profile.toEntity()
@@ -72,8 +72,8 @@ class ProfileMapperTests {
             notificationVolume = IntSetting(true, 3),
             alarmVolume = IntSetting(true, 4),
             autoBrightness = BooleanSetting(apply = true, value = true),
-            brightness = IntSetting(true, 5),
-            ringMode = RingModeSetting(true, RingModeSetting.Companion.RingMode.VIBRATE),
+            brightnessLevel = IntSetting(true, 5),
+            ringMode = RingModeSetting(true, RingModeSetting.Companion.RingMode.VIBRATION),
         )
         val entity = ProfileEntity(
             id = 1,
@@ -88,10 +88,10 @@ class ProfileMapperTests {
             alarmVolume = 4,
             applyAutoBrightness = true,
             autoBrightness = true,
-            applyBrightness = true,
-            brightness = 5,
+            applyBrightnessLevel = true,
+            brightnessLevel = 5,
             applyRingMode = true,
-            ringMode = RingModeSetting.Companion.RingMode.VIBRATE,
+            ringMode = RingModeSetting.Companion.RingMode.VIBRATION,
         )
 
         val actualProfile = entity.toModel()

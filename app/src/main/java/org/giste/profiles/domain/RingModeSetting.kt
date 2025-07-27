@@ -20,6 +20,6 @@ data class RingModeSetting(
     override val value: RingMode = RingMode.NORMAL
 ) : Setting(apply, value) {
     companion object {
-        enum class RingMode { NORMAL, VIBRATE, SILENT }
+        enum class RingMode { NORMAL, VIBRATION, SILENCE }
     }
 }

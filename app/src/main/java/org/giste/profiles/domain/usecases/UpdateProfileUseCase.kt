@@ -25,7 +25,7 @@ class UpdateProfileUseCase @Inject constructor(
     suspend operator fun invoke(profile: Profile) = profileRepository.update(
         profile = if (profile.autoBrightness.apply && profile.autoBrightness.value) {
             // Do not apply brightness level settings if auto-brightness is on
-            profile.copy(brightness = profile.brightness.copy(apply = false))
+            profile.copy(brightnessLevel = profile.brightnessLevel.copy(apply = false))
         } else {
             profile
         }

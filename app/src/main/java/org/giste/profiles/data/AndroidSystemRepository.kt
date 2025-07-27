@@ -81,7 +81,7 @@ internal class AndroidSystemRepository @Inject constructor(
                 if (alarmVolume.apply) setVolume(VolumeStream.AlarmStream, alarmVolume.value)
                 if (ringMode.apply) setRingMode(ringMode.value)
                 if (autoBrightness.apply) setAutoBrightness(autoBrightness.value)
-                if (brightness.apply) setBrightnessLevel(brightness.value)
+                if (brightnessLevel.apply) setBrightnessLevel(brightnessLevel.value)
             }
         }
     }
@@ -101,8 +101,8 @@ internal class AndroidSystemRepository @Inject constructor(
         val currentMode = audioManager.ringerMode
         val newMode = when (mode) {
             RingModeSetting.Companion.RingMode.NORMAL -> AudioManager.RINGER_MODE_NORMAL
-            RingModeSetting.Companion.RingMode.VIBRATE -> AudioManager.RINGER_MODE_VIBRATE
-            RingModeSetting.Companion.RingMode.SILENT -> AudioManager.RINGER_MODE_SILENT
+            RingModeSetting.Companion.RingMode.VIBRATION -> AudioManager.RINGER_MODE_VIBRATE
+            RingModeSetting.Companion.RingMode.SILENCE -> AudioManager.RINGER_MODE_SILENT
         }
 
         if (newMode != currentMode) {

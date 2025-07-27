@@ -35,8 +35,8 @@ fun Profile.toEntity(): ProfileEntity {
             alarmVolume = alarmVolume.value,
             applyAutoBrightness = autoBrightness.apply,
             autoBrightness = autoBrightness.value,
-            applyBrightness = brightness.apply,
-            brightness = brightness.value,
+            applyBrightnessLevel = brightnessLevel.apply,
+            brightnessLevel = brightnessLevel.value,
             applyRingMode = ringMode.apply,
             ringMode = ringMode.value,
         )
@@ -53,7 +53,7 @@ fun ProfileEntity.toModel(): Profile {
             notificationVolume = IntSetting(applyNotificationVolume, notificationVolume),
             alarmVolume = IntSetting(applyAlarmVolume, alarmVolume),
             autoBrightness = BooleanSetting(applyAutoBrightness, autoBrightness),
-            brightness = IntSetting(applyBrightness, brightness),
+            brightnessLevel = IntSetting(applyBrightnessLevel, brightnessLevel),
             ringMode = RingModeSetting(applyRingMode, ringMode),
         )
     }

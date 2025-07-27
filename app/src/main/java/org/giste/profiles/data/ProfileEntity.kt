@@ -63,11 +63,11 @@ data class ProfileEntity(
     @ColumnInfo(name = "auto_brightness")
     val autoBrightness: Boolean = false,
 
-    @ColumnInfo(name = "apply_brightness")
-    val applyBrightness: Boolean = false,
+    @ColumnInfo(name = "apply_brightness_level")
+    val applyBrightnessLevel: Boolean = false,
 
-    @ColumnInfo(name = "brightness")
-    val brightness: Int = 0,
+    @ColumnInfo(name = "brightness_level")
+    val brightnessLevel: Int = 0,
 
     @ColumnInfo(name = "apply_ring_mode")
     val applyRingMode: Boolean = false,

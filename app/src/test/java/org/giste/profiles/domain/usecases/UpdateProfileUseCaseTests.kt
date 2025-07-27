@@ -43,7 +43,7 @@ class UpdateProfileUseCaseTests {
         val profile = Profile(
             name = "Profile",
             autoBrightness = BooleanSetting(apply = true, value = true),
-            brightness = IntSetting(true, 1)
+            brightnessLevel = IntSetting(true, 1)
         )
         coEvery { profileRepository.update(any()) } returns Unit
 
@@ -52,7 +52,7 @@ class UpdateProfileUseCaseTests {
         val expectedProfile = Profile(
             name = "Profile",
             autoBrightness = BooleanSetting(apply = true, value = true),
-            brightness = IntSetting(false, 1)
+            brightnessLevel = IntSetting(false, 1)
         )
         coVerify { profileRepository.update(expectedProfile) }
     }
