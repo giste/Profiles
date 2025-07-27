@@ -72,9 +72,7 @@ fun Profiles() {
                 },
                 onDismiss = { navController.popBackStack() },
             )
-            profileDetailsDestination(
-                onBackNavigation = { navController.popBackStack() },
-            )
+            profileDetailsDestination()
         }
     }
 }

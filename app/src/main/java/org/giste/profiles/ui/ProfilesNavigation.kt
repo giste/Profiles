@@ -76,9 +76,7 @@ fun NavGraphBuilder.newProfileDestination(
     }
 }
 
-fun NavGraphBuilder.profileDetailsDestination(
-    onBackNavigation: () -> Unit, //TODO
-) {
+fun NavGraphBuilder.profileDetailsDestination() {
     composable<ProfilesDestinations.ProfileDetail> { navBackStackEntry ->
         Log.d("ProfileDetail", "NavStackEntry: $navBackStackEntry")
         val profileRoute: ProfilesDestinations.ProfileDetail = navBackStackEntry.toRoute()

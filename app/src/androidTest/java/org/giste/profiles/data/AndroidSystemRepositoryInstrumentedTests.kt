@@ -19,7 +19,6 @@ import android.content.Context
 import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
