@@ -145,10 +145,10 @@ fun NewProfileDialog(
                                 "${uiState.name.length}/$NAME_MAX_LENGTH"
 
                             NewProfileViewModel.NameError.BlankNameError ->
-                                stringResource(R.string.validation_name_blank)
+                                stringResource(R.string.validation_not_blank)
 
                             NewProfileViewModel.NameError.NameExistsError ->
-                                stringResource(R.string.validation_name_exists)
+                                stringResource(R.string.validation_already_exists)
                         },
                         color = if (uiState.error is NewProfileViewModel.NameError.NoError) {
                             Color.Unspecified

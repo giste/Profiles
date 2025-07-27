@@ -35,8 +35,8 @@
     <string name="profile_name_dialog_label">Name</string>
     <string name="profile_name_dialog_error_content_description">Error</string>
 
-    <string name="validation_name_blank">Name can not be blank</string>
-    <string name="validation_name_exists">Name already exists</string>
+    <string name="validation_not_blank">can not be blank</string>
+    <string name="validation_already_exists">already exists</string>
 
     <string name="profile_screen_category_volume_label">Volume</string>
     <string name="profile_screen_setting_volume_media_label">Media</string>
